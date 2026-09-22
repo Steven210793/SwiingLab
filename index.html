@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -40,16 +41,49 @@
   --no-bd:rgba(217,112,102,0.4);
   --shadow:0 12px 34px rgba(0,0,0,0.45);
   --radius:20px;
+  --bg-grad-1:#1c1712;
+  --bg-grad-2:#161310;
+  --thumb-bg:#141210;
+  --text-soft:#a9c2b6;
+  --text-soft-2:#d7e4dc;
+  --nav-bg:rgba(18,16,13,0.72);
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px)
+}
+
+:root[data-theme="light"]{
+  --bg-0:#f7f2e6;
+  --bg-1:#f2ecdc;
+  --glass:rgba(30,25,15,0.04);
+  --glass-2:rgba(30,25,15,0.02);
+  --border:rgba(30,25,15,0.12);
+  --border-soft:rgba(30,25,15,0.07);
+  --gold:#b8892f;
+  --gold-light:#a97927;
+  --gold-dark:#8f6a22;
+  --text:#221d15;
+  --muted:#786d59;
+  --ok:#2f8a5e;
+  --ok-bg:rgba(47,138,94,0.12);
+  --ok-bd:rgba(47,138,94,0.4);
+  --no:#c14f42;
+  --no-bg:rgba(193,79,66,0.12);
+  --no-bd:rgba(193,79,66,0.4);
+  --shadow:0 12px 30px rgba(60,50,30,0.12);
+  --bg-grad-1:#fffaf0;
+  --bg-grad-2:#f1e6cd;
+  --thumb-bg:#0a0908;
+  --text-soft:#5f6f5a;
+  --text-soft-2:#46564a;
+  --nav-bg:rgba(255,250,240,0.82);
 }
 
 body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(1100px 620px at 50% -8%, #1c1712 0%, rgba(28,23,18,0) 60%),
-    radial-gradient(800px 560px at 105% 105%, #161310 0%, rgba(22,19,16,0) 55%),
+    radial-gradient(1100px 620px at 50% -8%, var(--bg-grad-1) 0%, rgba(28,23,18,0) 60%),
+    radial-gradient(800px 560px at 105% 105%, var(--bg-grad-2) 0%, rgba(22,19,16,0) 55%),
     var(--bg-0);
   background-attachment:fixed;
   color:var(--text);
@@ -108,7 +142,7 @@ body{
   border:1px solid var(--border);
   border-radius:99px;
   padding:8px 13px;
-  color:#dde7e1;
+  color:var(--text);
   font-size:12.5px;
   font-weight:600;
   white-space:nowrap
@@ -158,7 +192,7 @@ body{
 
 .clubs{
   display:block;
-  color:#a9b8b0;
+  color:var(--text-soft);
   font-size:12px;
   min-height:32px;
   margin:5px 0
@@ -207,7 +241,7 @@ body{
 .thumb{
   width:90px;
   height:72px;
-  background:#141210;
+  background:var(--thumb-bg);
   border-radius:13px;
   overflow:hidden;
   flex:none
@@ -225,7 +259,7 @@ body{
 
 .back{
   cursor:pointer;
-  color:#a9c2b6;
+  color:var(--text-soft);
   margin-bottom:20px;
   font-weight:600
 }
@@ -336,13 +370,13 @@ body{
 .ok{
   background:var(--ok-bg);
   border-color:var(--ok-bd);
-  color:#bdeed3
+  color:var(--ok)
 }
 
 .no{
   background:var(--no-bg);
   border-color:var(--no-bd);
-  color:#ffd9d3
+  color:var(--no)
 }
 
 .score{
@@ -448,7 +482,7 @@ body{
   flex:1;
   background:rgba(255,255,255,0.035);
   border:1px solid var(--border);
-  color:#d7e4dc;
+  color:var(--text-soft-2);
   padding:12px;
   border-radius:14px;
   font-size:15px;
@@ -527,7 +561,7 @@ body{
   display:flex;
   justify-content:space-between;
   font-size:13px;
-  color:#d7e4dc;
+  color:var(--text-soft-2);
   margin-bottom:5px
 }
 
@@ -538,7 +572,7 @@ body{
   left:50%;
   transform:translateX(-50%);
   width:min(452px,calc(100% - 28px));
-  background:rgba(18,16,13,0.72);
+  background:var(--nav-bg);
   backdrop-filter:blur(22px);
   -webkit-backdrop-filter:blur(22px);
   border:1px solid var(--border);
@@ -572,6 +606,140 @@ svg{
   height:100%
 }
 
+.toggleRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.switch{
+  position:relative;
+  width:48px;
+  height:27px;
+  background:rgba(255,255,255,0.12);
+  border:1px solid var(--border);
+  border-radius:99px;
+  cursor:pointer;
+  flex:none
+}
+
+.switch i{
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:var(--gold-light);
+  transition:left .18s;
+  display:block
+}
+
+.switch.on{
+  background:rgba(227,179,74,0.22);
+  border-color:rgba(227,179,74,0.55)
+}
+
+.switch.on i{
+  left:23px
+}
+
+.bagRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border-soft)
+}
+
+.bagRow:last-child{
+  border-bottom:none
+}
+
+.bagCheck{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14.5px;
+  flex:1
+}
+
+.bagCheck input[type=checkbox]{
+  width:19px;
+  height:19px;
+  accent-color:var(--gold);
+  flex:none
+}
+
+.bagDist{
+  width:60px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:7px 6px;
+  color:var(--text);
+  font-size:13px;
+  text-align:center;
+  flex:none
+}
+
+.modalOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  padding:24px
+}
+
+.modalBox{
+  background:linear-gradient(160deg, rgba(30,26,20,0.98), rgba(18,16,13,0.98));
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px;
+  max-width:340px;
+  width:100%;
+  box-shadow:var(--shadow)
+}
+
+:root[data-theme="light"] .modalBox{
+  background:linear-gradient(160deg, rgba(255,250,240,0.98), rgba(242,236,220,0.98))
+}
+
+.modalBox p{
+  margin:0 0 18px;
+  font-size:15px;
+  line-height:1.5;
+  color:var(--text)
+}
+
+.modalBtns{
+  display:flex;
+  gap:10px
+}
+
+.modalBtns button{
+  flex:1;
+  padding:12px;
+  border-radius:13px;
+  font-weight:700;
+  font-size:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text)
+}
+
+.modalBtns button.confirmYes{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold) 60%,var(--gold-dark));
+  color:#191207;
+  border:0
+}
+
 </style>
 </head>
 
@@ -593,17 +761,42 @@ svg{
 // ===================== CLUBS PAR ZONE =====================
 
 const clubOptions={
-'Approches':['50°','54°','60°'],
-'Fers':['PW','Fer 9','Fer 8','Fer 7','Fer 6','Fer 5','Fer 4','Fer 3'],
-'Long jeu':['Hybride 3','Bois 3','Driver']
+'Putting':['Putter'],
+'Approches':['50°','52°','54°','56°','58°','60°'],
+'Fers':['PW','Fer 9','Fer 8','Fer 7','Fer 6','Fer 5','Fer 4','Fer 3','Fer 2'],
+'Long jeu':['Hybride 7','Hybride 5','Hybride 3','Bois 7','Bois 5','Bois 3','Driver']
 };
 
-const clubs={
-'Putting':'Putter',
-'Approches':clubOptions['Approches'].join(' · '),
-'Fers':clubOptions['Fers'].join(' · '),
-'Long jeu':clubOptions['Long jeu'].join(' · ')
-};
+// ===================== MON SAC (localStorage) =====================
+
+function loadBag(){
+  try{
+    return JSON.parse(localStorage.getItem('mag_bag')||'{}');
+  }catch(e){
+    return {};
+  }
+}
+
+function saveBag(b){
+  try{
+    localStorage.setItem('mag_bag',JSON.stringify(b));
+  }catch(e){}
+}
+
+function getActiveClubs(zone){
+  let bag=loadBag();
+  let checked=clubOptions[zone].filter(c=>bag[c]&&bag[c].checked);
+  return checked.length>0?checked:clubOptions[zone];
+}
+
+function getClubDistance(club){
+  let bag=loadBag();
+  return (bag[club]&&bag[club].distance)?bag[club].distance:null;
+}
+
+function clubsLabel(zone){
+  return getActiveClubs(zone).join(' · ');
+}
 
 // ===================== EXERCICES — APPROCHES / FERS / LONG JEU =====================
 
@@ -1135,7 +1328,7 @@ return `
 <b>${m}</b>
 
 <span class="clubs">
-${clubs[m]}
+${clubsLabel(m)}
 </span>
 
 <span class="muted">
@@ -1167,7 +1360,7 @@ S.innerHTML=`
 <h1>${m}</h1>
 
 <div class="muted">
-${clubs[m]}
+${clubsLabel(m)}
 </div>
 
 <div class="zoneMenu section">
@@ -1296,8 +1489,9 @@ currentDetailM=m;
 currentDetailI=i;
 
 let ex=exercises[m][i];
+let activeClubs=getActiveClubs(m);
 
-if(!selectedClub[ex.id])selectedClub[ex.id]=ex.clubs[0];
+if(!selectedClub[ex.id]||!activeClubs.includes(selectedClub[ex.id]))selectedClub[ex.id]=activeClubs[0];
 if(ex.ballsMode==='player'&&!selectedBalls[ex.id])selectedBalls[ex.id]=ex.ballOptions[0];
 if(ex.kind==='phases'&&!selectedDist[ex.id])selectedDist[ex.id]=ex.distances[0];
 if(ex.kind==='distanceInput'&&distanceInputVal[ex.id]===undefined)distanceInputVal[ex.id]=140;
@@ -1328,7 +1522,7 @@ ${diagramHtml}
 
 <div class="muted" style="margin-top:10px">Club</div>
 <select class="clubSelect" onchange="pickClub('${ex.id}',this.value)">
-${ex.clubs.map(c=>`<option value="${c}" ${selectedClub[ex.id]===c?'selected':''}>${c}</option>`).join('')}
+${activeClubs.map(c=>`<option value="${c}" ${selectedClub[ex.id]===c?'selected':''}>${c}</option>`).join('')}
 </select>
 
 ${ex.kind==='phases'?`
@@ -1401,6 +1595,14 @@ setActiveTab('exercices');
 
 function pickClub(id,val){
 selectedClub[id]=val;
+let ex=exercises[currentDetailM]?exercises[currentDetailM][currentDetailI]:null;
+if(ex&&ex.id===id&&ex.kind==='distanceInput'){
+let d=getClubDistance(val);
+if(d!==null){
+distanceInputVal[id]=d;
+detail(currentDetailM,currentDetailI);
+}
+}
 }
 
 function pickBalls(id,n){
@@ -1507,6 +1709,37 @@ detailPutting(id);
 
 // ===================== JEU — APPROCHES / FERS / LONG JEU =====================
 
+// ===================== MODALE DE CONFIRMATION =====================
+
+function showConfirm(message,onYes){
+let overlay=document.createElement('div');
+overlay.className='modalOverlay';
+overlay.innerHTML=`
+<div class="modalBox">
+<p>${message}</p>
+<div class="modalBtns">
+<button class="modalCancel">Annuler</button>
+<button class="confirmYes">Quitter</button>
+</div>
+</div>`;
+document.body.appendChild(overlay);
+overlay.querySelector('.modalCancel').onclick=()=>overlay.remove();
+overlay.querySelector('.confirmYes').onclick=()=>{overlay.remove();onYes();};
+overlay.onclick=(e)=>{if(e.target===overlay)overlay.remove();};
+}
+
+function confirmQuit(){
+showConfirm('Es-tu sûr de vouloir quitter ? Ta progression sur cet exercice sera perdue.',()=>{
+detail(playState.m,playState.i);
+});
+}
+
+function confirmQuitPutting(){
+showConfirm('Es-tu sûr de vouloir quitter ? Ta progression sur cet exercice sera perdue.',()=>{
+detailPutting(puttingState.id);
+});
+}
+
 let playState={};
 
 function start(m,i){
@@ -1571,7 +1804,7 @@ distInfo=`<div class="phaseLabel">Objectif : entre ${p.rangeLow} et ${p.rangeHig
 S.innerHTML=`
 
 <div class="back"
-onclick="detail('${p.m}',${p.i})">
+onclick="confirmQuit()">
 ← Quitter
 </div>
 
@@ -1796,7 +2029,7 @@ ${p.levels.map((lv,idx)=>`<span class="levelChip ${idx===p.levelIndex?'cur':(idx
 S.innerHTML=`
 
 <div class="back"
-onclick="detailPutting('${p.id}')">
+onclick="confirmQuitPutting()">
 ← Quitter
 </div>
 
@@ -2194,6 +2427,19 @@ S.innerHTML=`
 
 </div>
 
+<div class="menuCard" onclick="bagScreen()">
+<b>Mon sac</b>
+<span class="muted">Configure tes clubs et tes distances</span>
+</div>
+
+<div class="info" style="margin-top:10px">
+<h3>APPARENCE</h3>
+<div class="toggleRow">
+<span>Mode clair</span>
+<div class="switch ${loadTheme()==='light'?'on':''}" onclick="toggleTheme()"><i></i></div>
+</div>
+</div>
+
 <div class="statsGrid">
 
 <div class="stat">
@@ -2221,6 +2467,95 @@ XP avant niveau ${li.level+1}
 setActiveTab('profil');
 }
 
+// ===================== MON SAC — ÉCRAN =====================
+
+function bagScreen(){
+
+let bag=loadBag();
+
+function rowsForZone(zone){
+return clubOptions[zone].map(c=>{
+let entry=bag[c]||{checked:false,distance:''};
+return `
+<div class="bagRow">
+<label class="bagCheck">
+<input type="checkbox" ${entry.checked?'checked':''} onchange="onBagCheck('${c}',this.checked)">
+<span>${c}</span>
+</label>
+<input type="number" class="bagDist" placeholder="m" value="${entry.distance||''}" oninput="onBagDist('${c}',this.value)">
+</div>`;
+}).join('');
+}
+
+S.innerHTML=`
+
+<div class="back" onclick="profile()">
+← Profil
+</div>
+
+<h1>Mon sac</h1>
+
+<div class="muted">
+Coche les clubs que tu as dans ton sac. Ajoute ta distance moyenne pour chacun, facultatif.
+</div>
+
+${zonesOrder.map(zone=>`
+<div class="section">
+<h2>${zone}</h2>
+<div class="info">
+${rowsForZone(zone)}
+</div>
+</div>
+`).join('')}
+
+<button class="primary" style="margin-top:20px" onclick="profile()">
+Valider
+</button>`;
+
+setActiveTab('profil');
+}
+
+function onBagCheck(club,checked){
+let bag=loadBag();
+if(!bag[club])bag[club]={checked:false,distance:''};
+bag[club].checked=checked;
+saveBag(bag);
+}
+
+function onBagDist(club,val){
+let bag=loadBag();
+if(!bag[club])bag[club]={checked:false,distance:''};
+bag[club].distance=val?parseFloat(val):'';
+saveBag(bag);
+}
+
+// ===================== THÈME CLAIR / SOMBRE =====================
+
+function loadTheme(){
+  try{
+    return localStorage.getItem('mag_theme')||'dark';
+  }catch(e){
+    return 'dark';
+  }
+}
+
+function saveTheme(t){
+  try{
+    localStorage.setItem('mag_theme',t);
+  }catch(e){}
+}
+
+function applyTheme(){
+  if(loadTheme()==='light')document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+}
+
+function toggleTheme(){
+  saveTheme(loadTheme()==='light'?'dark':'light');
+  applyTheme();
+  profile();
+}
+
 let profileSaveTimer=null;
 
 function onProfileChange(){
@@ -2237,6 +2572,7 @@ setTimeout(()=>{if(note)note.textContent='';},1500);
 },400);
 }
 
+applyTheme();
 home();
 
 </script>
