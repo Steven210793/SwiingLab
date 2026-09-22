@@ -1,0 +1,2245 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SwiingLab</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SwiingLab">
+<meta name="theme-color" content="#0a0908">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;650;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg-0:#0a0908;
+  --bg-1:#0d0c0a;
+  --glass:rgba(255,255,255,0.045);
+  --glass-2:rgba(255,255,255,0.02);
+  --border:rgba(255,255,255,0.09);
+  --border-soft:rgba(255,255,255,0.055);
+  --gold:#e3b34a;
+  --gold-light:#f3d98b;
+  --gold-dark:#b8892f;
+  --text:#f2e9d8;
+  --muted:#a49a89;
+  --ok:#4cb07e;
+  --ok-bg:rgba(76,176,126,0.13);
+  --ok-bd:rgba(76,176,126,0.4);
+  --no:#d97066;
+  --no-bg:rgba(217,112,102,0.13);
+  --no-bd:rgba(217,112,102,0.4);
+  --shadow:0 12px 34px rgba(0,0,0,0.45);
+  --radius:20px;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(1100px 620px at 50% -8%, #1c1712 0%, rgba(28,23,18,0) 60%),
+    radial-gradient(800px 560px at 105% 105%, #161310 0%, rgba(22,19,16,0) 55%),
+    var(--bg-0);
+  background-attachment:fixed;
+  color:var(--text);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased
+}
+
+.app{
+  max-width:480px;
+  margin:auto;
+  min-height:100vh;
+  padding:26px 18px 128px
+}
+
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:'Sora',-apple-system,sans-serif
+}
+
+.logo .badgeIcon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  flex:none;
+  background-image:url('data:image/png;base64,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');
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.45)
+}
+
+.logo .word{
+  font-weight:700;
+  font-size:23px;
+  letter-spacing:0.005em;
+  color:var(--text)
+}
+
+.logo .word b{
+  color:var(--gold);
+  font-weight:700
+}
+
+.pill{
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--border);
+  border-radius:99px;
+  padding:8px 13px;
+  color:#dde7e1;
+  font-size:12.5px;
+  font-weight:600;
+  white-space:nowrap
+}
+
+.hero{
+  padding:30px 0 20px
+}
+
+.hero h1,h1{
+  font-family:'Sora',-apple-system,sans-serif;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  margin:0 0 8px
+}
+
+.muted{
+  color:var(--muted)
+}
+
+.modes,.zoneMenu{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+.card,.menuCard{
+  background:linear-gradient(160deg, rgba(255,255,255,0.055), rgba(255,255,255,0.014));
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  cursor:pointer;
+  box-shadow:var(--shadow)
+}
+
+.card b,.menuCard b{
+  display:block;
+  font-family:'Sora',-apple-system,sans-serif;
+  font-weight:650;
+  font-size:17px;
+  margin-bottom:4px;
+  letter-spacing:-0.005em
+}
+
+.clubs{
+  display:block;
+  color:#a9b8b0;
+  font-size:12px;
+  min-height:32px;
+  margin:5px 0
+}
+
+.bar{
+  height:6px;
+  background:rgba(255,255,255,0.07);
+  border-radius:9px;
+  margin-top:12px;
+  overflow:hidden
+}
+
+.bar i{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--gold-dark),var(--gold) 55%,var(--gold-light))
+}
+
+.section{
+  margin-top:28px
+}
+
+.section h2{
+  font-family:'Sora',-apple-system,sans-serif;
+  font-size:19px;
+  font-weight:650;
+  letter-spacing:-0.005em
+}
+
+.exercise{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin:10px 0;
+  background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:10px;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(0,0,0,0.32)
+}
+
+.thumb{
+  width:90px;
+  height:72px;
+  background:#141210;
+  border-radius:13px;
+  overflow:hidden;
+  flex:none
+}
+
+.exercise b{
+  display:block;
+  font-weight:650
+}
+
+.tag{
+  font-size:12px;
+  color:var(--gold-light)
+}
+
+.back{
+  cursor:pointer;
+  color:#a9c2b6;
+  margin-bottom:20px;
+  font-weight:600
+}
+
+.diagram{
+  background:linear-gradient(160deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border-soft);
+  border-radius:22px;
+  padding:12px;
+  margin:18px 0;
+  box-shadow:var(--shadow)
+}
+
+.info{
+  background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:15px;
+  margin:10px 0;
+  box-shadow:0 8px 22px rgba(0,0,0,0.32)
+}
+
+.info h3{
+  margin:0 0 7px;
+  font-size:12.5px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  font-weight:700
+}
+
+.info p{
+  margin:0;
+  line-height:1.55
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:12px 0
+}
+
+.metric{
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border-soft);
+  border-radius:14px;
+  padding:10px;
+  text-align:center
+}
+
+.metric b{
+  display:block;
+  font-size:18px;
+  font-family:'Sora',sans-serif;
+  font-weight:700
+}
+
+.primary{
+  width:100%;
+  border:0;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold) 60%,var(--gold-dark));
+  color:#191207;
+  font-weight:750;
+  padding:15px;
+  border-radius:15px;
+  font-size:16px;
+  box-shadow:0 10px 26px rgba(227,179,74,0.22), inset 0 1px 0 rgba(255,255,255,0.35);
+  letter-spacing:0.01em
+}
+
+.hidden{
+  display:none
+}
+
+.play{
+  text-align:center;
+  padding-top:20px
+}
+
+.ballNo{
+  font-size:18px;
+  color:var(--muted);
+  margin:20px
+}
+
+.choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+.choice button{
+  height:120px;
+  border:1px solid transparent;
+  border-radius:20px;
+  color:white;
+  font-size:19px;
+  font-weight:750;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px)
+}
+
+.ok{
+  background:var(--ok-bg);
+  border-color:var(--ok-bd);
+  color:#bdeed3
+}
+
+.no{
+  background:var(--no-bg);
+  border-color:var(--no-bd);
+  color:#ffd9d3
+}
+
+.score{
+  font-size:15px;
+  margin:20px 0
+}
+
+.statsGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px
+}
+
+.stat{
+  background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.32)
+}
+
+.stat strong{
+  display:block;
+  font-size:24px;
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  margin-top:5px
+}
+
+.histItem{
+  background:linear-gradient(160deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--border-soft);
+  border-radius:16px;
+  padding:12px 14px;
+  margin:8px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.histItem div b{
+  display:block;
+  font-size:14px;
+  font-weight:650
+}
+
+.histItem .r{
+  text-align:right
+}
+
+.histItem .r b{
+  font-size:16px;
+  color:var(--gold-light)
+}
+
+.field{
+  margin:14px 0
+}
+
+.field label{
+  display:block;
+  font-size:11.5px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:650
+}
+
+.field input{
+  width:100%;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:12px 14px;
+  color:var(--text);
+  font-size:15px
+}
+
+.field input:focus{
+  outline:1.5px solid var(--gold)
+}
+
+.saveNote{
+  font-size:12px;
+  color:var(--gold-light);
+  margin-top:6px;
+  min-height:14px
+}
+
+.distPicker{
+  display:flex;
+  gap:10px;
+  margin:14px 0
+}
+
+.distPicker button{
+  flex:1;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border);
+  color:#d7e4dc;
+  padding:12px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:700
+}
+
+.distPicker button.sel{
+  background:rgba(227,179,74,0.14);
+  border-color:rgba(227,179,74,0.55);
+  color:var(--gold-light)
+}
+
+.levelRow{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin:14px 0;
+  flex-wrap:wrap
+}
+
+.levelChip{
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border);
+  border-radius:99px;
+  padding:6px 12px;
+  font-size:12px;
+  color:var(--muted)
+}
+
+.levelChip.cur{
+  background:rgba(227,179,74,0.16);
+  border-color:rgba(227,179,74,0.6);
+  color:var(--gold-light);
+  font-weight:750
+}
+
+.levelChip.done{
+  color:var(--gold);
+  border-color:rgba(227,179,74,0.25)
+}
+
+.clubSelect{
+  width:100%;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:12px 14px;
+  color:var(--text);
+  font-size:15px;
+  margin:10px 0
+}
+
+.effectBadge{
+  display:inline-block;
+  background:rgba(227,179,74,0.14);
+  border:1px solid rgba(227,179,74,0.55);
+  border-radius:99px;
+  padding:9px 20px;
+  font-size:17px;
+  font-weight:750;
+  color:var(--gold-light);
+  margin:14px 0 4px
+}
+
+.phaseLabel{
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0 0
+}
+
+.clubBarRow{
+  margin:12px 0
+}
+
+.clubBarTop{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:#d7e4dc;
+  margin-bottom:5px
+}
+
+.nav{
+  position:fixed;
+  z-index:5;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(452px,calc(100% - 28px));
+  background:rgba(18,16,13,0.72);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  border:1px solid var(--border);
+  border-radius:20px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  padding:9px;
+  box-shadow:0 14px 34px rgba(0,0,0,0.45)
+}
+
+.nav button{
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:14px;
+  color:var(--muted);
+  padding:10px 2px;
+  font-size:12px;
+  font-weight:600
+}
+
+.nav button.active{
+  background:rgba(227,179,74,0.14);
+  border-color:rgba(227,179,74,0.4);
+  color:var(--gold-light);
+  font-weight:750
+}
+
+svg{
+  width:100%;
+  height:100%
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="app">
+  <div id="screen"></div>
+</main>
+
+<nav class="nav">
+  <button id="navAccueil" onclick="home()">Accueil</button>
+  <button id="navExercices" onclick="allExercises()">Exercices</button>
+  <button id="navProgression" onclick="progressHub()">Progression</button>
+  <button id="navProfil" onclick="profile()">Profil</button>
+</nav>
+
+<script>
+
+// ===================== CLUBS PAR ZONE =====================
+
+const clubOptions={
+'Approches':['50°','54°','60°'],
+'Fers':['PW','Fer 9','Fer 8','Fer 7','Fer 6','Fer 5','Fer 4','Fer 3'],
+'Long jeu':['Hybride 3','Bois 3','Driver']
+};
+
+const clubs={
+'Putting':'Putter',
+'Approches':clubOptions['Approches'].join(' · '),
+'Fers':clubOptions['Fers'].join(' · '),
+'Long jeu':clubOptions['Long jeu'].join(' · ')
+};
+
+// ===================== EXERCICES — APPROCHES / FERS / LONG JEU =====================
+
+const exercises={
+
+'Approches':[
+{
+id:'appPrecision',
+nom:'Cercle serré',
+tag:'Précision',
+clubs:clubOptions['Approches'],
+kind:'simple',
+ballsMode:'fixed',
+totalBalls:3,
+description:'Choisis ton wedge et joue trois balles vers le drapeau.',
+objectif:'Fais atterrir les 3 balles dans un cercle d’1 m autour du trou.'
+},
+{
+id:'appTrajectoire',
+nom:'Les trois trajectoires',
+tag:'Trajectoire',
+clubs:clubOptions['Approches'],
+kind:'phases',
+distances:[5,10,15,20,25,30],
+phases:[
+{label:'Trajectoire basse, balle roulante',balls:2},
+{label:'Trajectoire intermédiaire',balls:2},
+{label:'Trajectoire haute, peu de roule',balls:2}
+],
+totalBalls:6,
+description:'Place trois lignes de tees à des distances croissantes de ta balle : une proche pour une trajectoire basse et roulante, une intermédiaire, une proche du trou pour une trajectoire haute avec peu de roule. Choisis ton wedge et la distance de jeu.',
+objectif:'Quelle que soit la trajectoire visée, pose la balle à moins d’1 m du trou.'
+},
+{
+id:'appBunker',
+nom:'Sortie de bunker',
+tag:'Bunker',
+clubs:clubOptions['Approches'],
+kind:'simple',
+ballsMode:'player',
+ballOptions:[3,5,10],
+description:'Choisis ton wedge et le nombre de balles, puis sors du bunker en te rapprochant au maximum du trou.',
+objectif:'Stoppe la balle à moins d’1 m 50 du trou.'
+}
+],
+
+'Fers':[
+{
+id:'ferDispersion',
+nom:'Couloir de précision',
+tag:'Dispersion',
+clubs:clubOptions['Fers'],
+kind:'simple',
+ballsMode:'fixed',
+totalBalls:10,
+description:'Choisis ton fer et matérialise un couloir de 30 m de large sur le practice.',
+objectif:'Place le maximum de balles dans le couloir, sur 10 balles.'
+},
+{
+id:'ferPrecision',
+nom:'Ma distance',
+tag:'Précision',
+clubs:clubOptions['Fers'],
+kind:'distanceInput',
+totalBalls:10,
+rangeMeters:10,
+description:'Choisis ton fer et indique la distance que tu réalises habituellement avec ce club.',
+objectif:'Reste dans une fourchette de ± 10 m autour de ta distance, sur 10 balles.'
+},
+{
+id:'ferEffets',
+nom:'Travail des effets',
+tag:'Effets',
+clubs:clubOptions['Fers'],
+kind:'simple',
+effectMode:true,
+totalBalls:10,
+description:'Choisis ton fer. À chaque balle, un effet est tiré au sort : fade, draw ou balle droite.',
+objectif:'Réalise l’effet demandé et reste dans le couloir de 30 m, sur 10 balles.'
+}
+],
+
+'Long jeu':[
+{
+id:'ljDispersion',
+nom:'Mise en jeu',
+tag:'Dispersion',
+clubs:clubOptions['Long jeu'],
+kind:'simple',
+ballsMode:'fixed',
+totalBalls:10,
+description:'Choisis ton club et matérialise un couloir de 40 m de large.',
+objectif:'Place le maximum de balles dans le couloir, sur 10 balles.'
+},
+{
+id:'ljEffets',
+nom:'Effets en long jeu',
+tag:'Effets',
+clubs:clubOptions['Long jeu'],
+kind:'simple',
+effectMode:true,
+totalBalls:10,
+description:'Choisis ton club. À chaque balle, un effet est tiré au sort : fade, draw ou balle droite.',
+objectif:'Réalise l’effet demandé et reste dans le couloir de 40 m, sur 10 balles.'
+}
+]
+
+};
+
+const zonesOrder=['Putting','Approches','Fers','Long jeu'];
+
+function zoneCount(m){
+  return m==='Putting'?puttingExercises.length:exercises[m].length;
+}
+
+// ===================== ZONE PUTTING =====================
+
+const puttingExercises=[
+
+{
+id:'porte',
+niveau:'Débutant',
+nom:'Porte de départ',
+type:'streak',
+distances:[1,2,3],
+totalBalls:3,
+target:3,
+description:'Place ta balle à la distance choisie du trou. Matérialise deux portes avec des tees, une 30 cm devant la balle et une 30 cm derrière, pour guider ton putter tout au long du mouvement.',
+objectif:'Enchaîne 3 putts réussis d’affilée, sans en manquer un seul.'
+},
+
+{
+id:'cercle',
+niveau:'Débutant',
+nom:'Cercle de sécurité',
+type:'streak',
+distances:[1,2,3],
+totalBalls:5,
+target:5,
+description:'Place 5 balles réparties régulièrement en cercle autour du trou, à la distance choisie.',
+objectif:'Rentre les 5 putts d’affilée, sans en manquer un seul.'
+},
+
+{
+id:'echelle',
+niveau:'Intermédiaire',
+nom:'Échelle de distance',
+type:'ladder',
+levels:[1,2,3],
+maxAttempts:9,
+description:'Putte à 1 m du trou. Si tu réussis, monte à 2 m puis à 3 m. Si tu rates, redescends d’un niveau.',
+objectif:'Valide les 3 distances sans faute pour terminer l’échelle.'
+},
+
+{
+id:'pression',
+niveau:'Avancé',
+nom:'Série sous pression',
+type:'ladder2',
+levels:[1,2,3,4,5],
+triesPerLevel:2,
+zoneCm:50,
+maxBalls:20,
+description:'Cinq paliers de 1 à 5 m. À chaque palier, matérialise une zone de 50 cm autour du trou et joue jusqu’à 2 balles.',
+objectif:'Fais entrer au moins une balle sur deux dans la zone à chaque palier pour monter d’un niveau. Si tes deux balles ratent, tu repars de zéro.'
+}
+
+];
+
+function puttingById(id){
+  return puttingExercises.find(e=>e.id===id);
+}
+
+// ===================== XP / NIVEAU =====================
+
+const MULT={'Débutant':1,'Intermédiaire':1.3,'Avancé':1.6};
+const XP_PER_BALL=5;
+const BONUS_THRESHOLD=70;
+const BONUS_XP=20;
+
+function levelThreshold(n){
+  return Math.round(80*Math.pow(n,1.5));
+}
+
+function getLevelInfo(totalXp){
+  let level=1, remaining=totalXp, thresh=levelThreshold(level);
+  while(remaining>=thresh){
+    remaining-=thresh;
+    level++;
+    thresh=levelThreshold(level);
+  }
+  return {level, xpInLevel:remaining, xpForNext:thresh, totalXp};
+}
+
+// ===================== STOCKAGE LOCAL =====================
+
+function loadHistory(){
+  try{
+    return JSON.parse(localStorage.getItem('mag_history')||'[]');
+  }catch(e){
+    return [];
+  }
+}
+
+function saveSession(s){
+  try{
+    let h=loadHistory();
+    h.push(s);
+    localStorage.setItem('mag_history',JSON.stringify(h));
+  }catch(e){}
+}
+
+function loadProfile(){
+  try{
+    return JSON.parse(localStorage.getItem('mag_profile')||'{"name":"","index":""}');
+  }catch(e){
+    return {name:'',index:''};
+  }
+}
+
+function saveProfile(p){
+  try{
+    localStorage.setItem('mag_profile',JSON.stringify(p));
+  }catch(e){}
+}
+
+function computeTotalXp(){
+  return loadHistory().reduce((sum,s)=>sum+s.xp,0);
+}
+
+function bestStreak(results){
+  let max=0,cur=0;
+  for(let r of results){
+    if(r){cur++;if(cur>max)max=cur;}else cur=0;
+  }
+  return max;
+}
+
+function computeZoneStats(m){
+  let sessions=loadHistory().filter(s=>s.zone===m);
+  let balls=sessions.reduce((a,s)=>a+s.total,0);
+  let ok=sessions.reduce((a,s)=>a+s.ok,0);
+  let rate=balls>0?Math.round(ok/balls*100):null;
+  let streak=0;
+  sessions.forEach(s=>{
+    let b=bestStreak(s.results);
+    if(b>streak)streak=b;
+  });
+  return {count:sessions.length,balls,rate,streak,sessions};
+}
+
+function computeClubStats(m){
+  let opts=clubOptions[m];
+  if(!opts)return [];
+  return opts.map(c=>{
+    let sessions=loadHistory().filter(s=>s.zone===m&&s.club===c);
+    let balls=sessions.reduce((a,s)=>a+s.total,0);
+    let ok=sessions.reduce((a,s)=>a+s.ok,0);
+    let rate=balls>0?Math.round(ok/balls*100):0;
+    return {club:c,rate,balls};
+  });
+}
+
+// ===================== NAV ACTIVE =====================
+
+function setActiveTab(tab){
+  ['navAccueil','navExercices','navProgression','navProfil'].forEach(id=>{
+    document.getElementById(id).classList.remove('active');
+  });
+  let map={accueil:'navAccueil',exercices:'navExercices',progression:'navProgression',profil:'navProfil'};
+  if(map[tab])document.getElementById(map[tab]).classList.add('active');
+}
+
+const S=document.getElementById('screen');
+
+// ===================== FLÈCHE DE DISTANCE (SVG) =====================
+
+function dArrow(x1,y1,x2,y2,color){
+color=color||'#e3b34a';
+let dx=x2-x1,dy=y2-y1;
+let len=Math.sqrt(dx*dx+dy*dy)||1;
+let ux=dx/len,uy=dy/len;
+let ah=6,aw=3.2;
+let px=-uy,py=ux;
+function head(bx,by,dx2,dy2){
+let backx=bx-dx2*ah,backy=by-dy2*ah;
+let lx=backx+px*aw,ly=backy+py*aw;
+let rx=backx-px*aw,ry=backy-py*aw;
+return `<polygon points="${bx},${by} ${lx.toFixed(1)},${ly.toFixed(1)} ${rx.toFixed(1)},${ry.toFixed(1)}" fill="${color}"/>`;
+}
+return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="1.4"/>${head(x1,y1,-ux,-uy)}${head(x2,y2,ux,uy)}`;
+}
+
+// ===================== DIAGRAMMES — APPROCHES / FERS / LONG JEU =====================
+
+function diagramCiblePrecision(){
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<circle cx="100" cy="55" r="26" fill="none" stroke="#8c8172" stroke-width="1.3" stroke-dasharray="3 4"/>
+<circle cx="100" cy="55" r="7" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="100" cy="55" r="2.5" fill="#f3d98b"/>
+<circle cx="86" cy="40" r="4" fill="#f4efe4"/>
+<circle cx="118" cy="62" r="4" fill="#f4efe4"/>
+<circle cx="92" cy="70" r="4" fill="#f4efe4"/>
+${dArrow(100,55,100,29,'#e3b34a')}
+<text x="112" y="40" font-size="9" fill="#d8cdb8">1 m</text>
+</svg>`;
+}
+
+function diagramTrajectoires(dist){
+dist=dist||15;
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<circle cx="100" cy="18" r="8" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="100" cy="18" r="2.5" fill="#f3d98b"/>
+<circle cx="100" cy="18" r="18" fill="none" stroke="#8c8172" stroke-width="1.1" stroke-dasharray="2 4"/>
+${dArrow(100,18,124,18,'#e3b34a')}
+<text x="150" y="21" font-size="8" fill="#d8cdb8">1 m</text>
+<circle cx="100" cy="96" r="4" fill="#f4efe4"/>
+<line x1="52" y1="72" x2="68" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="72" y1="72" x2="88" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="92" y1="72" x2="108" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="112" y1="72" x2="128" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="132" y1="72" x2="148" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="58" y1="52" x2="74" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="78" y1="52" x2="94" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="98" y1="52" x2="114" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="118" y1="52" x2="134" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="138" y1="52" x2="154" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="64" y1="34" x2="80" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="84" y1="34" x2="100" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="104" y1="34" x2="120" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="124" y1="34" x2="140" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="144" y1="34" x2="160" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
+<circle cx="35" cy="72" r="3" fill="#e3b34a"/>
+<circle cx="29" cy="52" r="3" fill="#8ebca4"/>
+<circle cx="23" cy="34" r="3" fill="#7fa3c9"/>
+<text x="100" y="108" text-anchor="middle" font-size="9"><tspan fill="#e3b34a">basse</tspan><tspan fill="#6b6255"> · </tspan><tspan fill="#8ebca4">intermédiaire</tspan><tspan fill="#6b6255"> · </tspan><tspan fill="#7fa3c9">haute</tspan></text>
+</svg>`;
+}
+
+function diagramBunker(){
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<ellipse cx="100" cy="80" rx="55" ry="22" fill="#3a3220"/>
+<circle cx="100" cy="80" r="4" fill="#f4efe4"/>
+<circle cx="100" cy="22" r="7" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="100" cy="22" r="2.5" fill="#f3d98b"/>
+<circle cx="100" cy="22" r="16" fill="none" stroke="#3a332a" stroke-width="2"/>
+<text x="122" y="25" font-size="8" fill="#8c8172">1,5 m</text>
+</svg>`;
+}
+
+function fanBackground(){
+return `<path d="M48.6 38.7 A80 80 0 0 1 151.4 38.7" stroke="#e3b34a" stroke-width="1" fill="none" opacity="0.55"/><path d="M58.8 51.0 A64 64 0 0 1 141.2 51.0" stroke="#e3b34a" stroke-width="0.8" fill="none" opacity="0.32"/><path d="M69.1 63.2 A48 48 0 0 1 130.9 63.2" stroke="#e3b34a" stroke-width="0.8" fill="none" opacity="0.32"/><path d="M79.4 75.5 A32 32 0 0 1 120.6 75.5" stroke="#e3b34a" stroke-width="0.8" fill="none" opacity="0.32"/><path d="M89.7 87.7 A16 16 0 0 1 110.3 87.7" stroke="#e3b34a" stroke-width="0.8" fill="none" opacity="0.32"/><line x1="100" y1="100" x2="48.6" y2="38.7" stroke="#3a332a" stroke-width="1"/><line x1="100" y1="100" x2="151.4" y2="38.7" stroke="#3a332a" stroke-width="1"/><line x1="100" y1="100" x2="100" y2="20" stroke="#8c8172" stroke-width="1" stroke-dasharray="2.5 3" opacity="0.8"/><text x="100" y="84" text-anchor="middle" font-size="6.5" font-weight="600" fill="#d8cdb8">50 m</text><text x="100" y="68" text-anchor="middle" font-size="6.5" font-weight="600" fill="#d8cdb8">100 m</text><text x="100" y="52" text-anchor="middle" font-size="6.5" font-weight="600" fill="#d8cdb8">150 m</text><text x="100" y="36" text-anchor="middle" font-size="6.5" font-weight="600" fill="#d8cdb8">200 m</text><text x="100" y="21" text-anchor="middle" font-size="6.5" font-weight="600" fill="#d8cdb8">250 m</text><path d="M91 104 L87 100 L113 100 L109 104 Z" fill="#171310" stroke="#3a332a" stroke-width="0.6"/><circle cx="100" cy="100" r="3.5" fill="#e3b34a"/>`;
+}
+
+function flag(cx,cy){
+return `<line x1="${cx}" y1="${cy+10}" x2="${cx}" y2="${cy-16}" stroke="#c7d6cd" stroke-width="1.3"/><path d="M${cx} ${cy-16} L${cx+12} ${cy-11} L${cx} ${cy-6} Z" fill="#e3574a"/><ellipse cx="${cx}" cy="${cy+11}" rx="5" ry="1.8" fill="#0d1210" opacity="0.5"/>`;
+}
+
+function diagramCouloir(width){
+width=width||30;
+let hw=Math.min(48,width*0.4+4);
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+${fanBackground()}
+<line x1="100" y1="100" x2="${100-hw}" y2="20" stroke="#f2e9d8" stroke-width="1.4"/>
+<line x1="100" y1="100" x2="${100+hw}" y2="20" stroke="#f2e9d8" stroke-width="1.4"/>
+${dArrow(100-hw,28,100+hw,28,'#e3b34a')}
+<text x="100" y="33" text-anchor="middle" font-size="8" fill="#f3d98b">${width} m</text>
+</svg>`;
+}
+
+function diagramFerPrecision(dist,range){
+dist=dist||140;
+range=range||10;
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+${fanBackground()}
+<rect x="91" y="34" width="18" height="52" rx="9" fill="none" stroke="#f2e9d8" stroke-width="1.5" stroke-dasharray="3 4"/>
+<text x="128" y="63" font-size="9" fill="#d8cdb8">${dist-range} – ${dist+range} m</text>
+</svg>`;
+}
+
+function diagramEffets(width){
+width=width||30;
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+${fanBackground()}
+<path d="M100 100 C80 78 80 38 100 20" stroke="#e3574a" stroke-width="1.3" fill="none" stroke-dasharray="3 3"/>
+<path d="M100 100 C120 78 120 38 100 20" stroke="#4ac77a" stroke-width="1.3" fill="none" stroke-dasharray="3 3"/>
+<text x="100" y="108" text-anchor="middle" font-size="9" fill="#8c8172">effet aléatoire · couloir ${width} m</text>
+</svg>`;
+}
+
+function exThumb(ex){
+if(ex.id==='appPrecision')return diagramCiblePrecision();
+if(ex.id==='appTrajectoire')return diagramTrajectoires(15);
+if(ex.id==='appBunker')return diagramBunker();
+if(ex.id==='ferDispersion')return diagramCouloir(30);
+if(ex.id==='ferPrecision')return diagramFerPrecision(140,10);
+if(ex.id==='ferEffets')return diagramEffets(30);
+if(ex.id==='ljDispersion')return diagramCouloir(40);
+if(ex.id==='ljEffets')return diagramEffets(40);
+return diagramCiblePrecision();
+}
+
+// ===================== DIAGRAMMES PUTTING =====================
+
+function diagramPorte(dist){
+dist=dist||2;
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<path d="M100 92 L100 24" stroke="#8c8172" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+<circle cx="100" cy="16" r="9" fill="#171310" stroke="#e3b34a" stroke-width="1.5"/>
+<circle cx="100" cy="16" r="3" fill="#f3d98b"/>
+<line x1="86" y1="80" x2="86" y2="90" stroke="#e3b34a" stroke-width="3"/>
+<line x1="114" y1="80" x2="114" y2="90" stroke="#e3b34a" stroke-width="3"/>
+<line x1="86" y1="46" x2="86" y2="56" stroke="#e3b34a" stroke-width="3"/>
+<line x1="114" y1="46" x2="114" y2="56" stroke="#e3b34a" stroke-width="3"/>
+<circle cx="100" cy="68" r="4" fill="#f4efe4"/>
+${dArrow(158,24,158,92)}
+<text x="163" y="58" font-size="10" fill="#d8cdb8">${dist} m</text>
+</svg>`;
+}
+
+function diagramCercle(dist){
+dist=dist||2;
+let cx=100,cy=52,r=30;
+let pts=[];
+for(let k=0;k<5;k++){
+let a=(-90+k*72)*Math.PI/180;
+pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);
+}
+let balls=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#f4efe4"/>`).join('');
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<circle cx="${cx}" cy="${cy}" r="9" fill="#171310" stroke="#e3b34a" stroke-width="1.5"/>
+<circle cx="${cx}" cy="${cy}" r="3" fill="#f3d98b"/>
+${dArrow(cx,cy,cx,cy-r)}
+<text x="${cx+8}" y="${cy-r/2}" font-size="10" fill="#d8cdb8">${dist} m</text>
+${balls}
+</svg>`;
+}
+
+function diagramEchelle(){
+let holeY=14;
+let levels=[[1,38],[2,62],[3,86]];
+let arrows=levels.map(function(lv,idx){
+let d=lv[0],y=lv[1];
+let x=120+idx*18;
+return dArrow(x,holeY,x,y)+`<text x="${x+5}" y="${(holeY+y)/2+3}" font-size="8" fill="#8c8172">${d}m</text>`;
+}).join('');
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<circle cx="100" cy="${holeY}" r="8" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="100" cy="${holeY}" r="2.5" fill="#f3d98b"/>
+<line x1="100" y1="22" x2="100" y2="92" stroke="#3a332a" stroke-width="2" stroke-dasharray="3 4"/>
+<circle cx="100" cy="38" r="4" fill="#f4efe4"/>
+<circle cx="100" cy="62" r="4" fill="#f4efe4"/>
+<circle cx="100" cy="86" r="4" fill="#f4efe4"/>
+${arrows}
+<text x="40" y="55" font-size="14" fill="#4cb07e">↑</text>
+<text x="40" y="75" font-size="14" fill="#d97066">↓</text>
+</svg>`;
+}
+
+function diagramPression(){
+let cx=100,holeY=18,zoneR=13;
+let positions=[[1,38],[2,54],[3,70],[4,86],[5,102]];
+let balls=positions.map(function(p){
+let d=p[0],y=p[1];
+return `<circle cx="${cx}" cy="${y}" r="4" fill="#f4efe4"/><text x="${cx+14}" y="${y+3}" font-size="8" fill="#8c8172">${d} m</text>`;
+}).join('');
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<line x1="${cx}" y1="${holeY+zoneR}" x2="${cx}" y2="106" stroke="#3a332a" stroke-width="2" stroke-dasharray="2 5"/>
+<circle cx="${cx}" cy="${holeY}" r="${zoneR}" fill="none" stroke="#e3b34a" stroke-width="1.6" opacity="0.55"/>
+<circle cx="${cx}" cy="${holeY}" r="5" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="${cx}" cy="${holeY}" r="1.8" fill="#f3d98b"/>
+<text x="${cx+zoneR+6}" y="${holeY+3}" font-size="8" fill="#8c8172">zone 50 cm</text>
+${balls}
+</svg>`;
+}
+
+function puttingThumb(e){
+if(e.type==='streak')return e.id==='porte'?diagramPorte(2):diagramCercle(2);
+if(e.type==='ladder')return diagramEchelle();
+return diagramPression();
+}
+
+// ===================== ACCUEIL =====================
+
+function home(){
+
+let li=getLevelInfo(computeTotalXp());
+
+S.innerHTML=`
+<div class="top">
+<div class="logo"><span class="badgeIcon"></span><span class="word">Swiing<b>Lab</b></span></div>
+<div class="pill">Niveau ${li.level} · ${li.totalXp} XP</div>
+</div>
+
+<div class="hero">
+<h1>Entraînement</h1>
+<div class="muted">Choisis une zone de jeu.</div>
+</div>
+
+<div class="modes">
+
+${zonesOrder.map(m=>{
+let zs=computeZoneStats(m);
+let w=zs.rate===null?0:zs.rate;
+return `
+
+<div class="card" onclick="zone('${m}')">
+
+<b>${m}</b>
+
+<span class="clubs">
+${clubs[m]}
+</span>
+
+<span class="muted">
+${zoneCount(m)} exercices
+</span>
+
+<div class="bar">
+<i style="width:${w}%"></i>
+</div>
+
+</div>
+
+`;
+}).join('')}
+
+</div>`;
+
+setActiveTab('accueil');
+}
+
+function zone(m){
+
+S.innerHTML=`
+
+<div class="back" onclick="home()">
+← Accueil
+</div>
+
+<h1>${m}</h1>
+
+<div class="muted">
+${clubs[m]}
+</div>
+
+<div class="zoneMenu section">
+
+<div class="menuCard" onclick="list('${m}')">
+<b>Exercices</b>
+<span class="muted">${zoneCount(m)} exercices</span>
+</div>
+
+<div class="menuCard" onclick="stats('${m}')">
+<b>Progression</b>
+<span class="muted">
+Statistiques ${m.toLowerCase()}
+</span>
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+// ===================== LISTE D'EXERCICES =====================
+
+function list(m){
+
+if(m==='Putting'){listPutting();return;}
+
+S.innerHTML=`
+
+<div class="back" onclick="zone('${m}')">
+← ${m}
+</div>
+
+<h1>Exercices</h1>
+
+<div class="section">
+
+${exercises[m].map((ex,i)=>`
+
+<div class="exercise"
+onclick="detail('${m}',${i})">
+
+<div class="thumb">
+${exThumb(ex)}
+</div>
+
+<div>
+
+<span class="tag">
+${ex.tag}
+</span>
+
+<b>${ex.nom}</b>
+
+<span class="muted">
+Voir l’exercice →
+</span>
+
+</div>
+
+</div>
+
+`).join('')}
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+function listPutting(){
+
+S.innerHTML=`
+
+<div class="back" onclick="zone('Putting')">
+← Putting
+</div>
+
+<h1>Exercices</h1>
+
+<div class="section">
+
+${puttingExercises.map(e=>`
+
+<div class="exercise"
+onclick="detailPutting('${e.id}')">
+
+<div class="thumb">
+${puttingThumb(e)}
+</div>
+
+<div>
+
+<span class="tag">
+${e.niveau}
+</span>
+
+<b>${e.nom}</b>
+
+<span class="muted">
+Voir l’exercice →
+</span>
+
+</div>
+
+</div>
+
+`).join('')}
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+// ===================== DÉTAIL EXERCICE — APPROCHES / FERS / LONG JEU =====================
+
+let selectedClub={};
+let selectedBalls={};
+let selectedDist={};
+let distanceInputVal={};
+let currentDetailM=null;
+let currentDetailI=null;
+
+function detail(m,i){
+
+currentDetailM=m;
+currentDetailI=i;
+
+let ex=exercises[m][i];
+
+if(!selectedClub[ex.id])selectedClub[ex.id]=ex.clubs[0];
+if(ex.ballsMode==='player'&&!selectedBalls[ex.id])selectedBalls[ex.id]=ex.ballOptions[0];
+if(ex.kind==='phases'&&!selectedDist[ex.id])selectedDist[ex.id]=ex.distances[0];
+if(ex.kind==='distanceInput'&&distanceInputVal[ex.id]===undefined)distanceInputVal[ex.id]=140;
+
+let diagramHtml;
+if(ex.id==='appTrajectoire')diagramHtml=diagramTrajectoires(selectedDist[ex.id]);
+else if(ex.id==='ferPrecision')diagramHtml=diagramFerPrecision(distanceInputVal[ex.id],ex.rangeMeters);
+else diagramHtml=exThumb(ex);
+
+let totalBalls=ex.kind==='phases'?ex.totalBalls:(ex.ballsMode==='player'?selectedBalls[ex.id]:ex.totalBalls);
+
+S.innerHTML=`
+
+<div class="back"
+onclick="list('${m}')">
+← Exercices
+</div>
+
+<span class="tag">
+${ex.tag}
+</span>
+
+<h1>${ex.nom}</h1>
+
+<div class="diagram" id="exDiagram">
+${diagramHtml}
+</div>
+
+<div class="muted" style="margin-top:10px">Club</div>
+<select class="clubSelect" onchange="pickClub('${ex.id}',this.value)">
+${ex.clubs.map(c=>`<option value="${c}" ${selectedClub[ex.id]===c?'selected':''}>${c}</option>`).join('')}
+</select>
+
+${ex.kind==='phases'?`
+<div class="muted" style="margin-top:10px">Distance de jeu</div>
+<div class="distPicker" style="flex-wrap:wrap">
+${ex.distances.map(d=>`<button class="${selectedDist[ex.id]===d?'sel':''}" onclick="pickTrajDist('${ex.id}',${d})">${d} m</button>`).join('')}
+</div>
+`:''}
+
+${ex.ballsMode==='player'?`
+<div class="muted" style="margin-top:10px">Nombre de balles</div>
+<div class="distPicker">
+${ex.ballOptions.map(n=>`<button class="${selectedBalls[ex.id]===n?'sel':''}" onclick="pickBalls('${ex.id}',${n})">${n}</button>`).join('')}
+</div>
+`:''}
+
+${ex.kind==='distanceInput'?`
+<div class="field">
+<label>Ta distance avec ce club (m)</label>
+<input type="number" class="clubSelect" id="distInput_${ex.id}" value="${distanceInputVal[ex.id]}" oninput="onDistInput('${ex.id}',this.value)">
+</div>
+`:''}
+
+<div class="metrics">
+
+<div class="metric">
+<b>${totalBalls}</b>
+Balles
+</div>
+
+<div class="metric">
+<b>1</b>
+Série
+</div>
+
+<div class="metric">
+<b>${totalBalls}</b>
+Total
+</div>
+
+</div>
+
+<div class="info">
+
+<h3>DESCRIPTION</h3>
+
+<p>
+${ex.description}
+</p>
+
+</div>
+
+<div class="info">
+
+<h3>OBJECTIF</h3>
+
+<p>
+${ex.objectif}
+</p>
+
+</div>
+
+<button class="primary"
+onclick="start('${m}',${i})">
+Commencer l’exercice
+</button>`;
+
+setActiveTab('exercices');
+}
+
+function pickClub(id,val){
+selectedClub[id]=val;
+}
+
+function pickBalls(id,n){
+selectedBalls[id]=n;
+detail(currentDetailM,currentDetailI);
+}
+
+function pickTrajDist(id,d){
+selectedDist[id]=d;
+detail(currentDetailM,currentDetailI);
+}
+
+function onDistInput(id,val){
+distanceInputVal[id]=parseFloat(val)||0;
+}
+
+let selectedDistPutting={};
+
+function detailPutting(id){
+
+let e=puttingById(id);
+
+let hasDist=(e.type==='streak');
+
+if(hasDist&&!selectedDist[id])selectedDist[id]=e.distances[0];
+
+let totalBalls=e.type==='streak'?e.totalBalls:(e.type==='ladder'?e.maxAttempts:e.maxBalls);
+
+S.innerHTML=`
+
+<div class="back"
+onclick="listPutting()">
+← Exercices
+</div>
+
+<span class="tag">
+${e.niveau}
+</span>
+
+<h1>${e.nom}</h1>
+
+<div class="diagram" id="puttingDiagram">
+${e.id==='porte'?diagramPorte(selectedDist[id]):e.id==='cercle'?diagramCercle(selectedDist[id]):puttingThumb(e)}
+</div>
+
+${hasDist?`
+<div class="muted" style="margin-top:10px">Distance</div>
+<div class="distPicker">
+${e.distances.map(d=>`<button class="${selectedDist[id]===d?'sel':''}" onclick="pickDist('${id}',${d})">${d} m</button>`).join('')}
+</div>
+`:''}
+
+<div class="metrics">
+
+<div class="metric">
+<b>${e.type==='streak'?e.totalBalls:'—'}</b>
+Balles
+</div>
+
+<div class="metric">
+<b>1</b>
+Série
+</div>
+
+<div class="metric">
+<b>${e.type==='streak'?e.totalBalls:'max '+totalBalls}</b>
+Total
+</div>
+
+</div>
+
+<div class="info">
+
+<h3>DESCRIPTION</h3>
+
+<p>
+${e.description}
+</p>
+
+</div>
+
+<div class="info">
+
+<h3>OBJECTIF</h3>
+
+<p>
+${e.objectif}
+</p>
+
+</div>
+
+<button class="primary"
+onclick="startPutting('${id}')">
+Commencer l’exercice
+</button>`;
+
+setActiveTab('exercices');
+}
+
+function pickDist(id,d){
+selectedDist[id]=d;
+detailPutting(id);
+}
+
+// ===================== JEU — APPROCHES / FERS / LONG JEU =====================
+
+let playState={};
+
+function start(m,i){
+
+let ex=exercises[m][i];
+let club=selectedClub[ex.id]||ex.clubs[0];
+
+let total=ex.kind==='phases'?ex.totalBalls:(ex.ballsMode==='player'?(selectedBalls[ex.id]||ex.ballOptions[0]):ex.totalBalls);
+
+let effects=null;
+if(ex.effectMode){
+let pool=['Fade','Droite','Draw'];
+effects=[];
+for(let k=0;k<total;k++)effects.push(pool[Math.floor(Math.random()*3)]);
+}
+
+let targetDist=null,rangeLow=null,rangeHigh=null;
+if(ex.kind==='distanceInput'){
+targetDist=distanceInputVal[ex.id]||140;
+rangeLow=targetDist-ex.rangeMeters;
+rangeHigh=targetDist+ex.rangeMeters;
+}
+
+playState={
+m,i,n:1,ok:0,no:0,total,results:[],
+club,effects,targetDist,rangeLow,rangeHigh,
+startTime:Date.now()
+};
+
+renderPlay();
+}
+
+function ballPhaseLabel(ex,n){
+let idx=n-1,acc=0;
+for(let ph of ex.phases){
+if(idx<acc+ph.balls)return ph.label;
+acc+=ph.balls;
+}
+return '';
+}
+
+function renderPlay(){
+
+let p=playState;
+let ex=exercises[p.m][p.i];
+
+let phaseLabel='';
+if(ex.kind==='phases'){
+phaseLabel=`<div class="phaseLabel">${ballPhaseLabel(ex,p.n)}</div>`;
+}
+
+let effectBadge='';
+if(ex.effectMode){
+effectBadge=`<div class="effectBadge">${p.effects[p.n-1]}</div>`;
+}
+
+let distInfo='';
+if(ex.kind==='distanceInput'){
+distInfo=`<div class="phaseLabel">Objectif : entre ${p.rangeLow} et ${p.rangeHigh} m</div>`;
+}
+
+S.innerHTML=`
+
+<div class="back"
+onclick="detail('${p.m}',${p.i})">
+← Quitter
+</div>
+
+<div class="play">
+
+<span class="tag">
+${ex.nom} · ${p.club}
+</span>
+
+<h1>
+Balle n°${p.n}
+</h1>
+
+<div class="ballNo">
+${p.n} / ${p.total}
+</div>
+
+${phaseLabel}
+${effectBadge}
+${distInfo}
+
+<div class="choice">
+
+<button class="ok"
+onclick="hit(true)">
+✓<br>
+Réussie
+</button>
+
+<button class="no"
+onclick="hit(false)">
+×<br>
+Ratée
+</button>
+
+</div>
+
+<div class="score">
+
+Réussies :
+<b>${p.ok}</b>
+
+·
+
+Ratées :
+<b>${p.no}</b>
+
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+function hit(ok){
+
+let p=playState;
+
+p.results.push(ok);
+
+if(ok){
+p.ok++;
+}else{
+p.no++;
+}
+
+if(p.n>=p.total){
+finish();
+return;
+}
+
+p.n++;
+
+renderPlay();
+}
+
+function finish(){
+
+let p=playState;
+let ex=exercises[p.m][p.i];
+
+let rate=
+Math.round(
+p.ok/p.total*100
+);
+
+let bonus=rate>=BONUS_THRESHOLD?BONUS_XP:0;
+let xp=p.ok*XP_PER_BALL+bonus;
+let duration=Math.round((Date.now()-p.startTime)/1000);
+
+saveSession({
+date:new Date().toISOString(),
+zone:p.m,
+exercise:ex.nom,
+club:p.club,
+results:p.results,
+ok:p.ok,
+no:p.no,
+total:p.total,
+rate,
+xp,
+duration
+});
+
+S.innerHTML=`
+
+<div class="play">
+
+<span class="tag">
+EXERCICE TERMINÉ
+</span>
+
+<h1>Résultat</h1>
+
+<div class="statsGrid">
+
+<div class="stat">
+Réussies
+<strong>${p.ok}</strong>
+</div>
+
+<div class="stat">
+Ratées
+<strong>${p.no}</strong>
+</div>
+
+<div class="stat">
+Total
+<strong>${p.total}</strong>
+</div>
+
+<div class="stat">
+Réussite
+<strong>${rate}%</strong>
+</div>
+
+</div>
+
+<div class="info section">
+<h3>XP GAGNÉ</h3>
+<p>
++${xp} XP${bonus>0?` (dont ${bonus} bonus régularité ≥ ${BONUS_THRESHOLD}%)`:''}
+</p>
+</div>
+
+<div class="section">
+
+<button class="primary"
+onclick="zone('${p.m}')">
+Terminer
+</button>
+
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+// ===================== JEU PUTTING =====================
+
+let puttingState={};
+
+function startPutting(id){
+
+let e=puttingById(id);
+
+if(e.type==='streak'){
+puttingState={
+id,type:'streak',
+n:1,total:e.totalBalls,target:e.target,
+ok:0,no:0,results:[],
+dist:selectedDist[id],
+startTime:Date.now()
+};
+}else if(e.type==='ladder'){
+puttingState={
+id,type:'ladder',
+levelIndex:0,levels:e.levels,attempts:0,maxAttempts:e.maxAttempts,
+ok:0,no:0,results:[],validated:false,
+startTime:Date.now()
+};
+}else{
+puttingState={
+id,type:'ladder2',
+levelIndex:0,levels:e.levels,tryInLevel:0,triesPerLevel:e.triesPerLevel,
+attempts:0,maxBalls:e.maxBalls,
+ok:0,no:0,results:[],validated:false,
+startTime:Date.now()
+};
+}
+
+renderPlayPutting();
+}
+
+function renderPlayPutting(){
+
+let p=puttingState;
+let e=puttingById(p.id);
+
+let headLine='';
+let sub='';
+
+if(p.type==='streak'){
+headLine=`Balle n°${p.n}`;
+sub=`${p.n} / ${p.total} · ${p.dist} m`;
+}else if(p.type==='ladder'){
+headLine=`Distance : ${p.levels[p.levelIndex]} m`;
+sub=`Essai ${p.attempts+1} / ${p.maxAttempts}`;
+}else{
+headLine=`Palier ${p.levelIndex+1} : ${p.levels[p.levelIndex]} m`;
+sub=`Balle ${p.tryInLevel+1} / ${p.triesPerLevel} de ce palier · zone 50 cm`;
+}
+
+let levelRow='';
+if(p.type==='ladder'||p.type==='ladder2'){
+levelRow=`<div class="levelRow">
+${p.levels.map((lv,idx)=>`<span class="levelChip ${idx===p.levelIndex?'cur':(idx<p.levelIndex?'done':'')}">${lv} m</span>`).join('')}
+</div>`;
+}
+
+S.innerHTML=`
+
+<div class="back"
+onclick="detailPutting('${p.id}')">
+← Quitter
+</div>
+
+<div class="play">
+
+<span class="tag">
+${e.nom}
+</span>
+
+<h1>
+${headLine}
+</h1>
+
+<div class="ballNo">
+${sub}
+</div>
+
+${levelRow}
+
+<div class="choice">
+
+<button class="ok"
+onclick="hitPutting(true)">
+✓<br>
+Réussie
+</button>
+
+<button class="no"
+onclick="hitPutting(false)">
+×<br>
+Ratée
+</button>
+
+</div>
+
+<div class="score">
+
+Réussies :
+<b>${p.ok}</b>
+
+·
+
+Ratées :
+<b>${p.no}</b>
+
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+function hitPutting(ok){
+
+let p=puttingState;
+
+p.results.push(ok);
+
+if(ok)p.ok++;else p.no++;
+
+if(p.type==='streak'){
+
+if(p.n>=p.total){
+finishPutting();
+return;
+}
+p.n++;
+renderPlayPutting();
+return;
+
+}
+
+if(p.type==='ladder'){
+
+p.attempts++;
+
+if(ok){
+p.levelIndex++;
+if(p.levelIndex>=p.levels.length){
+p.validated=true;
+finishPutting();
+return;
+}
+}else{
+p.levelIndex=Math.max(0,p.levelIndex-1);
+}
+
+if(p.attempts>=p.maxAttempts){
+finishPutting();
+return;
+}
+
+renderPlayPutting();
+return;
+
+}
+
+// ladder2
+p.attempts++;
+
+if(ok){
+p.levelIndex++;
+p.tryInLevel=0;
+if(p.levelIndex>=p.levels.length){
+p.validated=true;
+finishPutting();
+return;
+}
+}else{
+p.tryInLevel++;
+if(p.tryInLevel>=p.triesPerLevel){
+p.levelIndex=0;
+p.tryInLevel=0;
+}
+}
+
+if(p.attempts>=p.maxBalls){
+finishPutting();
+return;
+}
+
+renderPlayPutting();
+}
+
+function finishPutting(){
+
+let p=puttingState;
+let e=puttingById(p.id);
+
+let total=p.results.length;
+let rate=total>0?Math.round(p.ok/total*100):0;
+
+let validated;
+if(p.type==='streak'){
+validated=bestStreak(p.results)>=p.target;
+}else{
+validated=!!p.validated;
+}
+
+let mult=MULT[e.niveau]||1;
+let xpPerBall=Math.round(XP_PER_BALL*mult);
+let bonus=validated?Math.round(BONUS_XP*mult):0;
+let xp=p.ok*xpPerBall+bonus;
+let duration=Math.round((Date.now()-p.startTime)/1000);
+
+saveSession({
+date:new Date().toISOString(),
+zone:'Putting',
+exercise:e.nom,
+niveau:e.niveau,
+results:p.results,
+ok:p.ok,
+no:p.no,
+total,
+rate,
+xp,
+duration,
+validated
+});
+
+S.innerHTML=`
+
+<div class="play">
+
+<span class="tag">
+EXERCICE TERMINÉ
+</span>
+
+<h1>${validated?'Validé ✓':'Résultat'}</h1>
+
+<div class="statsGrid">
+
+<div class="stat">
+Réussies
+<strong>${p.ok}</strong>
+</div>
+
+<div class="stat">
+Ratées
+<strong>${p.no}</strong>
+</div>
+
+<div class="stat">
+Total
+<strong>${total}</strong>
+</div>
+
+<div class="stat">
+Réussite
+<strong>${rate}%</strong>
+</div>
+
+</div>
+
+<div class="info section">
+<h3>XP GAGNÉ</h3>
+<p>
++${xp} XP${bonus>0?` (dont ${bonus} bonus exercice validé)`:''}
+</p>
+</div>
+
+<div class="section">
+
+<button class="primary"
+onclick="zone('Putting')">
+Terminer
+</button>
+
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+// ===================== PROGRESSION =====================
+
+function stats(m){
+
+let zs=computeZoneStats(m);
+let recent=zs.sessions.slice().reverse().slice(0,8);
+let hasClubs=!!clubOptions[m];
+let clubStats=hasClubs?computeClubStats(m):[];
+
+S.innerHTML=`
+
+<div class="back"
+onclick="zone('${m}')">
+← ${m}
+</div>
+
+<h1>Progression</h1>
+
+<div class="muted">
+Statistiques liées uniquement à
+${m.toLowerCase()}.
+</div>
+
+<div class="statsGrid">
+
+<div class="stat">
+Sessions
+<strong>${zs.count}</strong>
+</div>
+
+<div class="stat">
+Balles jouées
+<strong>${zs.balls}</strong>
+</div>
+
+<div class="stat">
+Réussite
+<strong>${zs.rate===null?'—':zs.rate+'%'}</strong>
+</div>
+
+<div class="stat">
+Meilleure série
+<strong>${zs.count>0?zs.streak:'—'}</strong>
+</div>
+
+</div>
+
+${hasClubs?`
+<div class="section">
+<h2>Progression par club</h2>
+${clubStats.map(c=>`
+<div class="clubBarRow">
+<div class="clubBarTop">
+<span>${c.club}</span>
+<span>${c.balls>0?c.rate+'%':'—'}</span>
+</div>
+<div class="bar">
+<i style="width:${c.rate}%"></i>
+</div>
+</div>
+`).join('')}
+</div>
+`:''}
+
+<div class="section">
+<h2>Historique</h2>
+
+${recent.length===0?`<div class="muted">Aucune séance enregistrée pour l’instant.</div>`:recent.map(s=>`
+<div class="histItem">
+<div>
+<b>${s.exercise}</b>
+<span class="muted">${new Date(s.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})} · ${new Date(s.date).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>
+</div>
+<div class="r">
+<b>${s.rate}%</b>
+<span class="muted">+${s.xp} XP</span>
+</div>
+</div>
+`).join('')}
+
+</div>`;
+
+setActiveTab('progression');
+}
+
+function allExercises(){
+
+S.innerHTML=`
+
+<h1>Tous les exercices</h1>
+
+<div class="muted">
+Choisis une zone.
+</div>
+
+<div class="section">
+
+${zonesOrder.map(m=>`
+
+<div class="card"
+style="margin-bottom:10px"
+onclick="list('${m}')">
+
+<b>${m}</b>
+
+<span class="muted">
+${zoneCount(m)} exercices
+</span>
+
+</div>
+
+`).join('')}
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+function progressHub(){
+
+S.innerHTML=`
+
+<h1>Progression</h1>
+
+<div class="muted">
+Choisis une zone pour consulter ses statistiques.
+</div>
+
+<div class="section">
+
+${zonesOrder.map(m=>`
+
+<div class="card"
+style="margin-bottom:10px"
+onclick="stats('${m}')">
+
+<b>${m}</b>
+
+<span class="muted">
+Voir les statistiques
+</span>
+
+</div>
+
+`).join('')}
+
+</div>`;
+
+setActiveTab('progression');
+}
+
+// ===================== PROFIL =====================
+
+function profile(){
+
+let p=loadProfile();
+let totalXp=computeTotalXp();
+let li=getLevelInfo(totalXp);
+let totalSessions=loadHistory().length;
+
+S.innerHTML=`
+
+<h1>Profil</h1>
+
+<div class="info">
+
+<h3>PROFIL JOUEUR</h3>
+
+<div class="field">
+<label>Nom</label>
+<input id="pName" type="text" value="${p.name?p.name.replace(/"/g,'&quot;'):''}" placeholder="Ton nom" oninput="onProfileChange()">
+</div>
+
+<div class="field">
+<label>Index de golf</label>
+<input id="pIndex" type="text" value="${p.index?p.index.replace(/"/g,'&quot;'):''}" placeholder="Ex : 18.4" oninput="onProfileChange()">
+</div>
+
+<div class="saveNote" id="saveNote"></div>
+
+</div>
+
+<div class="statsGrid">
+
+<div class="stat">
+Niveau
+<strong>${li.level}</strong>
+</div>
+
+<div class="stat">
+XP total
+<strong>${totalXp}</strong>
+</div>
+
+<div class="stat">
+Séances
+<strong>${totalSessions}</strong>
+</div>
+
+<div class="stat">
+XP avant niveau ${li.level+1}
+<strong>${li.xpForNext-li.xpInLevel}</strong>
+</div>
+
+</div>`;
+
+setActiveTab('profil');
+}
+
+let profileSaveTimer=null;
+
+function onProfileChange(){
+if(profileSaveTimer)clearTimeout(profileSaveTimer);
+profileSaveTimer=setTimeout(()=>{
+let name=document.getElementById('pName').value;
+let index=document.getElementById('pIndex').value;
+saveProfile({name,index});
+let note=document.getElementById('saveNote');
+if(note){
+note.textContent='Enregistré ✓';
+setTimeout(()=>{if(note)note.textContent='';},1500);
+}
+},400);
+}
+
+home();
+
+</script>
+
+</body>
+</html>
