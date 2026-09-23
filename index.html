@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="fr">
 <head>
@@ -800,107 +799,146 @@ function clubsLabel(zone){
 
 // ===================== EXERCICES — APPROCHES / FERS / LONG JEU =====================
 
+// ===================== EXERCICES — APPROCHES / FERS / LONG JEU =====================
+
 const exercises={
 
 'Approches':[
 {
 id:'appPrecision',
-nom:'Cercle serré',
+nom:'Précision',
 tag:'Précision',
 clubs:clubOptions['Approches'],
 kind:'simple',
-ballsMode:'fixed',
-totalBalls:3,
-description:'Choisis ton wedge et joue trois balles vers le drapeau.',
-objectif:'Fais atterrir les 3 balles dans un cercle d’1 m autour du trou.'
+totalBalls:10,
+target:7,
+needsDistance:true,
+distanceDefault:20,
+description:'Choisis une distance d’approche et matérialise autour du trou une zone d’environ 3 m de rayon.',
+objectif:'Joue 10 balles vers le même trou en essayant de terminer à moins de 3 m. Réussis 7 balles sur 10 dans la zone.'
+},
+{
+id:'appContact',
+nom:'Contact',
+tag:'Contact',
+clubs:clubOptions['Approches'],
+kind:'simple',
+totalBalls:10,
+target:8,
+description:'Pose une serviette à plat sur le sol, environ 5 cm derrière la balle, dans l’axe du coup. Choisis une cible et prépare ton approche normalement.',
+objectif:'Joue 10 balles sans déplacer la serviette : le club doit passer directement sur la balle sans la toucher avant l’impact. Réussis 8 contacts propres sur 10.'
 },
 {
 id:'appTrajectoire',
-nom:'Les trois trajectoires',
+nom:'Trajectoire',
 tag:'Trajectoire',
 clubs:clubOptions['Approches'],
-kind:'phases',
-distances:[5,10,15,20,25,30],
-phases:[
-{label:'Trajectoire basse, balle roulante',balls:2},
-{label:'Trajectoire intermédiaire',balls:2},
-{label:'Trajectoire haute, peu de roule',balls:2}
-],
-totalBalls:6,
-description:'Place trois lignes de tees à des distances croissantes de ta balle : une proche pour une trajectoire basse et roulante, une intermédiaire, une proche du trou pour une trajectoire haute avec peu de roule. Choisis ton wedge et la distance de jeu.',
-objectif:'Quelle que soit la trajectoire visée, pose la balle à moins d’1 m du trou.'
+kind:'simple',
+totalBalls:10,
+target:8,
+subChoice:{label:'Trajectoire',options:['Basse','Moyenne','Haute']},
+description:'Choisis un trou sur le green et place une baguette d’alignement au sol, à une distance adaptée à la trajectoire choisie : loin du trou pour une trajectoire basse et roulante, proche du trou pour une trajectoire haute avec peu de roule.',
+objectif:'Joue 10 balles avec la même trajectoire choisie : la balle doit franchir la baguette et produire le type de roule recherché. Réussis 8 balles sur 10.'
 },
 {
-id:'appBunker',
-nom:'Sortie de bunker',
-tag:'Bunker',
+id:'appCalibrage',
+nom:'Calibrage des wedges',
+tag:'Calibrage',
 clubs:clubOptions['Approches'],
-kind:'simple',
-ballsMode:'player',
-ballOptions:[3,5,10],
-description:'Choisis ton wedge et le nombre de balles, puis sors du bunker en te rapprochant au maximum du trou.',
-objectif:'Stoppe la balle à moins d’1 m 50 du trou.'
+kind:'measure',
+groups:[
+{label:'Demi-coup',balls:5},
+{label:'Trois-quarts de coup',balls:5},
+{label:'Plein coup',balls:5}
+],
+description:'Choisis ton wedge. Cet exercice sert avant tout à construire ton yardage plutôt qu’à t’entraîner à proprement parler : 5 demi-coups, 5 trois-quarts de coups puis 5 pleins coups.',
+objectif:'Après chaque coup, indique la distance obtenue pour construire tes repères de distance par type de coup.'
 }
 ],
 
 'Fers':[
 {
-id:'ferDispersion',
-nom:'Couloir de précision',
-tag:'Dispersion',
+id:'ferDistance',
+nom:'Distance',
+tag:'Distance',
 clubs:clubOptions['Fers'],
 kind:'simple',
-ballsMode:'fixed',
 totalBalls:10,
-description:'Choisis ton fer et matérialise un couloir de 30 m de large sur le practice.',
-objectif:'Place le maximum de balles dans le couloir, sur 10 balles.'
+target:7,
+needsRefDistance:true,
+tolerance:5,
+description:'Choisis un fer et indique ta distance de référence avec ce club. Joue 10 balles avec un plein swing normal en cherchant à reproduire exactement le même coup à chaque fois.',
+objectif:'Réussis 7 balles sur 10 dans une fourchette de ±5 m autour de ta distance de référence.'
 },
 {
-id:'ferPrecision',
-nom:'Ma distance',
-tag:'Précision',
-clubs:clubOptions['Fers'],
-kind:'distanceInput',
-totalBalls:10,
-rangeMeters:10,
-description:'Choisis ton fer et indique la distance que tu réalises habituellement avec ce club.',
-objectif:'Reste dans une fourchette de ± 10 m autour de ta distance, sur 10 balles.'
-},
-{
-id:'ferEffets',
-nom:'Travail des effets',
-tag:'Effets',
+id:'ferDirection',
+nom:'Direction',
+tag:'Direction',
 clubs:clubOptions['Fers'],
 kind:'simple',
-effectMode:true,
 totalBalls:10,
-description:'Choisis ton fer. À chaque balle, un effet est tiré au sort : fade, draw ou balle droite.',
-objectif:'Réalise l’effet demandé et reste dans le couloir de 30 m, sur 10 balles.'
+target:7,
+corridorWidth:20,
+description:'Choisis une cible au practice et imagine un couloir de 20 m de large, soit environ 10 m de chaque côté de ta ligne de cible. Joue 10 balles avec le même fer en visant toujours la même cible.',
+objectif:'La distance importe peu ici, seule la direction compte. Place 7 balles sur 10 à l’intérieur du couloir.'
+},
+{
+id:'ferEffet',
+nom:'Effet',
+tag:'Effet',
+clubs:clubOptions['Fers'],
+kind:'ordered',
+groups:[
+{label:'Balle droite',balls:3},
+{label:'Fade',balls:3},
+{label:'Draw',balls:3}
+],
+target:6,
+description:'Choisis un fer et une cible clairement identifiable au practice. Joue à la suite 3 balles droites (le moins de courbure possible), 3 balles en fade (courbure vers la droite) puis 3 balles en draw (courbure vers la gauche).',
+objectif:'La balle doit présenter clairement la trajectoire demandée tout en restant exploitable. Réussis 2 balles sur 3 pour chaque trajectoire, soit un minimum de 6 réussites sur 9.'
 }
 ],
 
 'Long jeu':[
 {
-id:'ljDispersion',
-nom:'Mise en jeu',
-tag:'Dispersion',
+id:'ljDistance',
+nom:'Distance',
+tag:'Distance',
 clubs:clubOptions['Long jeu'],
 kind:'simple',
-ballsMode:'fixed',
 totalBalls:10,
-description:'Choisis ton club et matérialise un couloir de 40 m de large.',
-objectif:'Place le maximum de balles dans le couloir, sur 10 balles.'
+target:7,
+needsRefDistance:true,
+tolerance:10,
+description:'Choisis un club et indique ta distance de référence avec ce club. Joue 10 balles avec un plein swing normal en cherchant à reproduire exactement le même coup à chaque fois.',
+objectif:'Réussis 7 balles sur 10 dans une fourchette de ±10 m autour de ta distance de référence.'
 },
 {
-id:'ljEffets',
-nom:'Effets en long jeu',
-tag:'Effets',
+id:'ljDirection',
+nom:'Direction',
+tag:'Direction',
 clubs:clubOptions['Long jeu'],
 kind:'simple',
-effectMode:true,
 totalBalls:10,
-description:'Choisis ton club. À chaque balle, un effet est tiré au sort : fade, draw ou balle droite.',
-objectif:'Réalise l’effet demandé et reste dans le couloir de 40 m, sur 10 balles.'
+target:7,
+corridorWidth:30,
+description:'Choisis une cible au practice et imagine un couloir de 30 m de large, soit environ 15 m de chaque côté de ta ligne de cible. Joue 10 balles avec le même club en visant toujours la même cible.',
+objectif:'La distance importe peu ici, seule la direction compte. Place 7 balles sur 10 à l’intérieur du couloir.'
+},
+{
+id:'ljEffet',
+nom:'Effet',
+tag:'Effet',
+clubs:clubOptions['Long jeu'],
+kind:'ordered',
+groups:[
+{label:'Balle droite',balls:3},
+{label:'Fade',balls:3},
+{label:'Draw',balls:3}
+],
+target:6,
+description:'Choisis un club et une cible clairement identifiable au practice. Joue à la suite 3 balles droites (le moins de courbure possible), 3 balles en fade (courbure vers la droite) puis 3 balles en draw (courbure vers la gauche).',
+objectif:'La balle doit présenter clairement la trajectoire demandée tout en restant exploitable. Réussis 2 balles sur 3 pour chaque trajectoire, soit un minimum de 6 réussites sur 9.'
 }
 ]
 
@@ -917,51 +955,35 @@ function zoneCount(m){
 const puttingExercises=[
 
 {
-id:'porte',
-niveau:'Débutant',
-nom:'Porte de départ',
-type:'streak',
-distances:[1,2,3],
-totalBalls:3,
-target:3,
-description:'Place ta balle à la distance choisie du trou. Matérialise deux portes avec des tees, une 30 cm devant la balle et une 30 cm derrière, pour guider ton putter tout au long du mouvement.',
-objectif:'Enchaîne 3 putts réussis d’affilée, sans en manquer un seul.'
-},
-
-{
-id:'cercle',
-niveau:'Débutant',
-nom:'Cercle de sécurité',
-type:'streak',
-distances:[1,2,3],
-totalBalls:5,
-target:5,
-description:'Place 5 balles réparties régulièrement en cercle autour du trou, à la distance choisie.',
-objectif:'Rentre les 5 putts d’affilée, sans en manquer un seul.'
-},
-
-{
-id:'echelle',
+id:'dosage',
 niveau:'Intermédiaire',
-nom:'Échelle de distance',
-type:'ladder',
-levels:[1,2,3],
-maxAttempts:9,
-description:'Putte à 1 m du trou. Si tu réussis, monte à 2 m puis à 3 m. Si tu rates, redescends d’un niveau.',
-objectif:'Valide les 3 distances sans faute pour terminer l’échelle.'
+nom:'Dosage',
+type:'sequence',
+distances:[3,6,9],
+maxRounds:3,
+description:'Place une balle à 3 m, une à 6 m et une à 9 m du trou. Derrière le trou, matérialise une zone d’environ 1 m de profondeur avec deux tees. Joue d’abord la balle à 3 m, puis celle à 6 m, puis enfin celle à 9 m.',
+objectif:'La balle doit terminer dans le trou ou dans la zone juste derrière (pas besoin de rentrer le putt). Réussis les trois distances à la suite, sinon tu repars du début.'
 },
 
 {
-id:'pression',
-niveau:'Avancé',
-nom:'Série sous pression',
-type:'ladder2',
-levels:[1,2,3,4,5],
-triesPerLevel:2,
-zoneCm:50,
-maxBalls:20,
-description:'Cinq paliers de 1 à 5 m. À chaque palier, matérialise une zone de 50 cm autour du trou et joue jusqu’à 2 balles.',
-objectif:'Fais entrer au moins une balle sur deux dans la zone à chaque palier pour monter d’un niveau. Si tes deux balles ratent, tu repars de zéro.'
+id:'precision',
+niveau:'Débutant',
+nom:'Précision',
+type:'simple',
+totalBalls:10,
+target:8,
+description:'Choisis un putt droit d’environ 2 m. Place deux tees à environ 30 cm devant la balle pour former une petite porte, légèrement plus large qu’une balle de golf. Vise le centre de la porte et joue normalement vers le trou.',
+objectif:'Le résultat final est secondaire : on vérifie surtout que la balle démarre sur la ligne choisie, sans toucher les tees. Réussis 8 passages sur 10.'
+},
+
+{
+id:'tempo',
+niveau:'Débutant',
+nom:'Tempo',
+type:'tempo',
+totalBalls:10,
+description:'Place plusieurs balles à environ 3 m du trou, de préférence sur un putt assez droit. Pour chaque putt, cherche à conserver exactement le même rythme : mouvement arrière fluide sans accélération brutale, puis retour naturel vers la balle. Rythme simple à garder en tête : « 1 » pendant le mouvement arrière, « 2 » au moment de revenir vers la balle.',
+objectif:'Réalise 10 putts consécutifs avec le même rythme, quel que soit le résultat dans le trou.'
 }
 
 ];
@@ -1092,64 +1114,56 @@ return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stro
 
 // ===================== DIAGRAMMES — APPROCHES / FERS / LONG JEU =====================
 
-function diagramCiblePrecision(){
+function diagramApproachZone(dist){
+dist=dist||20;
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
-<circle cx="100" cy="55" r="26" fill="none" stroke="#8c8172" stroke-width="1.3" stroke-dasharray="3 4"/>
-<circle cx="100" cy="55" r="7" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
-<circle cx="100" cy="55" r="2.5" fill="#f3d98b"/>
-<circle cx="86" cy="40" r="4" fill="#f4efe4"/>
-<circle cx="118" cy="62" r="4" fill="#f4efe4"/>
-<circle cx="92" cy="70" r="4" fill="#f4efe4"/>
-${dArrow(100,55,100,29,'#e3b34a')}
-<text x="112" y="40" font-size="9" fill="#d8cdb8">1 m</text>
+<circle cx="100" cy="52" r="30" fill="none" stroke="#8c8172" stroke-width="1.3" stroke-dasharray="3 4"/>
+<circle cx="100" cy="52" r="7" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
+<circle cx="100" cy="52" r="2.5" fill="#f3d98b"/>
+${dArrow(100,52,100,22,'#e3b34a')}
+<text x="112" y="35" font-size="9" fill="#d8cdb8">zone 3 m</text>
+<text x="100" y="100" text-anchor="middle" font-size="9" fill="#8c8172">distance de jeu : ${dist} m</text>
 </svg>`;
 }
 
-function diagramTrajectoires(dist){
-dist=dist||15;
+function diagramContact(){
+return `
+<svg viewBox="0 0 200 110">
+<rect width="200" height="110" rx="12" fill="#0a0908"/>
+<rect x="68" y="66" width="64" height="15" rx="3" fill="#3a332a" stroke="#8c8172" stroke-width="1"/>
+<circle cx="100" cy="58" r="4" fill="#f4efe4"/>
+${dArrow(100,58,100,30,'#e3b34a')}
+<text x="112" y="42" font-size="8" fill="#d8cdb8">cible</text>
+<text x="100" y="98" text-anchor="middle" font-size="8" fill="#8c8172">serviette · 5 cm derrière la balle</text>
+</svg>`;
+}
+
+function diagramTrajUnique(choice){
+choice=choice||'Moyenne';
+let cfg={
+'Basse':{y:74,color:'#e3b34a'},
+'Moyenne':{y:52,color:'#8ebca4'},
+'Haute':{y:32,color:'#7fa3c9'}
+}[choice];
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
 <circle cx="100" cy="18" r="8" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
 <circle cx="100" cy="18" r="2.5" fill="#f3d98b"/>
-<circle cx="100" cy="18" r="18" fill="none" stroke="#8c8172" stroke-width="1.1" stroke-dasharray="2 4"/>
-${dArrow(100,18,124,18,'#e3b34a')}
-<text x="150" y="21" font-size="8" fill="#d8cdb8">1 m</text>
 <circle cx="100" cy="96" r="4" fill="#f4efe4"/>
-<line x1="52" y1="72" x2="68" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="72" y1="72" x2="88" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="92" y1="72" x2="108" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="112" y1="72" x2="128" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="132" y1="72" x2="148" y2="72" stroke="#e3b34a" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="58" y1="52" x2="74" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="78" y1="52" x2="94" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="98" y1="52" x2="114" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="118" y1="52" x2="134" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="138" y1="52" x2="154" y2="52" stroke="#8ebca4" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="64" y1="34" x2="80" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="84" y1="34" x2="100" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="104" y1="34" x2="120" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="124" y1="34" x2="140" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
-<line x1="144" y1="34" x2="160" y2="34" stroke="#7fa3c9" stroke-width="1.5" stroke-dasharray="3 3"/>
-<circle cx="35" cy="72" r="3" fill="#e3b34a"/>
-<circle cx="29" cy="52" r="3" fill="#8ebca4"/>
-<circle cx="23" cy="34" r="3" fill="#7fa3c9"/>
-<text x="100" y="108" text-anchor="middle" font-size="9"><tspan fill="#e3b34a">basse</tspan><tspan fill="#6b6255"> · </tspan><tspan fill="#8ebca4">intermédiaire</tspan><tspan fill="#6b6255"> · </tspan><tspan fill="#7fa3c9">haute</tspan></text>
+<line x1="66" y1="${cfg.y}" x2="134" y2="${cfg.y}" stroke="${cfg.color}" stroke-width="2.2" stroke-dasharray="4 4"/>
+<text x="100" y="108" text-anchor="middle" font-size="9" fill="${cfg.color}">trajectoire ${choice.toLowerCase()}</text>
 </svg>`;
 }
 
-function diagramBunker(){
+function diagramCalibrage(){
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
-<ellipse cx="100" cy="80" rx="55" ry="22" fill="#3a3220"/>
-<circle cx="100" cy="80" r="4" fill="#f4efe4"/>
-<circle cx="100" cy="22" r="7" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
-<circle cx="100" cy="22" r="2.5" fill="#f3d98b"/>
-<circle cx="100" cy="22" r="16" fill="none" stroke="#3a332a" stroke-width="2"/>
-<text x="122" y="25" font-size="8" fill="#8c8172">1,5 m</text>
+${fanBackground()}
+<text x="100" y="108" text-anchor="middle" font-size="9" fill="#8c8172">demi · trois-quarts · plein coup</text>
 </svg>`;
 }
 
@@ -1187,28 +1201,31 @@ ${fanBackground()}
 </svg>`;
 }
 
-function diagramEffets(width){
+function diagramEffet3(width){
 width=width||30;
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
 ${fanBackground()}
+<line x1="100" y1="100" x2="100" y2="20" stroke="#f2e9d8" stroke-width="1.2" stroke-dasharray="3 3"/>
 <path d="M100 100 C80 78 80 38 100 20" stroke="#e3574a" stroke-width="1.3" fill="none" stroke-dasharray="3 3"/>
 <path d="M100 100 C120 78 120 38 100 20" stroke="#4ac77a" stroke-width="1.3" fill="none" stroke-dasharray="3 3"/>
-<text x="100" y="108" text-anchor="middle" font-size="9" fill="#8c8172">effet aléatoire · couloir ${width} m</text>
+<text x="100" y="108" text-anchor="middle" font-size="9" fill="#8c8172">droite · fade · draw · couloir ${width} m</text>
 </svg>`;
 }
 
 function exThumb(ex){
-if(ex.id==='appPrecision')return diagramCiblePrecision();
-if(ex.id==='appTrajectoire')return diagramTrajectoires(15);
-if(ex.id==='appBunker')return diagramBunker();
-if(ex.id==='ferDispersion')return diagramCouloir(30);
-if(ex.id==='ferPrecision')return diagramFerPrecision(140,10);
-if(ex.id==='ferEffets')return diagramEffets(30);
-if(ex.id==='ljDispersion')return diagramCouloir(40);
-if(ex.id==='ljEffets')return diagramEffets(40);
-return diagramCiblePrecision();
+if(ex.id==='appPrecision')return diagramApproachZone(20);
+if(ex.id==='appContact')return diagramContact();
+if(ex.id==='appTrajectoire')return diagramTrajUnique('Moyenne');
+if(ex.id==='appCalibrage')return diagramCalibrage();
+if(ex.id==='ferDistance')return diagramFerPrecision(140,5);
+if(ex.id==='ferDirection')return diagramCouloir(20);
+if(ex.id==='ferEffet')return diagramEffet3(20);
+if(ex.id==='ljDistance')return diagramFerPrecision(180,10);
+if(ex.id==='ljDirection')return diagramCouloir(30);
+if(ex.id==='ljEffet')return diagramEffet3(30);
+return diagramApproachZone(20);
 }
 
 // ===================== DIAGRAMMES PUTTING =====================
@@ -1231,72 +1248,42 @@ ${dArrow(158,24,158,92)}
 </svg>`;
 }
 
-function diagramCercle(dist){
-dist=dist||2;
-let cx=100,cy=52,r=30;
-let pts=[];
-for(let k=0;k<5;k++){
-let a=(-90+k*72)*Math.PI/180;
-pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);
-}
-let balls=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#f4efe4"/>`).join('');
-return `
-<svg viewBox="0 0 200 110">
-<rect width="200" height="110" rx="12" fill="#0a0908"/>
-<circle cx="${cx}" cy="${cy}" r="9" fill="#171310" stroke="#e3b34a" stroke-width="1.5"/>
-<circle cx="${cx}" cy="${cy}" r="3" fill="#f3d98b"/>
-${dArrow(cx,cy,cx,cy-r)}
-<text x="${cx+8}" y="${cy-r/2}" font-size="10" fill="#d8cdb8">${dist} m</text>
-${balls}
-</svg>`;
-}
-
-function diagramEchelle(){
+function diagramDosage(){
 let holeY=14;
-let levels=[[1,38],[2,62],[3,86]];
-let arrows=levels.map(function(lv,idx){
+let levels=[[3,42],[6,68],[9,94]];
+let dots=levels.map(function(lv){
 let d=lv[0],y=lv[1];
-let x=120+idx*18;
-return dArrow(x,holeY,x,y)+`<text x="${x+5}" y="${(holeY+y)/2+3}" font-size="8" fill="#8c8172">${d}m</text>`;
+return `<circle cx="100" cy="${y}" r="4" fill="#f4efe4"/><text x="114" y="${y+3}" font-size="8" fill="#8c8172">${d} m</text>`;
 }).join('');
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
 <circle cx="100" cy="${holeY}" r="8" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
 <circle cx="100" cy="${holeY}" r="2.5" fill="#f3d98b"/>
-<line x1="100" y1="22" x2="100" y2="92" stroke="#3a332a" stroke-width="2" stroke-dasharray="3 4"/>
-<circle cx="100" cy="38" r="4" fill="#f4efe4"/>
-<circle cx="100" cy="62" r="4" fill="#f4efe4"/>
-<circle cx="100" cy="86" r="4" fill="#f4efe4"/>
-${arrows}
-<text x="40" y="55" font-size="14" fill="#4cb07e">↑</text>
-<text x="40" y="75" font-size="14" fill="#d97066">↓</text>
+<line x1="87" y1="${holeY+7}" x2="87" y2="${holeY+21}" stroke="#e3b34a" stroke-width="3"/>
+<line x1="113" y1="${holeY+7}" x2="113" y2="${holeY+21}" stroke="#e3b34a" stroke-width="3"/>
+<line x1="100" y1="22" x2="100" y2="96" stroke="#3a332a" stroke-width="2" stroke-dasharray="3 4"/>
+${dots}
 </svg>`;
 }
 
-function diagramPression(){
-let cx=100,holeY=18,zoneR=13;
-let positions=[[1,38],[2,54],[3,70],[4,86],[5,102]];
-let balls=positions.map(function(p){
-let d=p[0],y=p[1];
-return `<circle cx="${cx}" cy="${y}" r="4" fill="#f4efe4"/><text x="${cx+14}" y="${y+3}" font-size="8" fill="#8c8172">${d} m</text>`;
-}).join('');
+function diagramTempo(){
 return `
 <svg viewBox="0 0 200 110">
 <rect width="200" height="110" rx="12" fill="#0a0908"/>
-<line x1="${cx}" y1="${holeY+zoneR}" x2="${cx}" y2="106" stroke="#3a332a" stroke-width="2" stroke-dasharray="2 5"/>
-<circle cx="${cx}" cy="${holeY}" r="${zoneR}" fill="none" stroke="#e3b34a" stroke-width="1.6" opacity="0.55"/>
-<circle cx="${cx}" cy="${holeY}" r="5" fill="#171310" stroke="#e3b34a" stroke-width="1.4"/>
-<circle cx="${cx}" cy="${holeY}" r="1.8" fill="#f3d98b"/>
-<text x="${cx+zoneR+6}" y="${holeY+3}" font-size="8" fill="#8c8172">zone 50 cm</text>
-${balls}
+<circle cx="100" cy="60" r="4" fill="#f4efe4"/>
+<path d="M62 60 Q80 30 100 60" stroke="#e3b34a" stroke-width="1.6" fill="none"/>
+<path d="M100 60 Q120 30 138 60" stroke="#8ebca4" stroke-width="1.6" fill="none"/>
+<text x="80" y="26" font-size="12" fill="#e3b34a" text-anchor="middle">1</text>
+<text x="120" y="26" font-size="12" fill="#8ebca4" text-anchor="middle">2</text>
+<text x="100" y="94" text-anchor="middle" font-size="9" fill="#8c8172">rythme constant · 3 m</text>
 </svg>`;
 }
 
 function puttingThumb(e){
-if(e.type==='streak')return e.id==='porte'?diagramPorte(2):diagramCercle(2);
-if(e.type==='ladder')return diagramEchelle();
-return diagramPression();
+if(e.id==='dosage')return diagramDosage();
+if(e.id==='precision')return diagramPorte(2);
+return diagramTempo();
 }
 
 // ===================== ACCUEIL =====================
@@ -1477,9 +1464,8 @@ setActiveTab('exercices');
 // ===================== DÉTAIL EXERCICE — APPROCHES / FERS / LONG JEU =====================
 
 let selectedClub={};
-let selectedBalls={};
-let selectedDist={};
-let distanceInputVal={};
+let selectedSubChoice={};
+let selectedDistanceVal={};
 let currentDetailM=null;
 let currentDetailI=null;
 
@@ -1492,16 +1478,20 @@ let ex=exercises[m][i];
 let activeClubs=getActiveClubs(m);
 
 if(!selectedClub[ex.id]||!activeClubs.includes(selectedClub[ex.id]))selectedClub[ex.id]=activeClubs[0];
-if(ex.ballsMode==='player'&&!selectedBalls[ex.id])selectedBalls[ex.id]=ex.ballOptions[0];
-if(ex.kind==='phases'&&!selectedDist[ex.id])selectedDist[ex.id]=ex.distances[0];
-if(ex.kind==='distanceInput'&&distanceInputVal[ex.id]===undefined)distanceInputVal[ex.id]=140;
+if(ex.subChoice&&!selectedSubChoice[ex.id])selectedSubChoice[ex.id]=ex.subChoice.options[0];
+if(ex.needsDistance&&selectedDistanceVal[ex.id]===undefined)selectedDistanceVal[ex.id]=ex.distanceDefault;
+if(ex.needsRefDistance&&selectedDistanceVal[ex.id]===undefined){
+let d=getClubDistance(selectedClub[ex.id]);
+selectedDistanceVal[ex.id]=(d!==null)?d:140;
+}
 
 let diagramHtml;
-if(ex.id==='appTrajectoire')diagramHtml=diagramTrajectoires(selectedDist[ex.id]);
-else if(ex.id==='ferPrecision')diagramHtml=diagramFerPrecision(distanceInputVal[ex.id],ex.rangeMeters);
+if(ex.id==='appTrajectoire')diagramHtml=diagramTrajUnique(selectedSubChoice[ex.id]);
+else if(ex.id==='appPrecision')diagramHtml=diagramApproachZone(selectedDistanceVal[ex.id]);
+else if(ex.needsRefDistance)diagramHtml=diagramFerPrecision(selectedDistanceVal[ex.id],ex.tolerance);
 else diagramHtml=exThumb(ex);
 
-let totalBalls=ex.kind==='phases'?ex.totalBalls:(ex.ballsMode==='player'?selectedBalls[ex.id]:ex.totalBalls);
+let totalBalls=(ex.kind==='measure'||ex.kind==='ordered')?ex.groups.reduce((a,g)=>a+g.balls,0):ex.totalBalls;
 
 S.innerHTML=`
 
@@ -1525,24 +1515,24 @@ ${diagramHtml}
 ${activeClubs.map(c=>`<option value="${c}" ${selectedClub[ex.id]===c?'selected':''}>${c}</option>`).join('')}
 </select>
 
-${ex.kind==='phases'?`
-<div class="muted" style="margin-top:10px">Distance de jeu</div>
+${ex.subChoice?`
+<div class="muted" style="margin-top:10px">${ex.subChoice.label}</div>
 <div class="distPicker" style="flex-wrap:wrap">
-${ex.distances.map(d=>`<button class="${selectedDist[ex.id]===d?'sel':''}" onclick="pickTrajDist('${ex.id}',${d})">${d} m</button>`).join('')}
+${ex.subChoice.options.map(o=>`<button class="${selectedSubChoice[ex.id]===o?'sel':''}" onclick="pickSubChoice('${ex.id}','${o}')">${o}</button>`).join('')}
 </div>
 `:''}
 
-${ex.ballsMode==='player'?`
-<div class="muted" style="margin-top:10px">Nombre de balles</div>
-<div class="distPicker">
-${ex.ballOptions.map(n=>`<button class="${selectedBalls[ex.id]===n?'sel':''}" onclick="pickBalls('${ex.id}',${n})">${n}</button>`).join('')}
-</div>
-`:''}
-
-${ex.kind==='distanceInput'?`
+${ex.needsDistance?`
 <div class="field">
-<label>Ta distance avec ce club (m)</label>
-<input type="number" class="clubSelect" id="distInput_${ex.id}" value="${distanceInputVal[ex.id]}" oninput="onDistInput('${ex.id}',this.value)">
+<label>Distance de jeu (m)</label>
+<input type="number" class="clubSelect" value="${selectedDistanceVal[ex.id]}" oninput="onDistanceInput('${ex.id}',this.value)">
+</div>
+`:''}
+
+${ex.needsRefDistance?`
+<div class="field">
+<label>Distance de référence (m)</label>
+<input type="number" class="clubSelect" value="${selectedDistanceVal[ex.id]}" oninput="onDistanceInput('${ex.id}',this.value)">
 </div>
 `:''}
 
@@ -1595,41 +1585,31 @@ setActiveTab('exercices');
 
 function pickClub(id,val){
 selectedClub[id]=val;
-let ex=exercises[currentDetailM]?exercises[currentDetailM][currentDetailI]:null;
-if(ex&&ex.id===id&&ex.kind==='distanceInput'){
+let ex=(currentDetailM&&exercises[currentDetailM])?exercises[currentDetailM][currentDetailI]:null;
+if(ex&&ex.id===id&&ex.needsRefDistance){
 let d=getClubDistance(val);
 if(d!==null){
-distanceInputVal[id]=d;
+selectedDistanceVal[id]=d;
 detail(currentDetailM,currentDetailI);
 }
 }
 }
 
-function pickBalls(id,n){
-selectedBalls[id]=n;
+function pickSubChoice(id,val){
+selectedSubChoice[id]=val;
 detail(currentDetailM,currentDetailI);
 }
 
-function pickTrajDist(id,d){
-selectedDist[id]=d;
-detail(currentDetailM,currentDetailI);
+function onDistanceInput(id,val){
+selectedDistanceVal[id]=parseFloat(val)||0;
 }
-
-function onDistInput(id,val){
-distanceInputVal[id]=parseFloat(val)||0;
-}
-
-let selectedDistPutting={};
 
 function detailPutting(id){
 
 let e=puttingById(id);
 
-let hasDist=(e.type==='streak');
-
-if(hasDist&&!selectedDist[id])selectedDist[id]=e.distances[0];
-
-let totalBalls=e.type==='streak'?e.totalBalls:(e.type==='ladder'?e.maxAttempts:e.maxBalls);
+let totalBalls=e.type==='sequence'?e.distances.length:e.totalBalls;
+let totalMax=e.type==='sequence'?(e.distances.length*e.maxRounds):e.totalBalls;
 
 S.innerHTML=`
 
@@ -1645,20 +1625,13 @@ ${e.niveau}
 <h1>${e.nom}</h1>
 
 <div class="diagram" id="puttingDiagram">
-${e.id==='porte'?diagramPorte(selectedDist[id]):e.id==='cercle'?diagramCercle(selectedDist[id]):puttingThumb(e)}
+${puttingThumb(e)}
 </div>
-
-${hasDist?`
-<div class="muted" style="margin-top:10px">Distance</div>
-<div class="distPicker">
-${e.distances.map(d=>`<button class="${selectedDist[id]===d?'sel':''}" onclick="pickDist('${id}',${d})">${d} m</button>`).join('')}
-</div>
-`:''}
 
 <div class="metrics">
 
 <div class="metric">
-<b>${e.type==='streak'?e.totalBalls:'—'}</b>
+<b>${totalBalls}</b>
 Balles
 </div>
 
@@ -1668,7 +1641,7 @@ Série
 </div>
 
 <div class="metric">
-<b>${e.type==='streak'?e.totalBalls:'max '+totalBalls}</b>
+<b>${e.type==='sequence'?'max '+totalMax:totalBalls}</b>
 Total
 </div>
 
@@ -1702,13 +1675,6 @@ Commencer l’exercice
 setActiveTab('exercices');
 }
 
-function pickDist(id,d){
-selectedDist[id]=d;
-detailPutting(id);
-}
-
-// ===================== JEU — APPROCHES / FERS / LONG JEU =====================
-
 // ===================== MODALE DE CONFIRMATION =====================
 
 function showConfirm(message,onYes){
@@ -1740,6 +1706,8 @@ detailPutting(puttingState.id);
 });
 }
 
+// ===================== JEU — APPROCHES / FERS / LONG JEU =====================
+
 let playState={};
 
 function start(m,i){
@@ -1747,38 +1715,44 @@ function start(m,i){
 let ex=exercises[m][i];
 let club=selectedClub[ex.id]||ex.clubs[0];
 
-let total=ex.kind==='phases'?ex.totalBalls:(ex.ballsMode==='player'?(selectedBalls[ex.id]||ex.ballOptions[0]):ex.totalBalls);
-
-let effects=null;
-if(ex.effectMode){
-let pool=['Fade','Droite','Draw'];
-effects=[];
-for(let k=0;k<total;k++)effects.push(pool[Math.floor(Math.random()*3)]);
+if(ex.kind==='measure'){
+let ballLabels=[];
+ex.groups.forEach(g=>{for(let k=0;k<g.balls;k++)ballLabels.push(g.label);});
+playState={
+m,i,kind:'measure',n:1,total:ballLabels.length,ballLabels,
+club,distances:[],
+startTime:Date.now()
+};
+renderPlay();
+return;
 }
 
-let targetDist=null,rangeLow=null,rangeHigh=null;
-if(ex.kind==='distanceInput'){
-targetDist=distanceInputVal[ex.id]||140;
-rangeLow=targetDist-ex.rangeMeters;
-rangeHigh=targetDist+ex.rangeMeters;
+let total=ex.kind==='ordered'?ex.groups.reduce((a,g)=>a+g.balls,0):ex.totalBalls;
+
+let subChoice=ex.subChoice?selectedSubChoice[ex.id]:null;
+
+let refDist=null,rangeLow=null,rangeHigh=null;
+if(ex.needsRefDistance){
+refDist=selectedDistanceVal[ex.id]||140;
+rangeLow=refDist-ex.tolerance;
+rangeHigh=refDist+ex.tolerance;
+}
+
+let playDist=ex.needsDistance?(selectedDistanceVal[ex.id]||ex.distanceDefault):null;
+
+let groupLabels=null;
+if(ex.kind==='ordered'){
+groupLabels=[];
+ex.groups.forEach(g=>{for(let k=0;k<g.balls;k++)groupLabels.push(g.label);});
 }
 
 playState={
-m,i,n:1,ok:0,no:0,total,results:[],
-club,effects,targetDist,rangeLow,rangeHigh,
+m,i,kind:ex.kind,n:1,ok:0,no:0,total,results:[],
+club,subChoice,refDist,rangeLow,rangeHigh,playDist,groupLabels,
 startTime:Date.now()
 };
 
 renderPlay();
-}
-
-function ballPhaseLabel(ex,n){
-let idx=n-1,acc=0;
-for(let ph of ex.phases){
-if(idx<acc+ph.balls)return ph.label;
-acc+=ph.balls;
-}
-return '';
 }
 
 function renderPlay(){
@@ -1786,19 +1760,54 @@ function renderPlay(){
 let p=playState;
 let ex=exercises[p.m][p.i];
 
-let phaseLabel='';
-if(ex.kind==='phases'){
-phaseLabel=`<div class="phaseLabel">${ballPhaseLabel(ex,p.n)}</div>`;
+if(p.kind==='measure'){
+S.innerHTML=`
+
+<div class="back"
+onclick="confirmQuit()">
+← Quitter
+</div>
+
+<div class="play">
+
+<span class="tag">
+${ex.nom} · ${p.club}
+</span>
+
+<h1>
+Balle n°${p.n}
+</h1>
+
+<div class="ballNo">
+${p.n} / ${p.total}
+</div>
+
+<div class="phaseLabel">${p.ballLabels[p.n-1]}</div>
+
+<div class="field" style="max-width:240px;margin:22px auto;text-align:left">
+<label>Distance obtenue (m)</label>
+<input type="number" class="clubSelect" id="measureInput">
+</div>
+
+<button class="primary" onclick="hitMeasure()">Valider</button>
+
+</div>`;
+setActiveTab('exercices');
+return;
 }
 
-let effectBadge='';
-if(ex.effectMode){
-effectBadge=`<div class="effectBadge">${p.effects[p.n-1]}</div>`;
+let subLabel='';
+if(p.kind==='ordered'){
+subLabel=`<div class="effectBadge">${p.groupLabels[p.n-1]}</div>`;
+}else if(p.subChoice){
+subLabel=`<div class="effectBadge">${p.subChoice}</div>`;
 }
 
 let distInfo='';
-if(ex.kind==='distanceInput'){
+if(p.refDist!==null&&p.refDist!==undefined){
 distInfo=`<div class="phaseLabel">Objectif : entre ${p.rangeLow} et ${p.rangeHigh} m</div>`;
+}else if(p.playDist!==null&&p.playDist!==undefined){
+distInfo=`<div class="phaseLabel">Distance de jeu : ${p.playDist} m</div>`;
 }
 
 S.innerHTML=`
@@ -1822,8 +1831,7 @@ Balle n°${p.n}
 ${p.n} / ${p.total}
 </div>
 
-${phaseLabel}
-${effectBadge}
+${subLabel}
 ${distInfo}
 
 <div class="choice">
@@ -1881,6 +1889,21 @@ p.n++;
 renderPlay();
 }
 
+function hitMeasure(){
+let p=playState;
+let el=document.getElementById('measureInput');
+let val=parseFloat(el?el.value:0)||0;
+p.distances.push(val);
+
+if(p.n>=p.total){
+finishMeasure();
+return;
+}
+
+p.n++;
+renderPlay();
+}
+
 function finish(){
 
 let p=playState;
@@ -1891,7 +1914,9 @@ Math.round(
 p.ok/p.total*100
 );
 
-let bonus=rate>=BONUS_THRESHOLD?BONUS_XP:0;
+let hasTarget=typeof ex.target==='number';
+let validated=hasTarget?(p.ok>=ex.target):null;
+let bonus=validated===true?BONUS_XP:(!hasTarget&&rate>=BONUS_THRESHOLD?BONUS_XP:0);
 let xp=p.ok*XP_PER_BALL+bonus;
 let duration=Math.round((Date.now()-p.startTime)/1000);
 
@@ -1906,8 +1931,12 @@ no:p.no,
 total:p.total,
 rate,
 xp,
-duration
+duration,
+validated:validated===null?undefined:validated
 });
+
+let titleTxt=validated===true?'Validé ✓':'Résultat';
+let bonusTxt=bonus>0?(hasTarget?` (dont ${bonus} bonus exercice validé)`:` (dont ${bonus} bonus régularité ≥ ${BONUS_THRESHOLD}%)`):'';
 
 S.innerHTML=`
 
@@ -1917,7 +1946,7 @@ S.innerHTML=`
 EXERCICE TERMINÉ
 </span>
 
-<h1>Résultat</h1>
+<h1>${titleTxt}</h1>
 
 <div class="statsGrid">
 
@@ -1946,7 +1975,78 @@ Réussite
 <div class="info section">
 <h3>XP GAGNÉ</h3>
 <p>
-+${xp} XP${bonus>0?` (dont ${bonus} bonus régularité ≥ ${BONUS_THRESHOLD}%)`:''}
++${xp} XP${bonusTxt}
+</p>
+</div>
+
+<div class="section">
+
+<button class="primary"
+onclick="zone('${p.m}')">
+Terminer
+</button>
+
+</div>
+
+</div>`;
+
+setActiveTab('exercices');
+}
+
+function finishMeasure(){
+
+let p=playState;
+let ex=exercises[p.m][p.i];
+
+let xp=p.total*XP_PER_BALL;
+let duration=Math.round((Date.now()-p.startTime)/1000);
+
+let recap=[];
+let idx=0;
+ex.groups.forEach(g=>{
+let vals=p.distances.slice(idx,idx+g.balls);
+idx+=g.balls;
+let avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+recap.push({label:g.label,avg,vals});
+});
+
+saveSession({
+date:new Date().toISOString(),
+zone:p.m,
+exercise:ex.nom,
+club:p.club,
+results:[],
+ok:p.total,
+no:0,
+total:p.total,
+rate:100,
+xp,
+duration,
+measure:true,
+distances:p.distances
+});
+
+S.innerHTML=`
+
+<div class="play">
+
+<span class="tag">
+EXERCICE TERMINÉ
+</span>
+
+<h1>Résultat</h1>
+
+${recap.map(r=>`
+<div class="info">
+<h3>${r.label.toUpperCase()}</h3>
+<p>Distance moyenne : ${r.avg} m<br><span class="muted">${r.vals.join(' m · ')} m</span></p>
+</div>
+`).join('')}
+
+<div class="info section">
+<h3>XP GAGNÉ</h3>
+<p>
++${xp} XP
 </p>
 </div>
 
@@ -1972,27 +2072,24 @@ function startPutting(id){
 
 let e=puttingById(id);
 
-if(e.type==='streak'){
+if(e.type==='sequence'){
 puttingState={
-id,type:'streak',
-n:1,total:e.totalBalls,target:e.target,
-ok:0,no:0,results:[],
-dist:selectedDist[id],
+id,type:'sequence',
+round:1,maxRounds:e.maxRounds,idx:0,distances:e.distances,
+ok:0,no:0,results:[],validated:false,
 startTime:Date.now()
 };
-}else if(e.type==='ladder'){
+}else if(e.type==='simple'){
 puttingState={
-id,type:'ladder',
-levelIndex:0,levels:e.levels,attempts:0,maxAttempts:e.maxAttempts,
-ok:0,no:0,results:[],validated:false,
+id,type:'simple',
+n:1,total:e.totalBalls,target:e.target,
+ok:0,no:0,results:[],
 startTime:Date.now()
 };
 }else{
 puttingState={
-id,type:'ladder2',
-levelIndex:0,levels:e.levels,tryInLevel:0,triesPerLevel:e.triesPerLevel,
-attempts:0,maxBalls:e.maxBalls,
-ok:0,no:0,results:[],validated:false,
+id,type:'tempo',
+n:1,total:e.totalBalls,
 startTime:Date.now()
 };
 }
@@ -2005,25 +2102,46 @@ function renderPlayPutting(){
 let p=puttingState;
 let e=puttingById(p.id);
 
+if(p.type==='tempo'){
+S.innerHTML=`
+
+<div class="back"
+onclick="confirmQuitPutting()">
+← Quitter
+</div>
+
+<div class="play">
+
+<span class="tag">
+${e.nom}
+</span>
+
+<h1>
+Balle n°${p.n}
+</h1>
+
+<div class="ballNo">
+${p.n} / ${p.total} · 3 m
+</div>
+
+<div class="phaseLabel">Rythme : « 1 » à la montée · « 2 » au retour</div>
+
+<button class="primary" style="margin-top:22px" onclick="nextTempo()">Balle suivante</button>
+
+</div>`;
+setActiveTab('exercices');
+return;
+}
+
 let headLine='';
 let sub='';
 
-if(p.type==='streak'){
-headLine=`Balle n°${p.n}`;
-sub=`${p.n} / ${p.total} · ${p.dist} m`;
-}else if(p.type==='ladder'){
-headLine=`Distance : ${p.levels[p.levelIndex]} m`;
-sub=`Essai ${p.attempts+1} / ${p.maxAttempts}`;
+if(p.type==='sequence'){
+headLine=`Distance : ${p.distances[p.idx]} m`;
+sub=`Balle ${p.idx+1} / ${p.distances.length} · série ${p.round} / ${p.maxRounds}`;
 }else{
-headLine=`Palier ${p.levelIndex+1} : ${p.levels[p.levelIndex]} m`;
-sub=`Balle ${p.tryInLevel+1} / ${p.triesPerLevel} de ce palier · zone 50 cm`;
-}
-
-let levelRow='';
-if(p.type==='ladder'||p.type==='ladder2'){
-levelRow=`<div class="levelRow">
-${p.levels.map((lv,idx)=>`<span class="levelChip ${idx===p.levelIndex?'cur':(idx<p.levelIndex?'done':'')}">${lv} m</span>`).join('')}
-</div>`;
+headLine=`Balle n°${p.n}`;
+sub=`${p.n} / ${p.total} · 2 m`;
 }
 
 S.innerHTML=`
@@ -2046,8 +2164,6 @@ ${headLine}
 <div class="ballNo">
 ${sub}
 </div>
-
-${levelRow}
 
 <div class="choice">
 
@@ -2082,6 +2198,16 @@ Ratées :
 setActiveTab('exercices');
 }
 
+function nextTempo(){
+let p=puttingState;
+if(p.n>=p.total){
+finishPutting();
+return;
+}
+p.n++;
+renderPlayPutting();
+}
+
 function hitPutting(ok){
 
 let p=puttingState;
@@ -2090,8 +2216,7 @@ p.results.push(ok);
 
 if(ok)p.ok++;else p.no++;
 
-if(p.type==='streak'){
-
+if(p.type==='simple'){
 if(p.n>=p.total){
 finishPutting();
 return;
@@ -2099,56 +2224,23 @@ return;
 p.n++;
 renderPlayPutting();
 return;
-
 }
 
-if(p.type==='ladder'){
-
-p.attempts++;
-
+// sequence
 if(ok){
-p.levelIndex++;
-if(p.levelIndex>=p.levels.length){
+p.idx++;
+if(p.idx>=p.distances.length){
 p.validated=true;
 finishPutting();
 return;
 }
 }else{
-p.levelIndex=Math.max(0,p.levelIndex-1);
-}
-
-if(p.attempts>=p.maxAttempts){
+p.idx=0;
+p.round++;
+if(p.round>p.maxRounds){
 finishPutting();
 return;
 }
-
-renderPlayPutting();
-return;
-
-}
-
-// ladder2
-p.attempts++;
-
-if(ok){
-p.levelIndex++;
-p.tryInLevel=0;
-if(p.levelIndex>=p.levels.length){
-p.validated=true;
-finishPutting();
-return;
-}
-}else{
-p.tryInLevel++;
-if(p.tryInLevel>=p.triesPerLevel){
-p.levelIndex=0;
-p.tryInLevel=0;
-}
-}
-
-if(p.attempts>=p.maxBalls){
-finishPutting();
-return;
 }
 
 renderPlayPutting();
@@ -2159,20 +2251,17 @@ function finishPutting(){
 let p=puttingState;
 let e=puttingById(p.id);
 
-let total=p.results.length;
-let rate=total>0?Math.round(p.ok/total*100):0;
+let total=p.type==='tempo'?p.total:p.results.length;
+let rate=p.type==='tempo'?100:(total>0?Math.round(p.ok/total*100):0);
 
-let validated;
-if(p.type==='streak'){
-validated=bestStreak(p.results)>=p.target;
-}else{
-validated=!!p.validated;
-}
+let validated=null;
+if(p.type==='simple')validated=(p.ok>=p.target);
+if(p.type==='sequence')validated=!!p.validated;
 
 let mult=MULT[e.niveau]||1;
 let xpPerBall=Math.round(XP_PER_BALL*mult);
-let bonus=validated?Math.round(BONUS_XP*mult):0;
-let xp=p.ok*xpPerBall+bonus;
+let bonus=(validated===true)?Math.round(BONUS_XP*mult):0;
+let xp=(p.type==='tempo')?Math.round(p.total*xpPerBall):(p.ok*xpPerBall+bonus);
 let duration=Math.round((Date.now()-p.startTime)/1000);
 
 saveSession({
@@ -2180,15 +2269,17 @@ date:new Date().toISOString(),
 zone:'Putting',
 exercise:e.nom,
 niveau:e.niveau,
-results:p.results,
-ok:p.ok,
-no:p.no,
+results:p.type==='tempo'?[]:p.results,
+ok:p.type==='tempo'?p.total:p.ok,
+no:p.type==='tempo'?0:p.no,
 total,
 rate,
 xp,
 duration,
-validated
+validated:validated===null?undefined:validated
 });
+
+let titleTxt=validated===true?'Validé ✓':(p.type==='tempo'?'Terminé':'Résultat');
 
 S.innerHTML=`
 
@@ -2198,8 +2289,23 @@ S.innerHTML=`
 EXERCICE TERMINÉ
 </span>
 
-<h1>${validated?'Validé ✓':'Résultat'}</h1>
+<h1>${titleTxt}</h1>
 
+${p.type==='tempo'?`
+<div class="statsGrid">
+
+<div class="stat">
+Balles jouées
+<strong>${p.total}</strong>
+</div>
+
+<div class="stat">
+Durée
+<strong>${duration}s</strong>
+</div>
+
+</div>
+`:`
 <div class="statsGrid">
 
 <div class="stat">
@@ -2223,6 +2329,7 @@ Réussite
 </div>
 
 </div>
+`}
 
 <div class="info section">
 <h3>XP GAGNÉ</h3>
