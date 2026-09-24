@@ -2612,7 +2612,14 @@ XP avant niveau ${li.level+1}
 <strong>${li.xpForNext-li.xpInLevel}</strong>
 </div>
 
-</div>`;
+</div>
+
+<div class="menuCard" style="margin-top:16px" onclick="shareApp()">
+<b>Partager</b>
+<span class="muted">Envoie l’application par SMS, WhatsApp...</span>
+</div>
+
+<div class="saveNote" id="shareNote"></div>`;
 
 setActiveTab('profil');
 }
@@ -2704,6 +2711,34 @@ function toggleTheme(){
   saveTheme(loadTheme()==='light'?'dark':'light');
   applyTheme();
   profile();
+}
+
+// ===================== PARTAGE =====================
+
+const SHARE_URL='https://steven210793.github.io/SwiingLab/';
+const SHARE_TEXT='Découvre SwiingLab, mon appli d\'entraînement au golf !';
+
+function shareApp(){
+  if(navigator.share){
+    navigator.share({title:'SwiingLab',text:SHARE_TEXT,url:SHARE_URL}).catch(()=>{});
+  }else{
+    copyShareLink();
+  }
+}
+
+function copyShareLink(){
+  let note=document.getElementById('shareNote');
+  function done(msg){
+    if(note){
+      note.textContent=msg;
+      setTimeout(()=>{if(note)note.textContent='';},2000);
+    }
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(SHARE_URL).then(()=>done('Lien copié ✓')).catch(()=>done(SHARE_URL));
+  }else{
+    done(SHARE_URL);
+  }
 }
 
 let profileSaveTimer=null;
