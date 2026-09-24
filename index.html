@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SwiingLab">
-<meta name="theme-color" content="#0a0908">
+<meta name="theme-color" content="#080808">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;650;700&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
 *{box-sizing:border-box}
 
 :root{
-  --bg-0:#0a0908;
-  --bg-1:#0d0c0a;
+  --bg-0:#080808;
+  --bg-1:#0c0c0c;
   --glass:rgba(255,255,255,0.045);
   --glass-2:rgba(255,255,255,0.02);
   --border:rgba(255,255,255,0.09);
@@ -40,41 +40,41 @@
   --no-bd:rgba(217,112,102,0.4);
   --shadow:0 12px 34px rgba(0,0,0,0.45);
   --radius:20px;
-  --bg-grad-1:#1c1712;
-  --bg-grad-2:#161310;
-  --thumb-bg:#141210;
+  --bg-grad-1:#1a1a1a;
+  --bg-grad-2:#151515;
+  --thumb-bg:#141414;
   --text-soft:#a9c2b6;
   --text-soft-2:#d7e4dc;
-  --nav-bg:rgba(18,16,13,0.72);
+  --nav-bg:rgba(16,16,16,0.72);
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px)
 }
 
 :root[data-theme="light"]{
-  --bg-0:#f7f2e6;
-  --bg-1:#f2ecdc;
-  --glass:rgba(30,25,15,0.04);
-  --glass-2:rgba(30,25,15,0.02);
-  --border:rgba(30,25,15,0.12);
-  --border-soft:rgba(30,25,15,0.07);
-  --gold:#b8892f;
-  --gold-light:#a97927;
-  --gold-dark:#8f6a22;
-  --text:#221d15;
-  --muted:#786d59;
-  --ok:#2f8a5e;
-  --ok-bg:rgba(47,138,94,0.12);
-  --ok-bd:rgba(47,138,94,0.4);
-  --no:#c14f42;
-  --no-bg:rgba(193,79,66,0.12);
-  --no-bd:rgba(193,79,66,0.4);
-  --shadow:0 12px 30px rgba(60,50,30,0.12);
-  --bg-grad-1:#fffaf0;
-  --bg-grad-2:#f1e6cd;
-  --thumb-bg:#0a0908;
-  --text-soft:#5f6f5a;
-  --text-soft-2:#46564a;
-  --nav-bg:rgba(255,250,240,0.82);
+  --bg-0:#070c09;
+  --bg-1:#0d140f;
+  --glass:rgba(255,255,255,0.045);
+  --glass-2:rgba(255,255,255,0.02);
+  --border:rgba(255,255,255,0.09);
+  --border-soft:rgba(255,255,255,0.055);
+  --gold:#e3b34a;
+  --gold-light:#f3d98b;
+  --gold-dark:#b8892f;
+  --text:#f2e9d8;
+  --muted:#a49a89;
+  --ok:#4cb07e;
+  --ok-bg:rgba(76,176,126,0.13);
+  --ok-bd:rgba(76,176,126,0.4);
+  --no:#d97066;
+  --no-bg:rgba(217,112,102,0.13);
+  --no-bd:rgba(217,112,102,0.4);
+  --shadow:0 12px 34px rgba(0,0,0,0.45);
+  --bg-grad-1:#142019;
+  --bg-grad-2:#0f1a14;
+  --thumb-bg:#0a120c;
+  --text-soft:#a9c2b6;
+  --text-soft-2:#d7e4dc;
+  --nav-bg:rgba(10,18,12,0.72);
 }
 
 body{
@@ -704,10 +704,6 @@ svg{
   max-width:340px;
   width:100%;
   box-shadow:var(--shadow)
-}
-
-:root[data-theme="light"] .modalBox{
-  background:linear-gradient(160deg, rgba(255,250,240,0.98), rgba(242,236,220,0.98))
 }
 
 .modalBox p{
