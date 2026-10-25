@@ -3235,12 +3235,39 @@ function rlComparison(){
  realUI('<h1>Comparaison mensuelle</h1><p>Statistiques des parcours réels uniquement.</p><label>Mois A</label>'+selector('rlMonthA',months[1])+'<label>Mois B</label>'+selector('rlMonthB',months[0])+'<div id="rlCompareData"></div><button class="secondary" onclick="realHome()">Retour</button>');rlCompareRender();
 }
 function rlCompareRender(){
- const d=realGet().rounds,a=document.getElementById('rlMonthA').value,b=document.getElementById('rlMonthB').value;
- const summarise=m=>{const r=d.filter(x=>x.date?.startsWith(m)),h=r.flatMap(x=>x.holes),p=h.filter(x=>x.putts!==null),v=n=>r.filter(x=>x.count===n);
- return {parties:r.length,score9:v(9).length?(v(9).reduce((s,x)=>s+rlRoundTotal(x),0)/v(9).length):null,score18:v(18).length?(v(18).reduce((s,x)=>s+rlRoundTotal(x),0)/v(18).length):null,puts:p.length?p.reduce((s,x)=>s+x.putts,0)/p.length:null,pars:h.length?h.filter(x=>x.shots===x.par).length/h.length*100:null}};
- const A=summarise(a),B=summarise(b),fmt=(n,unit='')=>n===null?'—':n.toFixed(1)+unit;
- const lines=[['Parties','parties',''],['Score moyen 9 trous','score9',''],['Score moyen 18 trous','score18',''],['Putts par trou renseigné','puts',''],['Pars par trou','pars',' %']];
- document.getElementById('rlCompareData').innerHTML='<div class="info"><div class="histItem"><b>Indicateur</b><b>'+a+' → '+b+'</b></div>'+lines.map(([label,key,unit])=>'<div class="histItem"><span>'+label+'</span><span>'+fmt(A[key],unit)+' → '+fmt(B[key],unit)+'</span></div>').join('')+'</div><p class="muted">Les moyennes de score distinguent les parties de 9 et 18 trous ; les putts manquants sont exclus.</p>';
+ const area=document.getElementById('rlCompareData'),selA=document.getElementById('rlMonthA'),selB=document.getElementById('rlMonthB');
+ if(!area||!selA||!selB)return;
+ const d=realGet().rounds,a=selA.value,b=selB.value;
+ if(a===b){area.innerHTML='<p class="muted">Choisis deux mois différents pour comparer les performances.</p>';return}
+ const summarise=m=>{
+  const rounds=d.filter(x=>typeof x.date==='string'&&x.date.startsWith(m));
+  const holes=rounds.flatMap(x=>x.holes||[]);
+  const validPutts=holes.filter(x=>Number.isFinite(x.putts));
+  const byFormat=n=>rounds.filter(x=>x.count===n);
+  const meanScore=n=>{const rs=byFormat(n);return rs.length?rs.reduce((sum,x)=>sum+rlRoundTotal(x),0)/rs.length:null};
+  return {parties:rounds.length,score9:meanScore(9),score18:meanScore(18),
+   n9:byFormat(9).length,n18:byFormat(18).length,
+   puts:validPutts.length?validPutts.reduce((sum,x)=>sum+x.putts,0)/validPutts.length:null,
+   nPutts:validPutts.length,pars:holes.length?100*holes.filter(x=>x.shots===x.par).length/holes.length:null,nHoles:holes.length};
+ };
+ const A=summarise(a),B=summarise(b);
+ const fmt=(v,unit='')=>v===null?'—':v.toFixed(1)+unit;
+ const rows=[
+  {label:'Parties enregistrées',key:'parties',better:null,nA:A.parties,nB:B.parties},
+  {label:'Score moyen 9 trous',key:'score9',better:'down',nA:A.n9,nB:B.n9},
+  {label:'Score moyen 18 trous',key:'score18',better:'down',nA:A.n18,nB:B.n18},
+  {label:'Putts par trou renseigné',key:'puts',better:'down',nA:A.nPutts,nB:B.nPutts},
+  {label:'Pars par trou',key:'pars',better:'up',unit:' %',nA:A.nHoles,nB:B.nHoles}
+ ];
+ const signed=v=>(v>0?'+':'')+v.toFixed(1);
+ area.innerHTML='<div class="info"><div class="histItem"><b>Indicateur</b><b>'+safe(a)+' → '+safe(b)+'</b></div>'+
+ rows.map(row=>{
+  const x=A[row.key],y=B[row.key],unit=row.unit||'',comparable=x!==null&&y!==null;
+  const diff=comparable?y-x:null;
+  const trend=!comparable||!row.better?'':Math.abs(diff)<0.05?'Stable':(diff<0)===(row.better==='down')?'Amélioration':'Recul';
+  const indicator=comparable?'<small>Variation : '+signed(diff)+unit+(trend?' · '+trend:'')+'</small>':'<small>Comparaison indisponible : données insuffisantes sur un des mois</small>';
+  return '<div class="histItem"><div><b>'+row.label+'</b><small>Échantillons : '+row.nA+' / '+row.nB+'</small></div><div class="r">'+fmt(x,unit)+' → '+fmt(y,unit)+indicator+'</div></div>';
+ }).join('')+'</div><p class="muted">Les scores des parties de 9 et 18 trous sont calculés séparément. Les putts non renseignés sont exclus. Une variation repose uniquement sur les données disponibles pour chaque mois.</p>';
 }
 function rlInsights(){
  const all=realGet().rounds.flatMap(r=>r.holes);
