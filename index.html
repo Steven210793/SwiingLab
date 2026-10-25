@@ -578,8 +578,8 @@ body{
   border:1px solid var(--border);
   border-radius:20px;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
   padding:9px;
   box-shadow:0 14px 34px rgba(0,0,0,0.45)
 }
@@ -594,6 +594,8 @@ body{
   font-weight:600
 }
 
+.nav button .navIcon{display:block;font-size:23px;line-height:1.2;margin-bottom:4px;font-weight:500}
+.nav button{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:57px;font-size:11px;padding:6px 2px}
 .nav button.active{
   background:rgba(227,179,74,0.14);
   border-color:rgba(227,179,74,0.4);
@@ -752,6 +754,16 @@ svg{
 .tm-badge{display:inline-block;border-radius:12px;padding:2px 9px;border:1px solid var(--border);font-size:11px;color:var(--muted)}
 :root{--bg-0:#071e17;--bg-1:#0b3024;--bg-grad-1:#124b35;--bg-grad-2:#0b3929;--gold:#c5a46d;--gold-light:#e6c995;--gold-dark:#967545;--text:#f8f7f2;--muted:#a9c5b5;--nav-bg:rgba(5,34,24,.92)}
 :root[data-theme="light"]{--bg-0:#071e17;--bg-1:#0b3024;--bg-grad-1:#124b35;--bg-grad-2:#0b3929;--gold:#c5a46d;--gold-light:#e6c995;--gold-dark:#967545;--text:#f8f7f2;--muted:#a9c5b5;--nav-bg:rgba(5,34,24,.92)}
+
+/* SwiingLab navigation et tableaux de bord */
+.slWelcome{padding:29px 24px;background:linear-gradient(145deg,#164c3a,#092e24);border:1px solid rgba(223,189,122,.3);border-radius:26px;margin:4px 0 27px;box-shadow:0 16px 35px #0003}
+.slEyebrow{font-size:10px;letter-spacing:2px;font-weight:800;color:var(--gold-light)}
+.slWelcomeHead{display:flex;align-items:center;gap:16px;margin-top:20px}.slWelcomeHead h1{font-size:clamp(24px,6vw,32px);line-height:1.15;margin:0 0 9px}.slWelcomeHead p,.slPageTop p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.slWelcomeLogo{width:62px;height:62px;flex:none;border-radius:17px;background:url('./icon-192.png') center/cover;box-shadow:0 8px 22px #0006}
+.slSectionTitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 3px 15px}.slSectionTitle h2{font-size:19px;margin:0}.slSectionTitle>span{font-size:11px;color:var(--muted)}
+.slTiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:30px}.slTile{box-sizing:border-box;width:100%;min-height:152px;padding:18px 14px 14px;text-align:left;border-radius:21px;border:1px solid rgba(218,203,162,.24);background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.035));color:var(--text);display:flex;flex-direction:column;align-items:flex-start;gap:13px;box-shadow:0 8px 22px rgba(0,0,0,.13);cursor:pointer;position:relative}.slTile:active{transform:scale(.98)}.slTileIcon{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:rgba(197,164,109,.16);border:1px solid rgba(197,164,109,.35);color:var(--gold-light);font-size:27px;line-height:1}.slTileCopy{display:flex;flex-direction:column;gap:5px;padding-right:8px}.slTileCopy strong{font-size:15px;line-height:1.25}.slTileCopy small{color:var(--muted);line-height:1.4;font-size:11px}.slTileArrow{position:absolute;bottom:13px;right:14px;color:var(--gold-light);font-size:23px}.slWide{grid-column:span 2;min-height:106px;flex-direction:row;align-items:center;padding:18px}.slWide .slTileIcon{flex:none}.slWide .slTileCopy{padding-right:20px}.slWide .slTileArrow{top:50%;bottom:auto;transform:translateY(-50%)}
+.slPageTop{padding:4px 0 19px}.slPageTop h1{margin:15px 0 8px}.slBack{background:transparent;border:0;padding:0 0 18px;color:var(--gold-light);font-size:13px;display:block;text-align:left}.slNotice{padding:15px;border:1px solid var(--border);border-radius:18px;margin-bottom:16px}.slNoticeButtons{display:flex;gap:10px;margin-top:12px}.slNoticeButtons button{flex:1}
+@media(max-width:350px){.slTiles{gap:9px}.slTile{padding:14px 10px}.slTileCopy strong{font-size:13px}.slWelcome{padding:22px 16px}.slWelcomeLogo{width:50px;height:50px}}
 </style>
 </head>
 
@@ -761,11 +773,11 @@ svg{
   <div id="screen"></div>
 </main>
 
-<nav class="nav">
-  <button id="navAccueil" onclick="realHome()">Données</button>
-  <button id="navExercices" onclick="allExercises()">Exercices</button>
-  <button id="navProgression" onclick="progressHub()">Progression</button>
-  <button id="navProfil" onclick="profile()">Profil</button>
+<nav class="nav" aria-label="Navigation principale">
+  <button id="navAccueil" onclick="slHome()"><span class="navIcon">⌂</span><span>Accueil</span></button>
+  <button id="navExercices" onclick="allExercises()"><span class="navIcon">◎</span><span>Exercices</span></button>
+  <button id="navProgression" onclick="realHome()"><span class="navIcon">▥</span><span>Données</span></button>
+  <button id="navProfil" onclick="profile()"><span class="navIcon">◯</span><span>Profil</span></button>
 </nav>
 
 <script>
@@ -3149,12 +3161,40 @@ const realSave=x=>localStorage.setItem(realKey,JSON.stringify(x));
 const safe=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let realDraft=null,realAt=0;
 const realUI=x=>{document.getElementById('screen').innerHTML=x;window.scrollTo(0,0)};
-function realHome(){
- const pending=localStorage.getItem(realDraftKey)?'<div class="info"><h2>Partie en cours</h2><button onclick="realResumeDraft()">Reprendre la saisie</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div>':'';
- const d=realGet(),holes=d.rounds.flatMap(r=>r.holes),putts=holes.filter(h=>Number.isFinite(h.putts));
- const avg=putts.length?(putts.reduce((v,h)=>v+h.putts,0)/putts.length).toFixed(2):'—';
- realUI(pending+'<h1>Centre de données</h1><p class="muted">TrackMan et parties réelles restent séparés.</p><div class="stats"><div class="stat">Parties réelles<strong>'+d.rounds.length+'</strong></div><div class="stat">Trous joués<strong>'+holes.length+'</strong></div><div class="stat">Putts / trou renseigné<strong>'+avg+'</strong></div></div><div class="info"><h2>Parcours réels</h2><button onclick="realNew()">Nouvelle partie</button><button class="secondary" onclick="realStats()">Statistiques et historique</button></div><div class="info"><h2>Analyse de performance</h2><button onclick="rlGoalsPage()">Mes objectifs</button><button class="secondary" onclick="rlComparison()">Comparer les mois</button><button class="secondary" onclick="rlInsights()">Points à travailler</button></div>'+rlRecords()+'<div class="info"><h2>TrackMan</h2><p class="muted">Tes données TrackMan restent indépendantes des scores réels.</p><button class="secondary" onclick="progressHub()">Consulter TrackMan</button></div><div class="info"><h2>Entraînements</h2><button class="secondary" onclick="allExercises()">Ouvrir les exercices</button></div>');
+function slCard(icon,title,description,fn,wide=false){
+ return '<button class="slTile'+(wide?' slWide':'')+'" onclick="'+fn+'"><span class="slTileIcon">'+icon+'</span><span class="slTileCopy"><strong>'+title+'</strong><small>'+description+'</small></span><span class="slTileArrow">›</span></button>';
 }
+function slHome(){
+ const d=realGet(),rounds=Array.isArray(d.rounds)?d.rounds:[],tm=tmData();
+ const n=Array.isArray(tm)?tm.length:0;
+ realUI('<section class="slWelcome"><span class="slEyebrow">SWIINGLAB · MON ESPACE GOLF</span><div class="slWelcomeHead"><span class="slWelcomeLogo"></span><span><h1>Bienvenue sur le green.</h1><p>Ton golf, tes progrès, à ton rythme.</p></span></div></section>'+
+ '<div class="slSectionTitle"><h2>Que veux-tu faire ?</h2><span>Choisis un espace</span></div>'+
+ '<div class="slTiles">'+
+ slCard('◎','Entraînements','Exercices et séances','allExercises()',true)+
+ slCard('◉','TrackMan',n+' séance(s) enregistrée(s)','progressHub()')+
+ slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','realStats()')+
+ slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
+ slCard('◯','Mon profil','Sac et informations','profile()',true)+
+ '</div>');
+ setActiveTab('accueil');
+}
+function realHome(){
+ const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
+ const d=realGet(),rounds=Array.isArray(d.rounds)?d.rounds:[],holes=rounds.flatMap(r=>r.holes||[]);
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">TON TABLEAU DE BORD</span><h1>Centre de données</h1><p>Choisis la statistique qui t’intéresse.</p></div>'+pending+
+ '<div class="slTiles">'+
+ slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
+ slCard('＋','Nouvelle partie','Remplir une carte de score','realNew()')+
+ slCard('◉','TrackMan','Mesures et trajectoires','progressHub()')+
+ slCard('◎','Entraînements','Résultats des exercices','allExercises()')+
+ slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
+ slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
+ slCard('◈','Points à travailler','Identifier les priorités','rlInsights()')+
+ slCard('★','Mes records','Meilleures performances','rlRecordsPage()')+
+ '</div>');
+ setActiveTab('progression');
+}
+function rlRecordsPage(){realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><h1>Records personnels</h1></div>'+rlRecords())}
 
 const realDraftKey='swiinglab_real_draft_v1';
 function realPersistDraft(){if(realDraft)localStorage.setItem(realDraftKey,JSON.stringify({draft:realDraft,at:realAt}))}
@@ -3194,7 +3234,7 @@ function realStats(){
 
 </script>
 
-<script>window.addEventListener('load',()=>realHome());
+<script>window.addEventListener('load',()=>slHome());
 const rlGoalKey='swiinglab_real_goals_v1';
 const rlGoals=()=>{try{return JSON.parse(localStorage.getItem(rlGoalKey)||'[]')}catch(e){return []}};
 const rlRelative=r=>r.holes.reduce((a,h)=>a+h.shots-h.par,0);
