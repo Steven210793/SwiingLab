@@ -3052,15 +3052,20 @@ function tmImport(input){
  f.text().then(content=>{
   try{
    const o=JSON.parse(content);
+   if(!o||typeof o!=='object'||Array.isArray(o))throw Error('Format JSON incorrect.');
    if(o.format==='swiinglab-backup-v1')throw Error('Pour ce fichier, utilise « Restaurer une sauvegarde » dans Profil.');
    const entries=Array.isArray(o.sessions)?o.sessions:[o];
    if(!entries.length||entries.length>150)throw Error('Aucune séance ou trop de séances dans ce fichier.');
-   const all=tmData(), seen=new Set(all.map(s=>tmSessionFingerprint(s.shots))), pending=[];
+   const all=tmData();
+   if(!Array.isArray(all))throw Error('Données enregistrées invalides.');
+   const seen=new Set(all.filter(s=>Array.isArray(s.shots)).map(s=>tmSessionFingerprint(s.shots)));
+   const knownSources=new Set(all.flatMap(s=>(s.shots||[]).map(sh=>sh.sourceId).filter(Boolean)));
+   const pending=[];
    let added=0, duplicates=0, addedShots=0;
    for(const raw of entries){
     if(!raw||!Array.isArray(raw.shots)||!raw.shots.length||raw.shots.length>3000)throw Error('Liste des coups incorrecte.');
     const dt=raw.date||new Date().toISOString();
-    if(!Number.isFinite(Date.parse(dt)))throw Error('Date incorrecte.');
+    if(typeof dt!=='string'||!Number.isFinite(Date.parse(dt)))throw Error('Date incorrecte.');
     const parsed=raw.shots.map(sh=>{
      if(!sh||typeof sh.club!=='string'||!sh.club.trim())throw Error('Un coup n’a pas de club.');
      const metrics={};
@@ -3069,15 +3074,15 @@ function tmImport(input){
       if(val!==null&&val!==undefined&&val!==''&&Number.isFinite(Number(val)))metrics[k]=Number(val);
      }
      if(!Object.keys(metrics).length)throw Error('Un coup n’a aucune mesure reconnue.');
-     return {club:sh.club.trim(),metrics,amplitude:sh.amplitude||sh.swing||sh.swingType||null,amplitudeUnverified:!!sh.amplitudeUnverified,shotNumber:sh.shotNumber??null,sourceId:sh.sourceId||null};
+     return {club:tmCanonClub(sh.club.trim()),metrics,amplitude:sh.amplitude||sh.swing||sh.swingType||null,amplitudeUnverified:!!sh.amplitudeUnverified,shotNumber:sh.shotNumber??null,sourceId:sh.sourceId||null};
     });
     const fp=tmSessionFingerprint(parsed);
-    if(seen.has(fp)){duplicates++;continue}
+    if(seen.has(fp)||parsed.every(sh=>sh.sourceId&&knownSources.has(sh.sourceId))){duplicates++;continue}
     const date=new Date(dt).toISOString(),id='tm-v12-'+tmFnv(fp+'|'+date);
     const venue=String(raw.venue||'TrackMan Range').slice(0,180);
     const dateUnverified=!!raw.dateUnverified||!raw.date||!!o.metadata?.actualSessionDateKnown===false&&!!o.metadata?.dateNote;
     pending.push({id,date,venue,shots:parsed,dateUnverified,source:raw.source||null});
-    seen.add(fp);added++;addedShots+=parsed.length;
+    seen.add(fp);parsed.forEach(sh=>{if(sh.sourceId)knownSources.add(sh.sourceId)});added++;addedShots+=parsed.length;
    }
    if(pending.length)localStorage.setItem(tmKey,JSON.stringify([...all,...pending]));
    alert(added+' séance(s) ajoutée(s) · '+addedShots+' coups. '+duplicates+' doublon(s) ignoré(s).');
