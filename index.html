@@ -3184,7 +3184,7 @@ function realHome(){
  realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">TON TABLEAU DE BORD</span><h1>Centre de données</h1><p>Choisis la statistique qui t’intéresse.</p></div>'+pending+
  '<div class="slTiles">'+
  slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
- slCard('＋','Nouvelle partie','Remplir une carte de score','realNew()')+
+ slCard('＋','Importer une partie','Fichier JSON créé depuis FFGolf','realImportPage()')+
  
  slCard('◎','Entraînements','Résultats des exercices','allExercises()')+
  slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
@@ -3291,6 +3291,41 @@ function realPersistDraft(){if(realDraft)localStorage.setItem(realDraftKey,JSON.
 function realResumeDraft(){try{let x=JSON.parse(localStorage.getItem(realDraftKey)||'null');if(!x?.draft||!Array.isArray(x.draft.holes))return realNew();realDraft=x.draft;realAt=Math.min(Math.max(0,x.at||0),realDraft.holes.length-1);realHole()}catch(e){realNew()}}
 function realDiscardDraft(){if(!confirm('Abandonner cette partie en cours ?'))return;localStorage.removeItem(realDraftKey);realDraft=null;realAt=0;realHome()}
 
+
+/* Import FFGolf : uniquement scores bruts, par, golf/parcours et HCP de trou facultatif. */
+function realImportPage(){
+ realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
+ setActiveTab('progression');
+}
+function realParseRound(raw){
+ if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Partie invalide');
+ const golf=String(raw.golf||'').trim(),name=String(raw.name||raw.course||'').trim(),date=String(raw.date||'').trim();
+ if(!golf||!name||golf.length>180||name.length>180)throw Error('Nom du golf et du parcours obligatoires');
+ if(date&&(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z'))))throw Error('Date incorrecte');
+ if(!Array.isArray(raw.holes)||![9,18].includes(raw.holes.length))throw Error('Une carte de 9 ou 18 trous complète est nécessaire');
+ const holes=raw.holes.map((h,i)=>{
+  const par=Number(h.par),shots=Number(h.shots??h.score),hcp=h.hcp??h.handicap;
+  if(![3,4,5].includes(par)||!Number.isInteger(shots)||shots<1||shots>30)throw Error('Trou '+(i+1)+' : par ou score brut incorrect');
+  const handicap=hcp===null||hcp===undefined||hcp===''?null:Number(hcp);
+  if(handicap!==null&&(!Number.isInteger(handicap)||handicap<1||handicap>18))throw Error('Trou '+(i+1)+' : HCP incorrect');
+  return {par,shots,putts:null,hcp:handicap};
+ });
+ return {id:Date.now()+'-'+Math.random().toString(36).slice(2,8),golf,name,date,count:holes.length,holes,source:'ffgolf-screenshots'};
+}
+function realRoundFingerprint(r){return [r.golf.toLowerCase().trim(),r.name.toLowerCase().trim(),r.date||'',r.holes.map(h=>h.par+':'+h.shots).join('|')].join('~')}
+function realImportJSON(input){
+ const f=input.files?.[0];if(!f)return;
+ if(f.size>2000000){alert('Fichier trop volumineux');input.value='';return}
+ f.text().then(t=>{try{
+  const payload=JSON.parse(t);
+  if(payload?.format!=='swiinglab-real-rounds-v1'||!Array.isArray(payload.rounds)||!payload.rounds.length||payload.rounds.length>100)throw Error('Format incompatible : fichier Parcours réels SwiingLab attendu');
+  const d=realGet(),rounds=payload.rounds.map(realParseRound),seen=new Set(d.rounds.map(realRoundFingerprint)),pending=[];
+  for(const round of rounds){const fp=realRoundFingerprint(round);if(!seen.has(fp)){pending.push(round);seen.add(fp)}}
+  if(pending.length){d.rounds.push(...pending);for(const r of pending){if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)})}realSave(d)}
+  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realStats();
+ }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}}).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
+}
+function realExportJSON(){tmDownload('SwiingLab-Parcours-Reels.json',{format:'swiinglab-real-rounds-v1',rounds:realGet().rounds})}
 function realNew(){
  const d=realGet();
  realUI('<h1>Nouvelle partie</h1><div class="info"><div class="field"><label>Parcours mémorisé</label><select id="rc" onchange="realAutofill()"><option value="">Nouveau parcours</option>'+d.courses.map((c,i)=>'<option value="'+i+'">'+safe(c.golf)+' — '+safe(c.name)+'</option>').join('')+'</select></div><div class="field"><label>Golf</label><input id="rg" placeholder="Golf de Bussy"></div><div class="field"><label>Parcours</label><input id="rn" placeholder="La Jonchère"></div><div class="field"><label>Nombre de trous</label><select id="rl"><option>18</option><option>9</option></select></div><div class="field"><label>Date</label><input type="date" id="rd" value="'+(()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')})()+'"></div><button onclick="realStart()">Commencer</button></div>');
@@ -3319,7 +3354,7 @@ function realStats(){
  let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
  let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
  let rows=d.rounds.slice().reverse().map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
- realUI('<h1>Parcours réels</h1><button onclick="realNew()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
+ realUI('<h1>Parcours réels</h1><button onclick="realImportPage()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
 }
 
 </script>
