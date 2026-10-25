@@ -3313,6 +3313,24 @@ function realParseRound(raw){
  return {id:Date.now()+'-'+Math.random().toString(36).slice(2,8),golf,name,date,count:holes.length,holes,source:'ffgolf-screenshots'};
 }
 function realRoundFingerprint(r){return [r.golf.toLowerCase().trim(),r.name.toLowerCase().trim(),r.date||'',r.holes.map(h=>h.par+':'+h.shots).join('|')].join('~')}
+/* Quatre cartes FFGolf embarquées : une seule insertion par empreinte, sans écraser les autres données. */
+const slPreloadedRealRounds=[["Golf de Saint-Malo","Surcouf","2026-08-18",[5,4,4,3,4,3,5,4,4,4,3,4,4,3,5,4,4,5],[5,4,4,3,5,4,5,5,4,4,2,4,5,4,3,5,5,3],[9,17,12,15,1,13,14,10,4,5,16,3,6,11,18,2,8,7]],["Dinard Golf","Dinard","2026-08-19",[4,4,4,5,4,4,3,4,3,4,4,3,3,4,4,4,3,4],[5,4,4,7,5,4,4,5,4,4,4,4,3,4,5,5,4,4],[9,1,5,15,3,11,17,13,7,6,8,4,10,12,16,2,18,14]],["Les Ormes Golf & Resort","Le Château","2026-08-20",[5,3,5,4,4,4,5,3,4,4,3,4,4,5,3,5,3,4],[5,4,4,4,4,4,5,4,4,4,3,5,4,4,4,5,4,5],[7,13,9,1,15,3,5,17,11,2,18,10,4,14,12,8,16,6]],["Golf du Gouverneur","Le Breuil","2026-09-13",[4,3,5,3,4,4,4,5,4,4,3,4,4,4,5,3,5,4],[5,4,4,3,6,7,4,6,5,6,4,5,5,5,8,5,7,7],[8,12,18,10,2,6,14,16,4,11,17,3,13,1,9,7,15,5]]];
+function slSeedRealRounds(){
+ try{
+  const db=realGet();if(!db||!Array.isArray(db.rounds)||!Array.isArray(db.courses))return;
+  const seen=new Set(db.rounds.map(realRoundFingerprint));
+  let changed=false;
+  for(const [golf,name,date,pars,scores,hcps] of slPreloadedRealRounds){
+   const raw={golf,name,date,holes:pars.map((par,i)=>({par,shots:scores[i],hcp:hcps[i]}))};
+   const round=realParseRound(raw),fp=realRoundFingerprint(round);
+   if(seen.has(fp))continue;
+   db.rounds.push(round);seen.add(fp);changed=true;
+   if(!db.courses.some(c=>c.golf===golf&&c.name===name&&c.count===round.count))db.courses.push({golf,name,count:round.count,pars:pars.slice()});
+  }
+  if(changed)realSave(db);
+ }catch(e){console.warn('Cartes FFGolf préchargées non ajoutées :',e)}
+}
+window.addEventListener('load',slSeedRealRounds);
 function realImportJSON(input){
  const f=input.files?.[0];if(!f)return;
  if(f.size>2000000){alert('Fichier trop volumineux');input.value='';return}
