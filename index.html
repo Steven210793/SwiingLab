@@ -3155,7 +3155,7 @@ function realNew(){
  const d=realGet();
  realUI('<h1>Nouvelle partie</h1><div class="info"><div class="field"><label>Parcours mémorisé</label><select id="rc" onchange="realAutofill()"><option value="">Nouveau parcours</option>'+d.courses.map((c,i)=>'<option value="'+i+'">'+safe(c.golf)+' — '+safe(c.name)+'</option>').join('')+'</select></div><div class="field"><label>Golf</label><input id="rg" placeholder="Golf de Bussy"></div><div class="field"><label>Parcours</label><input id="rn" placeholder="La Jonchère"></div><div class="field"><label>Nombre de trous</label><select id="rl"><option>18</option><option>9</option></select></div><div class="field"><label>Date</label><input type="date" id="rd" value="'+new Date().toLocaleDateString('en-CA')+'"></div><button onclick="realStart()">Commencer</button></div>');
 }
-function realAutofill(){let c=realGet().courses[Number(document.getElementById('rc').value)];if(!c)return;rg.value=c.golf;rn.value=c.name;rl.value=c.count}
+function realAutofill(){let selected=document.getElementById('rc').value;if(selected==='')return;let c=realGet().courses[Number(selected)];if(!c)return;rg.value=c.golf;rn.value=c.name;rl.value=c.count}
 function realStart(){
  let golf=rg.value.trim(),name=rn.value.trim(),count=+rl.value;if(!golf||!name)return alert('Renseigne le golf et le parcours.');
  let c=realGet().courses.find(c=>c.golf===golf&&c.name===name&&c.count===count);
