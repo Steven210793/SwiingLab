@@ -3171,8 +3171,8 @@ function slHome(){
  '<div class="slSectionTitle"><h2>Que veux-tu faire ?</h2><span>Choisis un espace</span></div>'+
  '<div class="slTiles">'+
  slCard('◎','Entraînements','Exercices et séances','allExercises()',true)+
- slCard('◉','TrackMan',n+' séance(s) enregistrée(s)','progressHub()')+
- slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','realStats()')+
+ slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
+ slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','realHome()')+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
  slCard('◯','Mon profil','Sac et informations','profile()',true)+
  '</div>');
@@ -3185,7 +3185,7 @@ function realHome(){
  '<div class="slTiles">'+
  slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
  slCard('＋','Nouvelle partie','Remplir une carte de score','realNew()')+
- slCard('◉','TrackMan','Mesures et trajectoires','progressHub()')+
+ 
  slCard('◎','Entraînements','Résultats des exercices','allExercises()')+
  slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
  slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
@@ -3195,6 +3195,96 @@ function realHome(){
  setActiveTab('progression');
 }
 function rlRecordsPage(){realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><h1>Records personnels</h1></div>'+rlRecords())}
+
+/* Parcours TrackMan : stockage séparé des séances Practice et des parcours réels. */
+const slVirtualKey='swiinglab_trackman_courses_v1';
+function slVirtualData(){
+ try{const a=JSON.parse(localStorage.getItem(slVirtualKey)||'[]');return Array.isArray(a)?a:[]}
+ catch(e){return []}
+}
+function slVirtualNumber(v){if(v===null||v===undefined||v==='')return null;const n=Number(typeof v==='string'?v.replace(',','.'):v);return Number.isFinite(n)?n:null}
+function slVirtualFingerprint(r){
+ const hs=Array.isArray(r.holes)?r.holes.map(h=>[h.number,h.par,h.score].join(':')).join('|'):'';
+ return [String(r.date||'').slice(0,10),String(r.course||'').trim().toLowerCase(),r.holeCount||'',hs].join('|')
+}
+function slTrackmanHome(){
+ const count=slVirtualData().length;
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">ENTRAÎNEMENT VIRTUEL</span><h1>TrackMan</h1><p>Deux espaces indépendants pour tes données TrackMan.</p></div><div class="slTiles">'+
+ slCard('◎','Practice','Séances, clubs et distances','progressHub()',true)+
+ slCard('⛳','Parcours',count+' partie(s) virtuelle(s)','slVirtualHome()',true)+
+ '</div>');
+ setActiveTab('progression');
+}
+function slVirtualHome(){
+ const rounds=slVirtualData();
+ const tiles=rounds.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(r=>{
+  const n=rounds.indexOf(r),score=r.totalScore,par=r.totalPar;
+  const delta=Number.isFinite(score)&&Number.isFinite(par)?' ('+(score-par>0?'+':'')+(score-par)+')':'';
+  return '<button class="slTile slWide" onclick="slVirtualDetail('+n+')"><span class="slTileIcon">⛳</span><span class="slTileCopy"><strong>'+safe(r.course)+'</strong><small>'+safe(r.date)+' · '+r.holeCount+' trous · '+(score===null?'Score non renseigné':score+' coups'+delta)+'</small></span><span class="slTileArrow">›</span></button>';
+ }).join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slTrackmanHome()">‹ TrackMan</button><span class="slEyebrow">TRACKMAN / PARCOURS</span><h1>Parcours virtuels</h1><p>Parties jouées sur simulateur, distinctes de tes cartes réelles.</p></div>'+
+ '<div class="info"><h3>Importer une partie</h3><p class="muted">Envoie tes captures TrackMan dans notre conversation. Je te fournirai un fichier JSON à importer ici.</p><input type="file" id="slVirtualFile" accept=".json,application/json" onchange="slVirtualImport(this)"><button class="secondary" onclick="slVirtualExample()">Télécharger un modèle JSON</button><button class="secondary" onclick="slVirtualExport()">Exporter mes parties</button></div>'+
+ '<div class="slSectionTitle"><h2>Mes parties</h2><span>'+rounds.length+' enregistrée(s)</span></div><div class="slTiles">'+(tiles||'<p class="muted">Aucune partie importée pour le moment.</p>')+'</div>');
+ setActiveTab('progression');
+}
+function slVirtualNormalize(raw){
+ if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Une partie est invalide.');
+ const course=String(raw.course||raw.courseName||'').trim();
+ const date=String(raw.date||'').slice(0,10);
+ if(!course||course.length>200)throw Error('Nom de parcours manquant ou trop long.');
+ if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z')))throw Error('Date de partie incorrecte.');
+ const inputHoles=raw.holes||[];
+ if(!Array.isArray(inputHoles)||inputHoles.length>18)throw Error('Liste des trous invalide.');
+ const holes=inputHoles.map((h,i)=>{
+  const number=slVirtualNumber(h.number??i+1),par=slVirtualNumber(h.par),score=slVirtualNumber(h.score??h.shots),handicap=slVirtualNumber(h.handicap??h.hcp);
+  if(!Number.isInteger(number)||number<1||number>18||!Number.isInteger(par)||par<3||par>6||!Number.isInteger(score)||score<1||score>30)throw Error('Trou '+(i+1)+' : numéro, par ou coups invalides.');
+  return {number,par,score,handicap:Number.isInteger(handicap)?handicap:null,distance:slVirtualNumber(h.distance),shots:Array.isArray(h.shotsDetail)?h.shotsDetail.slice(0,30):[]};
+ });
+ if(new Set(holes.map(h=>h.number)).size!==holes.length)throw Error('Numéros de trous répétés.');
+ const holeCount=slVirtualNumber(raw.holeCount)??holes.length;
+ if(![9,18].includes(holeCount))throw Error('Format : 9 ou 18 trous attendu.');
+ if(holes.length&&holes.length!==holeCount)throw Error('Il manque des trous sur la carte de score.');
+ const score=holes.length?holes.reduce((sum,h)=>sum+h.score,0):slVirtualNumber(raw.totalScore);
+ const par=holes.length?holes.reduce((sum,h)=>sum+h.par,0):slVirtualNumber(raw.totalPar);
+ if(score===null||!Number.isInteger(score)||score<1||score>540)throw Error('Score total absent ou invalide.');
+ const stats=raw.stats&&typeof raw.stats==='object'&&!Array.isArray(raw.stats)?raw.stats:{};
+ const sanitized={};
+ for(const k of ['fairwaysHitPct','girPct','scramblingPct','averageDriveM','longestDriveM']){
+  const v=slVirtualNumber(stats[k]);if(v!==null){if(k.endsWith('Pct')&&(v<0||v>100))throw Error('Pourcentage hors limites : '+k);if(!k.endsWith('Pct')&&(v<0||v>600))throw Error('Distance hors limites : '+k);sanitized[k]=v}
+ }
+ const settings=raw.settings&&typeof raw.settings==='object'&&!Array.isArray(raw.settings)?raw.settings:{};
+ const keep={};for(const k of ['gameType','format','flags','mulligans','putting','gimmeDistanceM','wind','fairwayFirmness','greenFirmness','greenSpeed']){if(settings[k]!==undefined&&settings[k]!==null)keep[k]=String(settings[k]).slice(0,120)}
+ return {course,date,holeCount,holes,totalScore:score,totalPar:par,stats:sanitized,settings:keep,player:String(raw.player||'').slice(0,100),source:'trackman-virtual',notes:String(raw.notes||'').slice(0,500)};
+}
+function slVirtualImport(input){
+ const file=input.files&&input.files[0];if(!file)return;
+ if(file.size>2000000){alert('Fichier trop volumineux.');input.value='';return}
+ file.text().then(content=>{
+  try{
+   const payload=JSON.parse(content);
+   if(!payload||payload.format!=='swiinglab-trackman-courses-v1'||!Array.isArray(payload.rounds))throw Error('Format de fichier incompatible avec les parcours TrackMan.');
+   if(!payload.rounds.length||payload.rounds.length>100)throw Error('Le fichier doit contenir entre 1 et 100 parties.');
+   const prior=slVirtualData(),seen=new Set(prior.map(slVirtualFingerprint)),pending=[];
+   let duplicates=0;
+   for(const raw of payload.rounds){const round=slVirtualNormalize(raw),fp=slVirtualFingerprint(round);if(seen.has(fp)){duplicates++;continue}seen.add(fp);pending.push(round)}
+   if(pending.length)localStorage.setItem(slVirtualKey,JSON.stringify([...prior,...pending]));
+   alert(pending.length+' partie(s) importée(s). '+duplicates+' doublon(s) ignoré(s).');
+   slVirtualHome();
+  }catch(e){alert('Importation impossible : '+e.message)}
+  finally{input.value=''}
+ }).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
+}
+function slVirtualExport(){tmDownload('SwiingLab-Parcours-TrackMan.json',{format:'swiinglab-trackman-courses-v1',rounds:slVirtualData()})}
+function slVirtualExample(){tmDownload('Modele-Parcours-TrackMan.json',{format:'swiinglab-trackman-courses-v1',rounds:[{course:'Nom du parcours',date:'2026-10-24',holeCount:9,totalScore:33,totalPar:36,holes:[],stats:{fairwaysHitPct:50,girPct:67,averageDriveM:239.8,longestDriveM:273.7,scramblingPct:100},settings:{gameType:'Stroke play',putting:'Auto - Niveau pro'}}]})}
+function slVirtualDetail(index){
+ const r=slVirtualData()[index];if(!r)return slVirtualHome();
+ const statNames={fairwaysHitPct:'Fairways touchés',girPct:'Greens en régulation',scramblingPct:'Scrambling',averageDriveM:'Drive moyen',longestDriveM:'Drive le plus long'};
+ const stats=Object.keys(r.stats||{}).map(k=>'<div class="stat"><span>'+safe(statNames[k]||k)+'</span><strong>'+r.stats[k]+(k.endsWith('Pct')?' %':' m')+'</strong></div>').join('');
+ const holes=(r.holes||[]).map(h=>'<div class="histItem"><span>Trou '+h.number+' · Par '+h.par+(h.handicap===null?'':' · HCP '+h.handicap)+'</span><b>'+h.score+' coups</b></div>').join('');
+ const settings=Object.entries(r.settings||{}).map(([k,v])=>'<div class="histItem"><span>'+safe(k)+'</span><span>'+safe(v)+'</span></div>').join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slVirtualHome()">‹ Parcours virtuels</button><span class="slEyebrow">PARTIE TRACKMAN</span><h1>'+safe(r.course)+'</h1><p>'+safe(r.date)+' · '+r.holeCount+' trous</p></div><div class="stats"><div class="stat">Score<strong>'+r.totalScore+'</strong></div><div class="stat">Par<strong>'+(r.totalPar??'—')+'</strong></div></div><div class="section"><h2>Statistiques</h2><div class="stats">'+(stats||'<p>Pas de statistiques complémentaires.</p>')+'</div></div><div class="section"><h2>Carte de score</h2>'+(holes||'<p>Carte trou par trou non disponible.</p>')+'</div><div class="section"><h2>Paramètres</h2>'+(settings||'<p>Non renseignés.</p>')+'</div>');
+ setActiveTab('progression');
+}
 
 const realDraftKey='swiinglab_real_draft_v1';
 function realPersistDraft(){if(realDraft)localStorage.setItem(realDraftKey,JSON.stringify({draft:realDraft,at:realAt}))}
