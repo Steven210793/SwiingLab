@@ -3055,7 +3055,7 @@ function tmImport(input){
    if(o.format==='swiinglab-backup-v1')throw Error('Pour ce fichier, utilise « Restaurer une sauvegarde » dans Profil.');
    const entries=Array.isArray(o.sessions)?o.sessions:[o];
    if(!entries.length||entries.length>150)throw Error('Aucune séance ou trop de séances dans ce fichier.');
-   const all=tmData(), seen=new Set(all.map(s=>tmSessionFingerprint(s.shots)));
+   const all=tmData(), seen=new Set(all.map(s=>tmSessionFingerprint(s.shots))), pending=[];
    let added=0, duplicates=0, addedShots=0;
    for(const raw of entries){
     if(!raw||!Array.isArray(raw.shots)||!raw.shots.length||raw.shots.length>3000)throw Error('Liste des coups incorrecte.');
@@ -3076,10 +3076,10 @@ function tmImport(input){
     const date=new Date(dt).toISOString(),id='tm-v12-'+tmFnv(fp+'|'+date);
     const venue=String(raw.venue||'TrackMan Range').slice(0,180);
     const dateUnverified=!!raw.dateUnverified||!raw.date||!!o.metadata?.actualSessionDateKnown===false&&!!o.metadata?.dateNote;
-    all.push({id,date,venue,shots:parsed,dateUnverified,source:raw.source||null});
+    pending.push({id,date,venue,shots:parsed,dateUnverified,source:raw.source||null});
     seen.add(fp);added++;addedShots+=parsed.length;
    }
-   localStorage.setItem(tmKey,JSON.stringify(all));
+   if(pending.length)localStorage.setItem(tmKey,JSON.stringify([...all,...pending]));
    alert(added+' séance(s) ajoutée(s) · '+addedShots+' coups. '+duplicates+' doublon(s) ignoré(s).');
    progressHub();
   }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}
