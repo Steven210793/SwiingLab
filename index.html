@@ -3142,7 +3142,7 @@ home();
 const realKey='swiinglab_real_v1';
 const realGet=()=>{try{return JSON.parse(localStorage.getItem(realKey)||'{"courses":[],"rounds":[]}')}catch(e){return {courses:[],rounds:[]}}};
 const realSave=x=>localStorage.setItem(realKey,JSON.stringify(x));
-const safe=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const safe=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let realDraft=null,realAt=0;
 const realUI=x=>{document.getElementById('screen').innerHTML=x;window.scrollTo(0,0)};
 function realHome(){
@@ -3155,17 +3155,24 @@ function realNew(){
  const d=realGet();
  realUI('<h1>Nouvelle partie</h1><div class="info"><div class="field"><label>Parcours mémorisé</label><select id="rc" onchange="realAutofill()"><option value="">Nouveau parcours</option>'+d.courses.map((c,i)=>'<option value="'+i+'">'+safe(c.golf)+' — '+safe(c.name)+'</option>').join('')+'</select></div><div class="field"><label>Golf</label><input id="rg" placeholder="Golf de Bussy"></div><div class="field"><label>Parcours</label><input id="rn" placeholder="La Jonchère"></div><div class="field"><label>Nombre de trous</label><select id="rl"><option>18</option><option>9</option></select></div><div class="field"><label>Date</label><input type="date" id="rd" value="'+new Date().toLocaleDateString('en-CA')+'"></div><button onclick="realStart()">Commencer</button></div>');
 }
-function realAutofill(){let selected=document.getElementById('rc').value;if(selected==='')return;let c=realGet().courses[Number(selected)];if(!c)return;rg.value=c.golf;rn.value=c.name;rl.value=c.count}
+function realAutofill(){
+ const chosen=document.getElementById('rc').value;
+ if(chosen==='')return;
+ const c=realGet().courses[Number(chosen)];if(!c)return;
+ document.getElementById('rg').value=c.golf;
+ document.getElementById('rn').value=c.name;
+ document.getElementById('rl').value=String(c.count);
+}
 function realStart(){
- let golf=rg.value.trim(),name=rn.value.trim(),count=+rl.value;if(!golf||!name)return alert('Renseigne le golf et le parcours.');
+ let golf=document.getElementById('rg').value.trim(),name=document.getElementById('rn').value.trim(),count=+document.getElementById('rl').value;if(!golf||!name)return alert('Renseigne le golf et le parcours.');
  let c=realGet().courses.find(c=>c.golf===golf&&c.name===name&&c.count===count);
- realDraft={id:Date.now(),date:rd.value,golf,name,count,holes:Array.from({length:count},(_,i)=>({par:c?.pars[i]||4,shots:null,putts:null}))};realAt=0;realHole();
+ realDraft={id:Date.now(),date:document.getElementById('rd').value,golf,name,count,holes:Array.from({length:count},(_,i)=>({par:c?.pars[i]||4,shots:null,putts:null}))};realAt=0;realHole();
 }
 function realHole(){
  let h=realDraft.holes[realAt];
  realUI('<h1>Trou '+(realAt+1)+' / '+realDraft.count+'</h1><p>'+safe(realDraft.golf)+' — '+safe(realDraft.name)+'</p><div class="info"><div class="field"><label>Par</label><select id="hp">'+[3,4,5,6].map(n=>'<option '+(n===h.par?'selected':'')+'>'+n+'</option>').join('')+'</select></div><div class="field"><label>Coups joués</label><input id="hs" type="number" min="1" max="30" value="'+(h.shots??'')+'"></div><div class="field"><label>Putts (facultatif)</label><input id="hu" type="number" min="0" max="15" value="'+(h.putts??'')+'"></div><button onclick="realNext()">'+(realAt===realDraft.count-1?'Enregistrer la partie':'Valider ce trou')+'</button> '+(realAt?'<button class="secondary" onclick="realBack()">Précédent</button>':'')+'</div>');
 }
-function realRecord(){let a=Number(hs.value);if(!Number.isInteger(a)||a<1||a>30){alert('Entre le nombre de coups.');return false}let p=hu.value===''?null:Number(hu.value);if(p!==null&&(!Number.isInteger(p)||p<0||p>15)){alert('Putts invalides.');return false}realDraft.holes[realAt]={par:+hp.value,shots:a,putts:p};return true}
+function realRecord(){let shotInput=document.getElementById('hs');if(!shotInput.value.trim()) {alert('Le nombre de coups est obligatoire.');return false}let a=Number(shotInput.value);if(!Number.isInteger(a)||a<1||a>30){alert('Entre le nombre de coups.');return false}let puttInput=document.getElementById('hu');let p=puttInput.value===''?null:Number(puttInput.value);if(p!==null&&(!Number.isInteger(p)||p<0||p>15)){alert('Putts invalides.');return false}realDraft.holes[realAt]={par:+document.getElementById('hp').value,shots:a,putts:p};return true}
 function realBack(){if(realRecord()){realAt--;realHole()}}
 function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);realDraft=null;realStats()}
 function realStats(){
