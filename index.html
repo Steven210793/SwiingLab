@@ -3142,7 +3142,7 @@ home();
 const realKey='swiinglab_real_v1';
 const realGet=()=>{try{return JSON.parse(localStorage.getItem(realKey)||'{"courses":[],"rounds":[]}')}catch(e){return {courses:[],rounds:[]}}};
 const realSave=x=>localStorage.setItem(realKey,JSON.stringify(x));
-const safe=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;':'&quot;'}[c]));
+const safe=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let realDraft=null,realAt=0;
 const realUI=x=>{document.getElementById('screen').innerHTML=x;window.scrollTo(0,0)};
 function realHome(){
