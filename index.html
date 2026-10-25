@@ -3371,7 +3371,7 @@ function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPer
 function realStats(){
  let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
  let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
- let rows=d.rounds.slice().reverse().map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
+ let rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
  realUI('<h1>Parcours réels</h1><button onclick="realImportPage()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
 }
 
