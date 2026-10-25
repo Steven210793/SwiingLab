@@ -3148,8 +3148,9 @@ const realUI=x=>{document.getElementById('screen').innerHTML=x;window.scrollTo(0
 function realHome(){
  const d=realGet(),holes=d.rounds.flatMap(r=>r.holes),putts=holes.filter(h=>h.putts!==null);
  const avg=putts.length?(putts.reduce((v,h)=>v+h.putts,0)/putts.length).toFixed(2):'—';
- realUI('<h1>Centre de données</h1><p class="muted">TrackMan et parties réelles restent séparés.</p><div class="stats"><div class="stat">Parties réelles<strong>'+d.rounds.length+'</strong></div><div class="stat">Trous joués<strong>'+holes.length+'</strong></div><div class="stat">Putts / trou renseigné<strong>'+avg+'</strong></div></div><div class="info"><h2>Parcours réels</h2><button onclick="realNew()">Nouvelle partie</button><button class="secondary" onclick="realStats()">Statistiques et historique</button></div><div class="info"><h2>TrackMan</h2><p class="muted">Import et analyse de coups dans le module Progression existant.</p><button class="secondary" onclick="progressHub()">Consulter TrackMan</button></div><div class="info"><h2>Entraînements</h2><button class="secondary" onclick="allExercises()">Ouvrir les exercices</button></div>');
+ realUI('<h1>Centre de données</h1><p class="muted">TrackMan et parties réelles restent séparés.</p><div class="stats"><div class="stat">Parties réelles<strong>'+d.rounds.length+'</strong></div><div class="stat">Trous joués<strong>'+holes.length+'</strong></div><div class="stat">Putts / trou renseigné<strong>'+avg+'</strong></div></div><div class="info"><h2>Parcours réels</h2><button onclick="realNew()">Nouvelle partie</button><button class="secondary" onclick="realStats()">Statistiques et historique</button></div><div class="info"><h2>Analyse de performance</h2><button onclick="rlGoalsPage()">Mes objectifs</button><button class="secondary" onclick="rlComparison()">Comparer les mois</button><button class="secondary" onclick="rlInsights()">Points à travailler</button></div>'+rlRecords()+'<div class="info"><h2>TrackMan</h2><p class="muted">Tes données TrackMan restent indépendantes des scores réels.</p><button class="secondary" onclick="progressHub()">Consulter TrackMan</button></div><div class="info"><h2>Entraînements</h2><button class="secondary" onclick="allExercises()">Ouvrir les exercices</button></div>');
 }
+
 function realNew(){
  const d=realGet();
  realUI('<h1>Nouvelle partie</h1><div class="info"><div class="field"><label>Parcours mémorisé</label><select id="rc" onchange="realAutofill()"><option value="">Nouveau parcours</option>'+d.courses.map((c,i)=>'<option value="'+i+'">'+safe(c.golf)+' — '+safe(c.name)+'</option>').join('')+'</select></div><div class="field"><label>Golf</label><input id="rg" placeholder="Golf de Bussy"></div><div class="field"><label>Parcours</label><input id="rn" placeholder="La Jonchère"></div><div class="field"><label>Nombre de trous</label><select id="rl"><option>18</option><option>9</option></select></div><div class="field"><label>Date</label><input type="date" id="rd" value="'+new Date().toLocaleDateString('en-CA')+'"></div><button onclick="realStart()">Commencer</button></div>');
@@ -3176,5 +3177,60 @@ function realStats(){
 
 </script>
 
-<script>window.addEventListener('load',()=>realHome());</script></body>
+<script>window.addEventListener('load',()=>realHome());
+const rlGoalKey='swiinglab_real_goals_v1';
+const rlGoals=()=>{try{return JSON.parse(localStorage.getItem(rlGoalKey)||'[]')}catch(e){return []}};
+const rlRelative=r=>r.holes.reduce((a,h)=>a+h.shots-h.par,0);
+const rlRoundTotal=r=>r.holes.reduce((a,h)=>a+h.shots,0);
+function rlRecords(){
+ const rounds=realGet().rounds;
+ if(!rounds.length)return '<p>Aucun record tant qu’aucune partie n’est enregistrée.</p>';
+ const best=n=>rounds.filter(r=>r.count===n).sort((a,b)=>rlRelative(a)-rlRelative(b))[0];
+ const result=r=>r?rlRoundTotal(r)+' coups ('+(rlRelative(r)>0?'+':'')+rlRelative(r)+'), '+safe(r.golf)+' — '+safe(r.name):'—';
+ const mostBirdies=Math.max(...rounds.map(r=>r.holes.filter(h=>h.shots<h.par).length));
+ const longest=rounds.reduce((best,r)=>{let n=0,m=0;for(const h of r.holes){n=h.shots===h.par?n+1:0;m=Math.max(n,m)}return Math.max(best,m)},0);
+ const byCourse=new Map();
+ for(const r of rounds){const k=r.golf+' / '+r.name+' / '+r.count;let old=byCourse.get(k);if(!old||rlRelative(r)<rlRelative(old))byCourse.set(k,r)}
+ return '<div class="info"><h3>Records personnels — parcours réels</h3><p>Meilleur 9 trous : '+result(best(9))+'</p><p>Meilleur 18 trous : '+result(best(18))+'</p><p>Birdies ou mieux sur une partie : '+mostBirdies+'</p><p>Plus longue série de pars : '+longest+'</p><h4>Meilleures cartes par parcours</h4>'+[...byCourse.values()].map(result).map(x=>'<p>'+x+'</p>').join('')+'</div>';
+}
+function rlGoalsPage(){
+ const goals=rlGoals(),rs=realGet().rounds;
+ const items=goals.map((g,i)=>{
+  const matches=rs.filter(r=>r.count===g.count), recent=matches.slice(-5);
+  const value=recent.length?recent.reduce((a,r)=>a+rlRoundTotal(r),0)/recent.length:null;
+  const met=value!==null&&value<=g.target;
+  return '<div class="histItem"><div><b>'+g.count+' trous — objectif '+g.target+' coups</b><small>Moyenne des '+recent.length+' dernières cartes de ce format : '+(value===null?'—':value.toFixed(1))+'</small><small>'+(value===null?'En attente de cartes':met?'Objectif atteint':'Encore '+(value-g.target).toFixed(1)+' coups à gagner en moyenne')+'</small></div><button class="secondary" onclick="rlRemoveGoal('+i+')">Supprimer</button></div>';
+ }).join('');
+ realUI('<h1>Objectifs de performance</h1><p>Les objectifs de score suivent séparément les vraies cartes de 9 ou 18 trous.</p><div class="info"><label>Format</label><select id="rlgCount"><option value="18">18 trous</option><option value="9">9 trous</option></select><label>Score cible, au maximum</label><input type="number" min="18" max="200" id="rlgTarget" placeholder="Ex. 90"><button onclick="rlAddGoal()">Ajouter un objectif</button></div>'+items+'<button class="secondary" onclick="realHome()">Retour</button>');
+}
+function rlAddGoal(){
+ const count=+document.getElementById('rlgCount').value,target=+document.getElementById('rlgTarget').value;
+ if(!Number.isInteger(target)||target<count||target>200)return alert('Indique un objectif de score valide.');
+ const goals=rlGoals();goals.push({count,target});localStorage.setItem(rlGoalKey,JSON.stringify(goals));rlGoalsPage();
+}
+function rlRemoveGoal(i){const goals=rlGoals();goals.splice(i,1);localStorage.setItem(rlGoalKey,JSON.stringify(goals));rlGoalsPage()}
+function rlComparison(){
+ const rs=realGet().rounds;
+ const months=[...new Set(rs.map(r=>(r.date||'').slice(0,7)).filter(Boolean))].sort().reverse();
+ if(months.length<2){realUI('<h1>Comparaison mensuelle</h1><p>Il faut des parties enregistrées sur deux mois différents.</p><button onclick="realHome()">Retour</button>');return}
+ const selector=(id,v)=>'<select id="'+id+'" onchange="rlCompareRender()">'+months.map(m=>'<option value="'+m+'" '+(m===v?'selected':'')+'>'+m+'</option>').join('')+'</select>';
+ realUI('<h1>Comparaison mensuelle</h1><p>Statistiques des parcours réels uniquement.</p><label>Mois A</label>'+selector('rlMonthA',months[1])+'<label>Mois B</label>'+selector('rlMonthB',months[0])+'<div id="rlCompareData"></div><button class="secondary" onclick="realHome()">Retour</button>');rlCompareRender();
+}
+function rlCompareRender(){
+ const d=realGet().rounds,a=document.getElementById('rlMonthA').value,b=document.getElementById('rlMonthB').value;
+ const summarise=m=>{const r=d.filter(x=>x.date?.startsWith(m)),h=r.flatMap(x=>x.holes),p=h.filter(x=>x.putts!==null),v=n=>r.filter(x=>x.count===n);
+ return {parties:r.length,score9:v(9).length?(v(9).reduce((s,x)=>s+rlRoundTotal(x),0)/v(9).length):null,score18:v(18).length?(v(18).reduce((s,x)=>s+rlRoundTotal(x),0)/v(18).length):null,puts:p.length?p.reduce((s,x)=>s+x.putts,0)/p.length:null,pars:h.length?h.filter(x=>x.shots===x.par).length/h.length*100:null}};
+ const A=summarise(a),B=summarise(b),fmt=(n,unit='')=>n===null?'—':n.toFixed(1)+unit;
+ const lines=[['Parties','parties',''],['Score moyen 9 trous','score9',''],['Score moyen 18 trous','score18',''],['Putts par trou renseigné','puts',''],['Pars par trou','pars',' %']];
+ document.getElementById('rlCompareData').innerHTML='<div class="info"><div class="histItem"><b>Indicateur</b><b>'+a+' → '+b+'</b></div>'+lines.map(([label,key,unit])=>'<div class="histItem"><span>'+label+'</span><span>'+fmt(A[key],unit)+' → '+fmt(B[key],unit)+'</span></div>').join('')+'</div><p class="muted">Les moyennes de score distinguent les parties de 9 et 18 trous ; les putts manquants sont exclus.</p>';
+}
+function rlInsights(){
+ const all=realGet().rounds.flatMap(r=>r.holes);
+ if(!all.length){realUI('<h1>Points à travailler</h1><p>Ajoute des cartes de score pour obtenir une analyse.</p><button onclick="realHome()">Retour</button>');return}
+ const byPar=[3,4,5].map(par=>{const a=all.filter(h=>h.par===par);return {par,n:a.length,over:a.length?a.reduce((s,h)=>s+h.shots-h.par,0)/a.length:null}}).filter(x=>x.n);
+ const worst=byPar.slice().sort((a,b)=>b.over-a.over)[0],putts=all.filter(h=>h.putts!==null),pavg=putts.length?putts.reduce((s,h)=>s+h.putts,0)/putts.length:null;
+ realUI('<h1>Points à travailler</h1><div class="info"><h3>Indicateurs des parcours réels</h3><p>Le type de trou avec le plus de coups au-dessus du par en moyenne est le <b>par '+worst.par+'</b> : '+worst.over.toFixed(2)+' coup(s) au-dessus du par sur '+worst.n+' trous.</p><p>Putts moyens : '+(pavg===null?'non renseignés':pavg.toFixed(2)+' sur '+putts.length+' trous documentés')+'</p><p class="muted">Ces scores indiquent où tes résultats sont les moins bons, mais ne permettent pas à eux seuls d’attribuer les coups perdus au drive, aux approches ou au putting.</p></div><button onclick="realHome()">Retour</button>');
+}
+
+</script></body>
 </html>
