@@ -6,9 +6,9 @@
 <title>SwiingLab | Performance</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="swiinglab-icon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-180.png">
+
+
+<link rel="apple-touch-icon" href="swiinglab-icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -3183,7 +3183,7 @@ function realBack(){if(realRecord()){realAt--;realPersistDraft();realHole()}}
 function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realStats()}
 function realStats(){
  let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
- let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
+ let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
  let rows=d.rounds.slice().reverse().map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
  realUI('<h1>Parcours réels</h1><button onclick="realNew()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
 }
