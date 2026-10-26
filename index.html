@@ -578,13 +578,15 @@ body{
   border:1px solid var(--border);
   border-radius:20px;
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:minmax(0,1fr);
+  justify-items:center;
   gap:5px;
   padding:9px;
   box-shadow:0 14px 34px rgba(0,0,0,0.45)
 }
 
 .nav button{
+  width:min(100%,160px);
   background:transparent;
   border:1px solid transparent;
   border-radius:14px;
@@ -1144,10 +1146,10 @@ function computeApproachClubStats(){
 
 function setActiveTab(tab){
   ['navAccueil','navExercices','navProgression','navProfil'].forEach(id=>{
-    document.getElementById(id).classList.remove('active');
+    document.getElementById(id)?.classList.remove('active');
   });
   let map={accueil:'navAccueil',exercices:'navExercices',progression:'navProgression',profil:'navProfil'};
-  if(map[tab])document.getElementById(map[tab]).classList.add('active');
+  if(map[tab])document.getElementById(map[tab])?.classList.add('active');
 }
 
 const S=document.getElementById('screen');
