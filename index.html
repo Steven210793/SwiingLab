@@ -775,9 +775,7 @@ svg{
 
 <nav class="nav" aria-label="Navigation principale">
   <button id="navAccueil" onclick="slHome()"><span class="navIcon">⌂</span><span>Accueil</span></button>
-  <button id="navExercices" onclick="allExercises()"><span class="navIcon">◎</span><span>Exercices</span></button>
-  <button id="navProgression" onclick="realHome()"><span class="navIcon">▥</span><span>Données</span></button>
-  <button id="navProfil" onclick="profile()"><span class="navIcon">◯</span><span>Profil</span></button>
+
 </nav>
 
 <script>
@@ -1293,18 +1291,18 @@ return diagramApproachZone(20);
 
 function diagramPorte(dist){
 return `<svg viewBox="0 0 320 220" role="img" aria-label="Porte de deux tees à peine plus large qu’une balle, positionnée à 30 centimètres devant la balle">
-<rect width="320" height="220" rx="12" fill="#0a0908"/>
-<path d="M160 188 L160 32" stroke="#8c8172" stroke-width="1.5" stroke-dasharray="5 6" />
+<rect width="320" height="220" rx="12" fill="#f4f0e6"/>
+<path d="M160 188 L160 32" stroke="#292929" stroke-width="1.5" stroke-dasharray="5 6" />
 <circle cx="160" cy="188" r="12" fill="#f6f3e9" stroke="#c9c6b9" stroke-width="2"/>
 <circle cx="156" cy="185" r="1.5" fill="#c9c6b9"/><circle cx="164" cy="190" r="1.5" fill="#c9c6b9"/>
-<rect x="143" y="65" width="7" height="19" rx="2" fill="#e3b34a"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#e3b34a"/>
-<line x1="150" x2="170" y1="58" y2="58" stroke="#8ebca4" stroke-width="1.5"/>
-<path d="M150 54 V62 M170 54 V62" stroke="#8ebca4" stroke-width="1.5"/>
-<text x="160" y="45" text-anchor="middle" font-size="11" fill="#8ebca4">largeur d’une balle + marge</text>
-<line x1="225" y1="75" x2="225" y2="188" stroke="#e3b34a" stroke-width="1.8"/>
-<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#e3b34a" stroke-width="1.8" fill="none"/>
-<path d="M179 75 H234 M179 188 H234" stroke="#e3b34a" stroke-width="1" opacity=".55"/>
-<text x="235" y="135" font-size="13" fill="#e3b34a">30 cm</text>
+<rect x="143" y="65" width="7" height="19" rx="2" fill="#ffffff"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#ffffff"/>
+<line x1="150" x2="170" y1="58" y2="58" stroke="#222222" stroke-width="1.5"/>
+<path d="M150 54 V62 M170 54 V62" stroke="#222222" stroke-width="1.5"/>
+<text x="160" y="45" text-anchor="middle" font-size="11" fill="#222222">largeur d’une balle + marge</text>
+<line x1="225" y1="75" x2="225" y2="188" stroke="#222222" stroke-width="1.8"/>
+<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#222222" stroke-width="1.8" fill="none"/>
+<path d="M179 75 H234 M179 188 H234" stroke="#222222" stroke-width="1" opacity=".55"/>
+<text x="235" y="135" font-size="13" fill="#ffffff">30 cm</text>
 <text x="160" y="210" font-size="11" text-anchor="middle" fill="#d8cdb8">balle</text>
 <text x="160" y="101" font-size="11" text-anchor="middle" fill="#d8cdb8">porte de tees</text>
 </svg>`;
@@ -2609,22 +2607,7 @@ S.innerHTML=`
 <span class="muted">Configure tes clubs et tes distances</span>
 </div>
 
-<div class="info" style="margin-top:10px">
-<h3>APPARENCE</h3>
-<div class="toggleRow">
-<span>Mode clair</span>
-<div class="switch ${loadTheme()==='light'?'on':''}" onclick="toggleTheme()"><i></i></div>
-</div>
-</div>
-
-<div class="statsGrid">
-<div class="stat">Séances<strong>${trainingSessions.length}</strong></div>
-<div class="stat">Balles jouées<strong>${totalBalls}</strong></div>
-<div class="stat">Réussite<strong>${evaluatedBalls?Math.round(successful/evaluatedBalls*100)+' %':'—'}</strong></div>
-<div class="stat">Meilleure série<strong>${bestTrainingStreak}</strong></div>
-</div>
-
-<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde</b><button class="secondary" onclick="tmBackup()">Télécharger / partager ma sauvegarde</button><div class="field"><label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
+<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde complète</b><p class="muted">Conserve ton profil, ton sac, tes distances, tes parties et tes statistiques sur Google Drive.</p><button class="secondary" onclick="tmBackup()">Sauvegarder mes données</button><div class="field"><label>Restaurer mes données depuis Drive ou le téléphone</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
 <b>Partager</b>
 <span class="muted">Envoie l’application par SMS, WhatsApp...</span>
 </div>
@@ -2991,7 +2974,7 @@ const tmMean=(shots,key)=>{const a=shots.map(s=>s.metrics[key]).filter(Number.is
 const tmShow=n=>n===null?'—':n.toLocaleString('fr-FR',{maximumFractionDigits:1});
 function tmDownload(name,obj){const url=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
 function tmBackup(){const keys={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('mag_')||k.startsWith('swiinglab_'))keys[k]=localStorage.getItem(k)}(async()=>{const data={format:'swiinglab-backup-v1',keys},file=new File([JSON.stringify(data,null,2)],'SwiingLab-sauvegarde.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:'Sauvegarde SwiingLab'});return}}catch(e){if(e.name==='AbortError')return}tmDownload(file.name,data)})()}
-function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));progressHub()}}catch(e){alert(e.message)}input.value=''})}
+function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));profile()}}catch(e){alert(e.message)}input.value=''})}
 // tmImport() V12 is implemented below (accepts both flat and normalized metrics).
 const tmClubs=()=>{const order=['Driver','Bois 3','Hybride 3','Fer 4','Fer 5','Fer 6','Fer 7','Fer 8','Fer 9','PW','50°','54°','60°'];const all=[...new Set([...Object.keys(loadBag()).filter(c=>loadBag()[c]?.checked).map(tmCanonClub),...tmData().flatMap(s=>s.shots.map(b=>tmCanonClub(b.club)))])].filter(c=>c!=='Putter');return all.sort((a,b)=>(order.indexOf(a)<0?100:order.indexOf(a))-(order.indexOf(b)<0?100:order.indexOf(b))||a.localeCompare(b,'fr'));};
 const tmSessions=c=>tmData().map(s=>({...s,shots:s.shots.filter(b=>tmCanonClub(b.club)===tmCanonClub(c))})).filter(s=>s.shots.length).sort((a,b)=>a.date.localeCompare(b.date));
@@ -3170,13 +3153,32 @@ function slHome(){
  realUI('<section class="slWelcome"><span class="slEyebrow">SWIINGLAB · MON ESPACE GOLF</span><div class="slWelcomeHead"><span class="slWelcomeLogo"></span><span><h1>Bienvenue sur le green.</h1><p>Ton golf, tes progrès, à ton rythme.</p></span></div></section>'+
  '<div class="slSectionTitle"><h2>Que veux-tu faire ?</h2><span>Choisis un espace</span></div>'+
  '<div class="slTiles">'+
- slCard('◎','Entraînements','Exercices et séances','allExercises()',true)+
+ slCard('◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true)+
  slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
- slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','realHome()')+
+ slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
  slCard('◯','Mon profil','Sac et informations','profile()',true)+
  '</div>');
  setActiveTab('accueil');
+}
+function slRealHome(){
+ const rounds=realGet().rounds||[];
+ const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">MES PARTIES</span><h1>Parcours réel</h1><p>Enregistre et retrouve tes parties de golf.</p></div>'+pending+'<div class="slTiles">'+
+ slCard('＋','Importer une partie','Ajouter une carte de score','realImportPage()',true)+
+ slCard('▤','Historique',rounds.length+' partie(s) enregistrée(s)','realHistory()')+
+ slCard('▦','Statistiques de parcours','Scores par type de trou','realStats()')+
+ slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
+ slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
+ '</div>');
+}
+function realHistory(){
+ const d=realGet();
+ const rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{
+ const score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);
+ return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' · '+r.count+' trous</small></div><div class="r"><b>'+score+'</b> '+(score-par>=0?'+':'')+(score-par)+'</div></div>';
+ }).join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Historique</h1></div>'+(rows||'<p>Aucune partie enregistrée.</p>'));
 }
 function realHome(){
  const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
@@ -3186,7 +3188,7 @@ function realHome(){
  slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
  slCard('＋','Importer une partie','Fichier JSON créé depuis FFGolf','realImportPage()')+
  
- slCard('◎','Entraînements','Résultats des exercices','allExercises()')+
+ 
  slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
  slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
  slCard('◈','Points à travailler','Identifier les priorités','rlInsights()')+
@@ -3294,7 +3296,7 @@ function realDiscardDraft(){if(!confirm('Abandonner cette partie en cours ?'))re
 
 /* Import FFGolf : uniquement scores bruts, par, golf/parcours et HCP de trou facultatif. */
 function realImportPage(){
- realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
  setActiveTab('progression');
 }
 function realParseRound(raw){
@@ -3340,7 +3342,7 @@ function realImportJSON(input){
   const d=realGet(),rounds=payload.rounds.map(realParseRound),seen=new Set(d.rounds.map(realRoundFingerprint)),pending=[];
   for(const round of rounds){const fp=realRoundFingerprint(round);if(!seen.has(fp)){pending.push(round);seen.add(fp)}}
   if(pending.length){d.rounds.push(...pending);for(const r of pending){if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)})}realSave(d)}
-  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realStats();
+  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realHistory();
  }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}}).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
 }
 function realExportJSON(){tmDownload('SwiingLab-Parcours-Reels.json',{format:'swiinglab-real-rounds-v1',rounds:realGet().rounds})}
@@ -3367,12 +3369,12 @@ function realHole(){
 }
 function realRecord(){let shotInput=document.getElementById('hs');if(!shotInput.value.trim()) {alert('Le nombre de coups est obligatoire.');return false}let a=Number(shotInput.value);if(!Number.isInteger(a)||a<1||a>30){alert('Entre le nombre de coups.');return false}let puttInput=document.getElementById('hu');let p=puttInput.value===''?null:Number(puttInput.value);if(p!==null&&(!Number.isInteger(p)||p<0||p>15||p>a)){alert('Le nombre de putts doit être compris entre 0 et le nombre de coups joués.');return false}realDraft.holes[realAt]={par:+document.getElementById('hp').value,shots:a,putts:p};realPersistDraft();return true}
 function realBack(){if(realRecord()){realAt--;realPersistDraft();realHole()}}
-function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realStats()}
+function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realHistory()}
 function realStats(){
  let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
  let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
  let rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
- realUI('<h1>Parcours réels</h1><button onclick="realImportPage()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Statistiques de parcours</h1></div><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div>');
 }
 
 </script>
@@ -3457,6 +3459,174 @@ function rlInsights(){
  const byPar=[3,4,5].map(par=>{const a=all.filter(h=>h.par===par);return {par,n:a.length,over:a.length?a.reduce((s,h)=>s+h.shots-h.par,0)/a.length:null}}).filter(x=>x.n);
  const worst=byPar.slice().sort((a,b)=>b.over-a.over)[0],putts=all.filter(h=>h.putts!==null),pavg=putts.length?putts.reduce((s,h)=>s+h.putts,0)/putts.length:null;
  realUI('<h1>Points à travailler</h1><div class="info"><h3>Indicateurs des parcours réels</h3><p>Le type de trou avec le plus de coups au-dessus du par en moyenne est le <b>par '+worst.par+'</b> : '+worst.over.toFixed(2)+' coup(s) au-dessus du par sur '+worst.n+' trous.</p><p>Putts moyens : '+(pavg===null?'non renseignés':pavg.toFixed(2)+' sur '+putts.length+' trous documentés')+'</p><p class="muted">Ces scores indiquent où tes résultats sont les moins bons, mais ne permettent pas à eux seuls d’attribuer les coups perdus au drive, aux approches ou au putting.</p></div><button onclick="realHome()">Retour</button>');
+}
+
+
+/* PUTT TRACKER – exercices importés de l’application d’origine,
+   statistiques calculées uniquement sur les vrais résultats saisis. */
+const PUTT_TRACKER_EXERCISES = [
+  {
+    id: 'circle',
+    name: 'Circle Drill',
+    desc: 'Améliorez votre précision à courte distance.',
+    diff: 'Débutant',
+    time: '5 min',
+    obj: 'Améliorer la régularité et la précision des putts courts.',
+    setup: 'Placez 6 balles autour du trou à 1 mètre de distance en formant un cercle.',
+    rules: [
+      'Rentrez les 6 balles dans le trou.',
+      'Si vous en manquez une, recommencez depuis le début.',
+      'Objectif : réussir 3 séries complètes.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [1],
+    icon: 'circle'
+  },
+  {
+    id: 'ladder',
+    name: 'Ladder Drill',
+    desc: 'Travaillez votre contrôle de distance.',
+    diff: 'Intermédiaire',
+    time: '8 min',
+    obj: 'Développer le contrôle de la force et la précision sur différentes distances.',
+    setup: 'Placez 5 balles à 1m, 2m, 3m, 4m et 5m du trou.',
+    rules: [
+      'Puttez de la plus courte à la plus longue distance.',
+      'Objectif : rentrer chaque balle en 2 essais max.',
+      'Réussissez 2 séries complètes.'
+    ],
+    series: 2,
+    puttsPerSeries: 5,
+    distances: [1,2,3,4,5],
+    icon: 'ladder'
+  },
+  {
+    id: 'gate',
+    name: 'Gate Drill',
+    desc: 'Améliorez votre départ de putt.',
+    diff: 'Débutant',
+    time: '6 min',
+    obj: 'Assurer un alignement parfait de la face du putter au départ.',
+    setup: 'Placez deux tees à 30cm du trou, légèrement plus larges que votre putter.',
+    rules: [
+      'Puttez 6 balles à travers la porte.',
+      'Chaque contact de tee = raté.',
+      'Objectif : 6 passages propres en 3 séries.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [0.5, 1],
+    icon: 'gate'
+  },
+  {
+    id: '369',
+    name: '3-6-9 Drill',
+    desc: 'Contrôlez 3 distances essentielles.',
+    diff: 'Intermédiaire',
+    time: '10 min',
+    obj: 'Maîtriser les distances de 3, 6 et 9 mètres.',
+    setup: 'Placez 3 balles à 3m, 3 balles à 6m et 3 balles à 9m du trou.',
+    rules: [
+      'Puttez chaque groupe dans l\'ordre.',
+      'Comptez le total rentré sur 9.',
+      'Objectif : 7/9 ou plus sur 2 séries.'
+    ],
+    series: 2,
+    puttsPerSeries: 9,
+    distances: [3,6,9],
+    icon: '369'
+  },
+  {
+    id: 'pressure',
+    name: 'Pressure Drill',
+    desc: 'Entraînez-vous sous pression.',
+    diff: 'Avancé',
+    time: '10 min',
+    obj: 'Simuler la pression de compétition et renforcer la concentration.',
+    setup: 'Placez 10 balles à 1.5m autour du trou.',
+    rules: [
+      'Rentrez les 10 balles à la suite.',
+      'Si vous en ratez une, recommencez à 0.',
+      'Comptez le nombre de tentatives nécessaires.'
+    ],
+    series: 1,
+    puttsPerSeries: 10,
+    distances: [1.5],
+    icon: 'pressure'
+  },
+  {
+    id: 'random',
+    name: 'Random Drill',
+    desc: 'Travaillez votre régularité sur distances variées.',
+    diff: 'Avancé',
+    time: '12 min',
+    obj: 'Améliorer l\'adaptabilité et la lecture du green.',
+    setup: 'Placez 6 balles à des distances aléatoires entre 1m et 6m.',
+    rules: [
+      'Puttez les 6 balles sans ordre précis.',
+      'Notez chaque résultat.',
+      'Objectif : 4/6 sur 3 séries.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [1,2,3,4,5,6],
+    icon: 'random'
+  }
+];
+const PT_STORE='swiinglab_putt_tracker_v1';
+const ptSessions=()=>{try{const d=JSON.parse(localStorage.getItem(PT_STORE)||'[]');return Array.isArray(d)?d:[]}catch(e){return []}};
+let ptCurrent=null;
+const ptEscape=x=>safe(x);
+function puttTrackerHome(){
+ const a=ptSessions(), attempts=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">PUTT TRACKER</span><h1>Centre d’entraînement putting</h1><p>Exercices, résultats et progression.</p></div>'+
+ '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+attempts+'</strong></div><div class="stat">Réussite<strong>'+(attempts?Math.round(100*made/attempts)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+a.reduce((n,s)=>Math.max(n,s.maxStreak||0),0)+'</strong></div></div>'+
+ '<div class="slTiles" style="margin-top:18px">'+slCard('◎','Mes entraînements','6 exercices de putting','ptList()',true)+slCard('▤','Historique','Mes séances enregistrées','ptHistory()')+slCard('↗','Progression','Mes statistiques réelles','ptStats()')+'</div>');
+}
+function ptList(){
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Mes entraînements</h1></div>'+
+ '<div class="slTiles">'+PUTT_TRACKER_EXERCISES.map(e=>slCard('◉',ptEscape(e.name),ptEscape(e.desc)+' · '+ptEscape(e.diff),'ptDetail(\''+e.id+'\')')).join('')+'</div>');
+}
+function ptDetail(id){
+ const e=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!e)return;
+ realUI('<div class="slPageTop"><button class="slBack" onclick="ptList()">‹ Exercices</button><h1>'+ptEscape(e.name)+'</h1><p>'+ptEscape(e.obj)+'</p></div>'+
+ '<div class="info"><h3>MISE EN PLACE</h3><p>'+ptEscape(e.setup)+'</p><h3>CONSIGNES</h3><div>'+e.rules.map(r=>'<p>• '+ptEscape(r)+'</p>').join('')+'</div><p class="muted">'+e.series+' série(s) de '+e.puttsPerSeries+' putts · '+ptEscape(e.diff)+' · '+ptEscape(e.time)+'</p><button class="primary" onclick="ptStart(\''+e.id+'\')">Commencer</button></div>');
+}
+function ptStart(id){
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!ex)return;
+ ptCurrent={id,results:[],started:Date.now(),series:ex.series,perSeries:ex.puttsPerSeries};
+ ptPlay();
+}
+function ptBest(results){let n=0,best=0;for(const r of results){n=r?n+1:0;best=Math.max(best,n)}return best}
+function ptPlay(){
+ if(!ptCurrent)return puttTrackerHome();
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id),rs=ptCurrent.results,total=ex.series*ex.puttsPerSeries;
+ const made=rs.filter(Boolean).length,serie=Math.min(ex.series,Math.floor(rs.length/ex.puttsPerSeries)+1);
+ realUI('<div class="slPageTop"><button class="slBack" onclick="ptQuit()">‹ Quitter</button><h1>'+ptEscape(ex.name)+'</h1><p>Série '+serie+' / '+ex.series+' · Balle '+(Math.min(rs.length+1,total))+' / '+total+'</p></div>'+
+ '<div class="info"><div class="statsGrid"><div class="stat">Réussis<strong>'+made+' / '+rs.length+'</strong></div><div class="stat">Réussite<strong>'+(rs.length?Math.round(made/rs.length*100)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+ptBest(rs)+'</strong></div><div class="stat">Progression<strong>'+rs.length+' / '+total+'</strong></div></div><div class="choice" style="margin-top:18px"><button class="ok" onclick="ptRecord(true)">Réussi</button><button class="no" onclick="ptRecord(false)">Manqué</button></div><button class="secondary" style="margin-top:12px" onclick="ptUndo()">Annuler le dernier putt</button><button class="secondary" style="margin-top:12px" onclick="ptEnd()">Terminer et sauvegarder</button></div>');
+}
+function ptRecord(ok){if(!ptCurrent)return;const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);ptCurrent.results.push(!!ok);if(ptCurrent.results.length>=ex.series*ex.puttsPerSeries)ptEnd();else ptPlay()}
+function ptUndo(){if(ptCurrent&&ptCurrent.results.length){ptCurrent.results.pop();ptPlay()}}
+function ptQuit(){if(!ptCurrent||!ptCurrent.results.length||confirm('Quitter sans enregistrer cette séance ?')){ptCurrent=null;puttTrackerHome()}}
+function ptEnd(){
+ if(!ptCurrent)return;const r=ptCurrent.results;if(!r.length){alert('Aucun putt enregistré.');return}
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);
+ const entry={id:Date.now(),exerciseId:ex.id,exercise:ex.name,date:new Date().toISOString(),results:r.slice(),made:r.filter(Boolean).length,attempts:r.length,maxStreak:ptBest(r),duration:Math.round((Date.now()-ptCurrent.started)/1000),planned:ex.series*ex.puttsPerSeries};
+ try{localStorage.setItem(PT_STORE,JSON.stringify([...ptSessions(),entry]))}catch(e){alert('Enregistrement impossible : espace de stockage indisponible.');return}
+ ptCurrent=null;ptStats();
+}
+function ptHistory(){
+ const a=ptSessions().slice().reverse();
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Historique putting</h1></div>'+
+ (a.length?a.map(s=>'<div class="histItem"><div><b>'+ptEscape(s.exercise)+'</b><small>'+new Date(s.date).toLocaleDateString('fr-FR')+' · '+s.attempts+' putts</small></div><div class="r"><b>'+s.made+'/'+s.attempts+'</b> '+Math.round(s.made/s.attempts*100)+' %</div></div>').join(''):'<p>Aucune séance enregistrée.</p>'));
+}
+function ptStats(){
+ const a=ptSessions(),total=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
+ const rows=PUTT_TRACKER_EXERCISES.map(e=>{const v=a.filter(s=>s.exerciseId===e.id),n=v.reduce((t,s)=>t+s.attempts,0),m=v.reduce((t,s)=>t+s.made,0);return '<div class="histItem"><div><b>'+ptEscape(e.name)+'</b><small>'+v.length+' séances · '+n+' putts</small></div><div class="r"><b>'+(n?Math.round(m/n*100)+' %':'—')+'</b></div></div>'}).join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Progression putting</h1></div>'+
+ '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+total+'</strong></div><div class="stat">Taux de réussite<strong>'+(total?Math.round(made/total*100)+' %':'—')+'</strong></div><div class="stat">Record consécutif<strong>'+a.reduce((m,s)=>Math.max(m,s.maxStreak),0)+'</strong></div></div><h2>Par exercice</h2>'+rows+
+ '<p class="muted">Statistiques fondées uniquement sur les coups enregistrés, sans valeurs de démonstration ni index putting estimé.</p>');
 }
 
 </script></body>
