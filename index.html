@@ -3,17 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SwiingLab | Performance</title>
+<title>SwiingLab V12</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="swiinglab-icon.svg">
-
-
-<link rel="apple-touch-icon" href="swiinglab-icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SwiingLab">
-<meta name="theme-color" content="#00563b">
+<meta name="theme-color" content="#080808">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;650;700&display=swap" rel="stylesheet">
@@ -117,7 +116,7 @@ body{
   height:42px;
   border-radius:12px;
   flex:none;
-  background-image:url('./icon-192.png');
+  background-image:url('data:image/png;base64,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');
   background-size:cover;
   background-position:center;
   box-shadow:0 2px 8px rgba(0,0,0,0.45)
@@ -568,39 +567,32 @@ body{
 .nav{
   position:fixed;
   z-index:5;
-  bottom:14px;
+  bottom:calc(14px + env(safe-area-inset-bottom, 0px));
   left:50%;
   transform:translateX(-50%);
-  width:min(452px,calc(100% - 28px));
+  width:auto;
+  display:flex;
+  justify-content:center;
+}
+
+.nav button{
   background:var(--nav-bg);
   backdrop-filter:blur(22px);
   -webkit-backdrop-filter:blur(22px);
   border:1px solid var(--border);
-  border-radius:20px;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:5px;
-  padding:9px;
-  box-shadow:0 14px 34px rgba(0,0,0,0.45)
+  border-radius:16px;
+  color:var(--gold-light);
+  padding:12px 28px;
+  min-width:130px;
+  min-height:46px;
+  box-shadow:0 14px 34px rgba(0,0,0,0.45);
+  font-size:13px;
+  font-weight:700;
 }
 
-.nav button{
-  background:transparent;
-  border:1px solid transparent;
-  border-radius:14px;
-  color:var(--muted);
-  padding:10px 2px;
-  font-size:12px;
-  font-weight:600
-}
-
-.nav button .navIcon{display:block;font-size:23px;line-height:1.2;margin-bottom:4px;font-weight:500}
-.nav button{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:57px;font-size:11px;padding:6px 2px}
 .nav button.active{
   background:rgba(227,179,74,0.14);
   border-color:rgba(227,179,74,0.4);
-  color:var(--gold-light);
-  font-weight:750
 }
 
 svg{
@@ -752,18 +744,6 @@ svg{
 .tm-table th,.tm-table td{padding:10px 12px;border-bottom:1px solid var(--border-soft);text-align:right}
 .tm-table th:first-child,.tm-table td:first-child{text-align:left;position:sticky;left:0;background:var(--bg-1)}
 .tm-badge{display:inline-block;border-radius:12px;padding:2px 9px;border:1px solid var(--border);font-size:11px;color:var(--muted)}
-:root{--bg-0:#071e17;--bg-1:#0b3024;--bg-grad-1:#124b35;--bg-grad-2:#0b3929;--gold:#c5a46d;--gold-light:#e6c995;--gold-dark:#967545;--text:#f8f7f2;--muted:#a9c5b5;--nav-bg:rgba(5,34,24,.92)}
-:root[data-theme="light"]{--bg-0:#071e17;--bg-1:#0b3024;--bg-grad-1:#124b35;--bg-grad-2:#0b3929;--gold:#c5a46d;--gold-light:#e6c995;--gold-dark:#967545;--text:#f8f7f2;--muted:#a9c5b5;--nav-bg:rgba(5,34,24,.92)}
-
-/* SwiingLab navigation et tableaux de bord */
-.slWelcome{padding:29px 24px;background:linear-gradient(145deg,#164c3a,#092e24);border:1px solid rgba(223,189,122,.3);border-radius:26px;margin:4px 0 27px;box-shadow:0 16px 35px #0003}
-.slEyebrow{font-size:10px;letter-spacing:2px;font-weight:800;color:var(--gold-light)}
-.slWelcomeHead{display:flex;align-items:center;gap:16px;margin-top:20px}.slWelcomeHead h1{font-size:clamp(24px,6vw,32px);line-height:1.15;margin:0 0 9px}.slWelcomeHead p,.slPageTop p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
-.slWelcomeLogo{width:62px;height:62px;flex:none;border-radius:17px;background:url('./icon-192.png') center/cover;box-shadow:0 8px 22px #0006}
-.slSectionTitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 3px 15px}.slSectionTitle h2{font-size:19px;margin:0}.slSectionTitle>span{font-size:11px;color:var(--muted)}
-.slTiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:30px}.slTile{box-sizing:border-box;width:100%;min-height:152px;padding:18px 14px 14px;text-align:left;border-radius:21px;border:1px solid rgba(218,203,162,.24);background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.035));color:var(--text);display:flex;flex-direction:column;align-items:flex-start;gap:13px;box-shadow:0 8px 22px rgba(0,0,0,.13);cursor:pointer;position:relative}.slTile:active{transform:scale(.98)}.slTileIcon{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:rgba(197,164,109,.16);border:1px solid rgba(197,164,109,.35);color:var(--gold-light);font-size:27px;line-height:1}.slTileCopy{display:flex;flex-direction:column;gap:5px;padding-right:8px}.slTileCopy strong{font-size:15px;line-height:1.25}.slTileCopy small{color:var(--muted);line-height:1.4;font-size:11px}.slTileArrow{position:absolute;bottom:13px;right:14px;color:var(--gold-light);font-size:23px}.slWide{grid-column:span 2;min-height:106px;flex-direction:row;align-items:center;padding:18px}.slWide .slTileIcon{flex:none}.slWide .slTileCopy{padding-right:20px}.slWide .slTileArrow{top:50%;bottom:auto;transform:translateY(-50%)}
-.slPageTop{padding:4px 0 19px}.slPageTop h1{margin:15px 0 8px}.slBack{background:transparent;border:0;padding:0 0 18px;color:var(--gold-light);font-size:13px;display:block;text-align:left}.slNotice{padding:15px;border:1px solid var(--border);border-radius:18px;margin-bottom:16px}.slNoticeButtons{display:flex;gap:10px;margin-top:12px}.slNoticeButtons button{flex:1}
-@media(max-width:350px){.slTiles{gap:9px}.slTile{padding:14px 10px}.slTileCopy strong{font-size:13px}.slWelcome{padding:22px 16px}.slWelcomeLogo{width:50px;height:50px}}
 </style>
 </head>
 
@@ -773,9 +753,8 @@ svg{
   <div id="screen"></div>
 </main>
 
-<nav class="nav" aria-label="Navigation principale">
-  <button id="navAccueil" onclick="slHome()"><span class="navIcon">⌂</span><span>Accueil</span></button>
-
+<nav class="nav">
+  <button id="navAccueil" onclick="home()">Accueil</button>
 </nav>
 
 <script>
@@ -1144,10 +1123,10 @@ function computeApproachClubStats(){
 
 function setActiveTab(tab){
   ['navAccueil','navExercices','navProgression','navProfil'].forEach(id=>{
-    document.getElementById(id).classList.remove('active');
+    document.getElementById(id)?.classList.remove('active');
   });
   let map={accueil:'navAccueil',exercices:'navExercices',progression:'navProgression',profil:'navProfil'};
-  if(map[tab])document.getElementById(map[tab]).classList.add('active');
+  if(map[tab])document.getElementById(map[tab])?.classList.add('active');
 }
 
 const S=document.getElementById('screen');
@@ -1291,18 +1270,18 @@ return diagramApproachZone(20);
 
 function diagramPorte(dist){
 return `<svg viewBox="0 0 320 220" role="img" aria-label="Porte de deux tees à peine plus large qu’une balle, positionnée à 30 centimètres devant la balle">
-<rect width="320" height="220" rx="12" fill="#f4f0e6"/>
-<path d="M160 188 L160 32" stroke="#292929" stroke-width="1.5" stroke-dasharray="5 6" />
+<rect width="320" height="220" rx="12" fill="#0a0908"/>
+<path d="M160 188 L160 32" stroke="#8c8172" stroke-width="1.5" stroke-dasharray="5 6" />
 <circle cx="160" cy="188" r="12" fill="#f6f3e9" stroke="#c9c6b9" stroke-width="2"/>
 <circle cx="156" cy="185" r="1.5" fill="#c9c6b9"/><circle cx="164" cy="190" r="1.5" fill="#c9c6b9"/>
-<rect x="143" y="65" width="7" height="19" rx="2" fill="#ffffff"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#ffffff"/>
-<line x1="150" x2="170" y1="58" y2="58" stroke="#222222" stroke-width="1.5"/>
-<path d="M150 54 V62 M170 54 V62" stroke="#222222" stroke-width="1.5"/>
-<text x="160" y="45" text-anchor="middle" font-size="11" fill="#222222">largeur d’une balle + marge</text>
-<line x1="225" y1="75" x2="225" y2="188" stroke="#222222" stroke-width="1.8"/>
-<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#222222" stroke-width="1.8" fill="none"/>
-<path d="M179 75 H234 M179 188 H234" stroke="#222222" stroke-width="1" opacity=".55"/>
-<text x="235" y="135" font-size="13" fill="#ffffff">30 cm</text>
+<rect x="143" y="65" width="7" height="19" rx="2" fill="#e3b34a"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#e3b34a"/>
+<line x1="150" x2="170" y1="58" y2="58" stroke="#8ebca4" stroke-width="1.5"/>
+<path d="M150 54 V62 M170 54 V62" stroke="#8ebca4" stroke-width="1.5"/>
+<text x="160" y="45" text-anchor="middle" font-size="11" fill="#8ebca4">largeur d’une balle + marge</text>
+<line x1="225" y1="75" x2="225" y2="188" stroke="#e3b34a" stroke-width="1.8"/>
+<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#e3b34a" stroke-width="1.8" fill="none"/>
+<path d="M179 75 H234 M179 188 H234" stroke="#e3b34a" stroke-width="1" opacity=".55"/>
+<text x="235" y="135" font-size="13" fill="#e3b34a">30 cm</text>
 <text x="160" y="210" font-size="11" text-anchor="middle" fill="#d8cdb8">balle</text>
 <text x="160" y="101" font-size="11" text-anchor="middle" fill="#d8cdb8">porte de tees</text>
 </svg>`;
@@ -2607,7 +2586,22 @@ S.innerHTML=`
 <span class="muted">Configure tes clubs et tes distances</span>
 </div>
 
-<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde complète</b><p class="muted">Conserve ton profil, ton sac, tes distances, tes parties et tes statistiques sur Google Drive.</p><button class="secondary" onclick="tmBackup()">Sauvegarder mes données</button><div class="field"><label>Restaurer mes données depuis Drive ou le téléphone</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
+<div class="info" style="margin-top:10px">
+<h3>APPARENCE</h3>
+<div class="toggleRow">
+<span>Mode clair</span>
+<div class="switch ${loadTheme()==='light'?'on':''}" onclick="toggleTheme()"><i></i></div>
+</div>
+</div>
+
+<div class="statsGrid">
+<div class="stat">Séances<strong>${trainingSessions.length}</strong></div>
+<div class="stat">Balles jouées<strong>${totalBalls}</strong></div>
+<div class="stat">Réussite<strong>${evaluatedBalls?Math.round(successful/evaluatedBalls*100)+' %':'—'}</strong></div>
+<div class="stat">Meilleure série<strong>${bestTrainingStreak}</strong></div>
+</div>
+
+<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde</b><button class="secondary" onclick="tmBackup()">Télécharger / partager ma sauvegarde</button><div class="field"><label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
 <b>Partager</b>
 <span class="muted">Envoie l’application par SMS, WhatsApp...</span>
 </div>
@@ -2928,6 +2922,109 @@ bagScreen=function(){
  const bag=loadBag();
  S.innerHTML=`<div class="back" onclick="profile()">← Profil</div><h1>Mon sac</h1><div class="muted">Distances relevées avec ton TrackMan, en mètres.</div>${zonesOrder.map(zone=>`<div class="section"><h2>${zone}</h2>${clubOptions[zone].map(c=>{const e=bag[c]||{},wedge=zone==='Approches';return `<div class="info"><label class="bagCheck"><input type="checkbox" ${e.checked?'checked':''} onchange="onBagCheck('${c}',this.checked)"><b>${c}</b></label>${zone==='Putting'?'':`<div class="field"><label>Type de distance</label><select class="clubSelect" onchange="setBasis('${c}',this.value)"><option value="carry" ${e.basis!=='total'?'selected':''}>Carry — vol de balle</option><option value="total" ${e.basis==='total'?'selected':''}>Totale — avec la roule</option></select></div><div class="${wedge?'wedgeDistances':'field'}">${(wedge?SWINGS:['Distance']).map(sw=>{const value=wedge?getClubDistance(c,sw):e.distance;return `<div class="field"><label>${sw} (m)</label><input aria-label="${c} ${sw}" type="number" min="0.1" step="0.1" placeholder="À renseigner" value="${value||''}" oninput="${wedge?`onWedgeDist('${c}','${SWING_KEYS[sw]}',this.value)`:`onBagDist('${c}',this.value)`}"></div>`;}).join('')}</div>${e.checked&&(wedge?SWINGS.some(sw=>!getClubDistance(c,sw)):!e.distance)?'<div class="muted">Distance(s) manquante(s)</div>':''}`}</div>`;}).join('')}</div>`).join('')}<div id="bagSaveNote" class="saveNote"></div><button class="primary" onclick="profile()">Valider</button>`;setActiveTab('profil');
 };
+
+// Import TrackMan : les valeurs ne sont sauvegardées qu'après vérification.
+const trackmanSample=[['Driver',254.9,'Callaway'],['Bois 3',223.8,'Callaway'],['Hybride 3',222.0,'Callaway'],['Fer 4',193.7,'Titleist'],['Fer 5',183.4,'Titleist'],['Fer 6',177.1,'Titleist'],['Fer 7',166.3,'Titleist'],['Fer 8',154.7,'Titleist'],['Fer 9',148.1,'Titleist'],['PW',131.7,'Titleist'],['50°',107.3,'Titleist'],['54°',null,'Titleist'],['60°',86.9,'Titleist']];
+let trackmanPending=[],trackmanKind='total';
+const trackmanSupported=new Set(Object.values(clubOptions).flat());
+function trackmanImportScreen(){
+ S.innerHTML=`<div class="back" onclick="bagScreen()">← Mon sac</div><h1>Importer depuis TrackMan</h1><p class="muted">Sélectionne une ou plusieurs captures d'écran de la liste des clubs TrackMan. Vérifie les valeurs avant de les enregistrer : aucune donnée ne sera modifiée avant validation.</p>
+ <div class="field"><label>Type de distance affichée dans TrackMan</label><select id="tmBasis" class="clubSelect" onchange="trackmanKind=this.value"><option value="total">Total (avec roule)</option><option value="carry">Carry (vol de balle)</option></select></div>
+ <div class="field"><label>Captures d'écran TrackMan</label><input id="tmPhotos" type="file" accept="image/*" multiple onchange="trackmanReadScreens(this.files)"></div>
+ <div class="field"><label>Fichier TrackMan de mes clubs (.json)</label><input type="file" accept=".json,application/json" onchange="trackmanReadClubsFile(this.files[0])"></div>
+ <div class="info"><p>Pour les deux captures déjà partagées dans la conversation, tu peux aussi charger leurs valeurs identifiées sans ressaisir les chiffres.</p><button class="secondary" onclick="trackmanLoadExample()">Charger les valeurs de mes 2 captures</button></div>
+ <div id="tmImportStatus" class="muted" aria-live="polite"></div><div id="tmImportPreview"></div>`;
+ setActiveTab('profil');
+}
+async function trackmanReadClubsFile(file){
+ if(!file)return;
+ const status=document.getElementById('tmImportStatus');
+ try{
+  const data=JSON.parse(await file.text());
+  if(data.format!=='swiinglab-clubs-trackman'||!Array.isArray(data.clubs))throw new Error('Format de fichier non reconnu');
+  const pending=[];
+  for(const entry of data.clubs){
+   if(!entry||!trackmanSupported.has(entry.club))continue;
+   const distance=entry.distance==null||entry.distance===''?null:Number(entry.distance);
+   if(distance!=null&&(!Number.isFinite(distance)||distance<=0))throw new Error('Distance invalide : '+entry.club);
+   if(!pending.some(v=>v.club===entry.club))pending.push({club:entry.club,distance,brand:String(entry.brand||'')});
+  }
+  if(!pending.length)throw new Error('Aucun club reconnu');
+  trackmanPending=pending;
+  trackmanKind=data.distanceType==='carry'?'carry':'total';
+  const select=document.getElementById('tmBasis');if(select)select.value=trackmanKind;
+  if(status)status.textContent=pending.length+' clubs chargés depuis le fichier. Vérifie avant de valider.';
+  trackmanPreview();
+ }catch(error){if(status)status.textContent='Import impossible : '+error.message;}
+}
+function trackmanLoadExample(){trackmanPending=trackmanSample.map(([club,distance,brand])=>({club,distance,brand}));trackmanPreview();}
+function trackmanNorm(value){return String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9°]/g,'');}
+function trackmanClub(label){
+ const t=trackmanNorm(label);
+ if(/\bdriver\b|^dr$/.test(String(label).toLowerCase())||t==='driver')return 'Driver';
+ if(/pitchingwedge/.test(t)||t==='pw')return 'PW';
+ let m=t.match(/(?:^|.*?)([3457])(?:wood|bois|w)(?:$|.*)/);if(m)return 'Bois '+m[1];
+ m=t.match(/(?:^|.*?)([357])(?:hybrid|hybride|h)(?:$|.*)/);if(m)return 'Hybride '+m[1];
+ m=t.match(/(?:^|.*?)([2-9])(?:iron|fer|i)(?:$|.*)/);if(m)return 'Fer '+m[1];
+ m=t.match(/(?:^|.*?)(50|52|54|56|58|60)(?:°|wedge|deg)?(?:$|.*)/);if(m)return m[1]+'°';
+ return null;
+}
+function trackmanExtract(data){
+ const tsvWords=typeof data?.tsv==='string'?data.tsv.split(/\r?\n/).slice(1).map(line=>{const c=line.split('\t');return {text:c.slice(11).join(' '),confidence:Number(c[10]),bbox:{x0:Number(c[6]),y0:Number(c[7]),x1:Number(c[6])+Number(c[8]),y1:Number(c[7])+Number(c[9])}};}):[];
+ const words=(data?.words?.length?data.words:tsvWords).filter(w=>w.text&&w.confidence>-1);
+ if(!words.length)return [];
+ const maxX=Math.max(...words.map(w=>w.bbox?.x1||0));
+ const lines=[];
+ for(const w of words){const box=w.bbox||{},ym=(box.y0+box.y1)/2;let line=lines.find(l=>Math.abs(l.y-ym)<Math.max(13,(box.y1-box.y0)*.65));if(!line){line={y:ym,words:[]};lines.push(line);}line.words.push(w);line.y=(line.y*(line.words.length-1)+ym)/line.words.length;}
+ lines.sort((a,b)=>a.y-b.y);for(const l of lines){l.words.sort((a,b)=>a.bbox.x0-b.bbox.x0);l.text=l.words.map(w=>w.text).join(' ');}
+ let clubs=[];
+ for(let i=0;i<lines.length;i++){const l=lines[i];const left=l.words.filter(w=>w.bbox.x0<maxX*.72).map(w=>w.text).join(' ');let club=trackmanClub(left);if(!club&&i+1<lines.length)club=trackmanClub(left+' '+lines[i+1].words.filter(w=>w.bbox.x0<maxX*.65).map(w=>w.text).join(' '));if(club&&trackmanSupported.has(club)&&!clubs.some(c=>c.club===club))clubs.push({club,y:l.y});}
+ return clubs.map((entry,i)=>{
+ const next=clubs[i+1]?.y??Infinity;const row=lines.filter(l=>l.y>=entry.y-16&&l.y<Math.min(next-18,entry.y+115));
+ const numbers=row.flatMap(l=>l.words.filter(w=>w.bbox.x0>maxX*.72).map(w=>({text:w.text.replace(/\s/g,''),y:l.y})));
+ const distance=numbers.map(w=>({distance:Number(w.text.replace(',','.').replace(/[^0-9.]/g,'')),y:w.y})).filter(x=>x.distance>=20&&x.distance<400).sort((a,b)=>Math.abs(a.y-entry.y)-Math.abs(b.y-entry.y))[0]?.distance??null;
+ const brand=row.map(l=>l.text).find(t=>/titleist|callaway|taylormade|ping|cobra|mizuno/i.test(t))?.match(/titleist|callaway|taylormade|ping|cobra|mizuno/i)?.[0]||'';
+ return {club:entry.club,distance,brand};
+ });
+}
+async function trackmanReadScreens(files){
+ const status=document.getElementById('tmImportStatus');if(!files?.length)return;
+ status.textContent='Lecture des captures en cours…';trackmanPending=[];
+ try{
+  if(!window.Tesseract){await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';script.onload=resolve;script.onerror=()=>reject(new Error('Le module de lecture des images n’a pas pu être téléchargé.'));document.head.appendChild(script);});}
+  const worker=await Tesseract.createWorker('eng');
+  try{for(const [i,file] of Array.from(files).entries()){
+   status.textContent=`Analyse de la capture ${i+1}/${files.length}…`;
+   const result=await worker.recognize(file, {}, {tsv:true});
+   // Le résultat TSV conserve la position des lignes et des colonnes.
+   const parsed=trackmanExtract(result.data);
+   for(const found of parsed){const old=trackmanPending.findIndex(item=>item.club===found.club);if(old<0)trackmanPending.push(found);else if(trackmanPending[old].distance==null&&found.distance!=null)trackmanPending[old]=found;}
+  }}finally{await worker.terminate();}
+  status.textContent=trackmanPending.length?`${trackmanPending.length} club(s) reconnu(s). Vérifie les distances avant validation.`:'Aucun club reconnu. Tu peux utiliser les valeurs des captures fournies ou les saisir dans Mon sac.';
+  trackmanPreview();
+ }catch(e){status.textContent='Lecture impossible : '+e.message+' Les données du sac n’ont pas été modifiées.';}
+}
+function trackmanPreview(){
+ const view=document.getElementById('tmImportPreview');if(!view)return;
+ view.innerHTML=trackmanPending.length?`<div class="section"><h2>Vérification (${trackmanPending.length} clubs)</h2><p class="muted">Les champs sans distance restent vides. Pour les wedges, les distances TrackMan seront enregistrées comme « Full swing » uniquement.</p>${trackmanPending.map((item,i)=>`<div class="info"><label><input type="checkbox" id="tmCheck${i}" checked> <b>${esc(item.club)}</b> ${item.brand?'· '+esc(item.brand):''}</label><div class="field"><label>Distance (m)</label><input type="number" id="tmValue${i}" step="0.1" min="0.1" value="${item.distance??''}" placeholder="Non renseignée"></div></div>`).join('')}</div><button class="primary" onclick="trackmanCommit()">Valider et importer dans Mon sac</button><button class="secondary" onclick="bagScreen()">Annuler</button>`:'';
+}
+function trackmanCommit(){
+ const bag=loadBag(),kind=document.getElementById('tmBasis')?.value||trackmanKind;
+ let imported=0;
+ for(const [i,item] of trackmanPending.entries()){
+  if(!document.getElementById('tmCheck'+i)?.checked)continue;
+  const input=document.getElementById('tmValue'+i),raw=input?.value.trim()||'',value=raw?Number(raw):null;
+  if(raw&&(!Number.isFinite(value)||value<=0)){alert('Distance invalide pour '+item.club);return;}
+  const existing=bag[item.club]||{};existing.checked=true;existing.basis=kind;
+  if(value!=null){if(clubOptions.Approches.includes(item.club)){existing.distances??={};existing.distances.full=value;existing.distance=value;}else existing.distance=value;}
+  bag[item.club]=existing;imported++;
+ }
+ if(!imported){alert('Sélectionne au moins un club.');return;}
+ saveBag(bag);bagScreen();const note=document.getElementById('bagSaveNote');if(note)note.textContent=`${imported} club(s) importé(s) depuis TrackMan.`;
+}
+const trackmanPreviousBagScreen=bagScreen;
+bagScreen=function(){trackmanPreviousBagScreen();S.innerHTML=S.innerHTML.replace('<div class="muted">Distances relevées avec ton TrackMan, en mètres.</div>','<div class="muted">Distances relevées avec ton TrackMan, en mètres.</div><button class="secondary" onclick="trackmanImportScreen()">Importer mon sac depuis TrackMan (captures d’écran)</button>');};
+
 const progressFilters={};let historyPage=0;
 function matchingSessions(m){const f=progressFilters[m]||{};return practiceSessions(m).filter(s=>(!f.exercise||s.exercise===f.exercise)&&(!f.club||s.club===f.club)&&(!f.swing||s.swing===f.swing)&&(!f.difficulty||(s.difficulty||'standard')===f.difficulty)&&(!f.basis||s.distanceBasis===f.basis));}
 function filterProgress(m,key,value){progressFilters[m]??={};progressFilters[m][key]=value;historyPage=0;stats(m);}
@@ -2974,7 +3071,7 @@ const tmMean=(shots,key)=>{const a=shots.map(s=>s.metrics[key]).filter(Number.is
 const tmShow=n=>n===null?'—':n.toLocaleString('fr-FR',{maximumFractionDigits:1});
 function tmDownload(name,obj){const url=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
 function tmBackup(){const keys={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('mag_')||k.startsWith('swiinglab_'))keys[k]=localStorage.getItem(k)}(async()=>{const data={format:'swiinglab-backup-v1',keys},file=new File([JSON.stringify(data,null,2)],'SwiingLab-sauvegarde.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:'Sauvegarde SwiingLab'});return}}catch(e){if(e.name==='AbortError')return}tmDownload(file.name,data)})()}
-function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));profile()}}catch(e){alert(e.message)}input.value=''})}
+function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));progressHub()}}catch(e){alert(e.message)}input.value=''})}
 // tmImport() V12 is implemented below (accepts both flat and normalized metrics).
 const tmClubs=()=>{const order=['Driver','Bois 3','Hybride 3','Fer 4','Fer 5','Fer 6','Fer 7','Fer 8','Fer 9','PW','50°','54°','60°'];const all=[...new Set([...Object.keys(loadBag()).filter(c=>loadBag()[c]?.checked).map(tmCanonClub),...tmData().flatMap(s=>s.shots.map(b=>tmCanonClub(b.club)))])].filter(c=>c!=='Putter');return all.sort((a,b)=>(order.indexOf(a)<0?100:order.indexOf(a))-(order.indexOf(b)<0?100:order.indexOf(b))||a.localeCompare(b,'fr'));};
 const tmSessions=c=>tmData().map(s=>({...s,shots:s.shots.filter(b=>tmCanonClub(b.club)===tmCanonClub(c))})).filter(s=>s.shots.length).sort((a,b)=>a.date.localeCompare(b.date));
@@ -3047,20 +3144,15 @@ function tmImport(input){
  f.text().then(content=>{
   try{
    const o=JSON.parse(content);
-   if(!o||typeof o!=='object'||Array.isArray(o))throw Error('Format JSON incorrect.');
    if(o.format==='swiinglab-backup-v1')throw Error('Pour ce fichier, utilise « Restaurer une sauvegarde » dans Profil.');
    const entries=Array.isArray(o.sessions)?o.sessions:[o];
    if(!entries.length||entries.length>150)throw Error('Aucune séance ou trop de séances dans ce fichier.');
-   const all=tmData();
-   if(!Array.isArray(all))throw Error('Données enregistrées invalides.');
-   const seen=new Set(all.filter(s=>Array.isArray(s.shots)).map(s=>tmSessionFingerprint(s.shots)));
-   const knownSources=new Set(all.flatMap(s=>(s.shots||[]).map(sh=>sh.sourceId).filter(Boolean)));
-   const pending=[];
+   const all=tmData(), seen=new Set(all.map(s=>tmSessionFingerprint(s.shots)));
    let added=0, duplicates=0, addedShots=0;
    for(const raw of entries){
     if(!raw||!Array.isArray(raw.shots)||!raw.shots.length||raw.shots.length>3000)throw Error('Liste des coups incorrecte.');
     const dt=raw.date||new Date().toISOString();
-    if(typeof dt!=='string'||!Number.isFinite(Date.parse(dt)))throw Error('Date incorrecte.');
+    if(!Number.isFinite(Date.parse(dt)))throw Error('Date incorrecte.');
     const parsed=raw.shots.map(sh=>{
      if(!sh||typeof sh.club!=='string'||!sh.club.trim())throw Error('Un coup n’a pas de club.');
      const metrics={};
@@ -3069,17 +3161,17 @@ function tmImport(input){
       if(val!==null&&val!==undefined&&val!==''&&Number.isFinite(Number(val)))metrics[k]=Number(val);
      }
      if(!Object.keys(metrics).length)throw Error('Un coup n’a aucune mesure reconnue.');
-     return {club:tmCanonClub(sh.club.trim()),metrics,amplitude:sh.amplitude||sh.swing||sh.swingType||null,amplitudeUnverified:!!sh.amplitudeUnverified,shotNumber:sh.shotNumber??null,sourceId:sh.sourceId||null};
+     return {club:sh.club.trim(),metrics,amplitude:sh.amplitude||sh.swing||sh.swingType||null,amplitudeUnverified:!!sh.amplitudeUnverified,shotNumber:sh.shotNumber??null,sourceId:sh.sourceId||null};
     });
     const fp=tmSessionFingerprint(parsed);
-    if(seen.has(fp)||parsed.every(sh=>sh.sourceId&&knownSources.has(sh.sourceId))){duplicates++;continue}
+    if(seen.has(fp)){duplicates++;continue}
     const date=new Date(dt).toISOString(),id='tm-v12-'+tmFnv(fp+'|'+date);
     const venue=String(raw.venue||'TrackMan Range').slice(0,180);
     const dateUnverified=!!raw.dateUnverified||!raw.date||!!o.metadata?.actualSessionDateKnown===false&&!!o.metadata?.dateNote;
-    pending.push({id,date,venue,shots:parsed,dateUnverified,source:raw.source||null});
-    seen.add(fp);parsed.forEach(sh=>{if(sh.sourceId)knownSources.add(sh.sourceId)});added++;addedShots+=parsed.length;
+    all.push({id,date,venue,shots:parsed,dateUnverified,source:raw.source||null});
+    seen.add(fp);added++;addedShots+=parsed.length;
    }
-   if(pending.length)localStorage.setItem(tmKey,JSON.stringify([...all,...pending]));
+   localStorage.setItem(tmKey,JSON.stringify(all));
    alert(added+' séance(s) ajoutée(s) · '+addedShots+' coups. '+duplicates+' doublon(s) ignoré(s).');
    progressHub();
   }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}
@@ -3136,498 +3228,9 @@ tmSeedV12();
 migrateTrainingReset();
 
 applyTheme();
-
-
-const realKey='swiinglab_real_v1';
-const realGet=()=>{try{return JSON.parse(localStorage.getItem(realKey)||'{"courses":[],"rounds":[]}')}catch(e){return {courses:[],rounds:[]}}};
-const realSave=x=>localStorage.setItem(realKey,JSON.stringify(x));
-const safe=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let realDraft=null,realAt=0;
-const realUI=x=>{document.getElementById('screen').innerHTML=x;window.scrollTo(0,0)};
-function slCard(icon,title,description,fn,wide=false){
- return '<button class="slTile'+(wide?' slWide':'')+'" onclick="'+fn+'"><span class="slTileIcon">'+icon+'</span><span class="slTileCopy"><strong>'+title+'</strong><small>'+description+'</small></span><span class="slTileArrow">›</span></button>';
-}
-function slHome(){
- const d=realGet(),rounds=Array.isArray(d.rounds)?d.rounds:[],tm=tmData();
- const n=Array.isArray(tm)?tm.length:0;
- realUI('<section class="slWelcome"><span class="slEyebrow">SWIINGLAB · MON ESPACE GOLF</span><div class="slWelcomeHead"><span class="slWelcomeLogo"></span><span><h1>Bienvenue sur le green.</h1><p>Ton golf, tes progrès, à ton rythme.</p></span></div></section>'+
- '<div class="slSectionTitle"><h2>Que veux-tu faire ?</h2><span>Choisis un espace</span></div>'+
- '<div class="slTiles">'+
- slCard('◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true)+
- slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
- slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
- slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
- slCard('◯','Mon profil','Sac et informations','profile()',true)+
- '</div>');
- setActiveTab('accueil');
-}
-function slRealHome(){
- const rounds=realGet().rounds||[];
- const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
- realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">MES PARTIES</span><h1>Parcours réel</h1><p>Enregistre et retrouve tes parties de golf.</p></div>'+pending+'<div class="slTiles">'+
- slCard('＋','Importer une partie','Ajouter une carte de score','realImportPage()',true)+
- slCard('▤','Historique',rounds.length+' partie(s) enregistrée(s)','realHistory()')+
- slCard('▦','Statistiques de parcours','Scores par type de trou','realStats()')+
- slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
- slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
- '</div>');
-}
-function realHistory(){
- const d=realGet();
- const rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{
- const score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);
- return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' · '+r.count+' trous</small></div><div class="r"><b>'+score+'</b> '+(score-par>=0?'+':'')+(score-par)+'</div></div>';
- }).join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Historique</h1></div>'+(rows||'<p>Aucune partie enregistrée.</p>'));
-}
-function realHome(){
- const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
- const d=realGet(),rounds=Array.isArray(d.rounds)?d.rounds:[],holes=rounds.flatMap(r=>r.holes||[]);
- realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">TON TABLEAU DE BORD</span><h1>Centre de données</h1><p>Choisis la statistique qui t’intéresse.</p></div>'+pending+
- '<div class="slTiles">'+
- slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
- slCard('＋','Importer une partie','Fichier JSON créé depuis FFGolf','realImportPage()')+
- 
- 
- slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
- slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
- slCard('◈','Points à travailler','Identifier les priorités','rlInsights()')+
- slCard('★','Mes records','Meilleures performances','rlRecordsPage()')+
- '</div>');
- setActiveTab('progression');
-}
-function rlRecordsPage(){realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><h1>Records personnels</h1></div>'+rlRecords())}
-
-/* Parcours TrackMan : stockage séparé des séances Practice et des parcours réels. */
-const slVirtualKey='swiinglab_trackman_courses_v1';
-function slVirtualData(){
- try{const a=JSON.parse(localStorage.getItem(slVirtualKey)||'[]');return Array.isArray(a)?a:[]}
- catch(e){return []}
-}
-function slVirtualNumber(v){if(v===null||v===undefined||v==='')return null;const n=Number(typeof v==='string'?v.replace(',','.'):v);return Number.isFinite(n)?n:null}
-function slVirtualFingerprint(r){
- const hs=Array.isArray(r.holes)?r.holes.map(h=>[h.number,h.par,h.score].join(':')).join('|'):'';
- return [String(r.date||'').slice(0,10),String(r.course||'').trim().toLowerCase(),r.holeCount||'',hs].join('|')
-}
-function slTrackmanHome(){
- const count=slVirtualData().length;
- realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">ENTRAÎNEMENT VIRTUEL</span><h1>TrackMan</h1><p>Deux espaces indépendants pour tes données TrackMan.</p></div><div class="slTiles">'+
- slCard('◎','Practice','Séances, clubs et distances','progressHub()',true)+
- slCard('⛳','Parcours',count+' partie(s) virtuelle(s)','slVirtualHome()',true)+
- '</div>');
- setActiveTab('progression');
-}
-function slVirtualHome(){
- const rounds=slVirtualData();
- const tiles=rounds.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(r=>{
-  const n=rounds.indexOf(r),score=r.totalScore,par=r.totalPar;
-  const delta=Number.isFinite(score)&&Number.isFinite(par)?' ('+(score-par>0?'+':'')+(score-par)+')':'';
-  return '<button class="slTile slWide" onclick="slVirtualDetail('+n+')"><span class="slTileIcon">⛳</span><span class="slTileCopy"><strong>'+safe(r.course)+'</strong><small>'+safe(r.date)+' · '+r.holeCount+' trous · '+(score===null?'Score non renseigné':score+' coups'+delta)+'</small></span><span class="slTileArrow">›</span></button>';
- }).join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slTrackmanHome()">‹ TrackMan</button><span class="slEyebrow">TRACKMAN / PARCOURS</span><h1>Parcours virtuels</h1><p>Parties jouées sur simulateur, distinctes de tes cartes réelles.</p></div>'+
- '<div class="info"><h3>Importer une partie</h3><p class="muted">Envoie tes captures TrackMan dans notre conversation. Je te fournirai un fichier JSON à importer ici.</p><input type="file" id="slVirtualFile" accept=".json,application/json" onchange="slVirtualImport(this)"><button class="secondary" onclick="slVirtualExample()">Télécharger un modèle JSON</button><button class="secondary" onclick="slVirtualExport()">Exporter mes parties</button></div>'+
- '<div class="slSectionTitle"><h2>Mes parties</h2><span>'+rounds.length+' enregistrée(s)</span></div><div class="slTiles">'+(tiles||'<p class="muted">Aucune partie importée pour le moment.</p>')+'</div>');
- setActiveTab('progression');
-}
-function slVirtualNormalize(raw){
- if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Une partie est invalide.');
- const course=String(raw.course||raw.courseName||'').trim();
- const date=String(raw.date||'').slice(0,10);
- if(!course||course.length>200)throw Error('Nom de parcours manquant ou trop long.');
- if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z')))throw Error('Date de partie incorrecte.');
- const inputHoles=raw.holes||[];
- if(!Array.isArray(inputHoles)||inputHoles.length>18)throw Error('Liste des trous invalide.');
- const holes=inputHoles.map((h,i)=>{
-  const number=slVirtualNumber(h.number??i+1),par=slVirtualNumber(h.par),score=slVirtualNumber(h.score??h.shots),handicap=slVirtualNumber(h.handicap??h.hcp);
-  if(!Number.isInteger(number)||number<1||number>18||!Number.isInteger(par)||par<3||par>6||!Number.isInteger(score)||score<1||score>30)throw Error('Trou '+(i+1)+' : numéro, par ou coups invalides.');
-  return {number,par,score,handicap:Number.isInteger(handicap)?handicap:null,distance:slVirtualNumber(h.distance),shots:Array.isArray(h.shotsDetail)?h.shotsDetail.slice(0,30):[]};
- });
- if(new Set(holes.map(h=>h.number)).size!==holes.length)throw Error('Numéros de trous répétés.');
- const holeCount=slVirtualNumber(raw.holeCount)??holes.length;
- if(![9,18].includes(holeCount))throw Error('Format : 9 ou 18 trous attendu.');
- if(holes.length&&holes.length!==holeCount)throw Error('Il manque des trous sur la carte de score.');
- const score=holes.length?holes.reduce((sum,h)=>sum+h.score,0):slVirtualNumber(raw.totalScore);
- const par=holes.length?holes.reduce((sum,h)=>sum+h.par,0):slVirtualNumber(raw.totalPar);
- if(score===null||!Number.isInteger(score)||score<1||score>540)throw Error('Score total absent ou invalide.');
- const stats=raw.stats&&typeof raw.stats==='object'&&!Array.isArray(raw.stats)?raw.stats:{};
- const sanitized={};
- for(const k of ['fairwaysHitPct','girPct','scramblingPct','averageDriveM','longestDriveM']){
-  const v=slVirtualNumber(stats[k]);if(v!==null){if(k.endsWith('Pct')&&(v<0||v>100))throw Error('Pourcentage hors limites : '+k);if(!k.endsWith('Pct')&&(v<0||v>600))throw Error('Distance hors limites : '+k);sanitized[k]=v}
- }
- const settings=raw.settings&&typeof raw.settings==='object'&&!Array.isArray(raw.settings)?raw.settings:{};
- const keep={};for(const k of ['gameType','format','flags','mulligans','putting','gimmeDistanceM','wind','fairwayFirmness','greenFirmness','greenSpeed']){if(settings[k]!==undefined&&settings[k]!==null)keep[k]=String(settings[k]).slice(0,120)}
- return {course,date,holeCount,holes,totalScore:score,totalPar:par,stats:sanitized,settings:keep,player:String(raw.player||'').slice(0,100),source:'trackman-virtual',notes:String(raw.notes||'').slice(0,500)};
-}
-function slVirtualImport(input){
- const file=input.files&&input.files[0];if(!file)return;
- if(file.size>2000000){alert('Fichier trop volumineux.');input.value='';return}
- file.text().then(content=>{
-  try{
-   const payload=JSON.parse(content);
-   if(!payload||payload.format!=='swiinglab-trackman-courses-v1'||!Array.isArray(payload.rounds))throw Error('Format de fichier incompatible avec les parcours TrackMan.');
-   if(!payload.rounds.length||payload.rounds.length>100)throw Error('Le fichier doit contenir entre 1 et 100 parties.');
-   const prior=slVirtualData(),seen=new Set(prior.map(slVirtualFingerprint)),pending=[];
-   let duplicates=0;
-   for(const raw of payload.rounds){const round=slVirtualNormalize(raw),fp=slVirtualFingerprint(round);if(seen.has(fp)){duplicates++;continue}seen.add(fp);pending.push(round)}
-   if(pending.length)localStorage.setItem(slVirtualKey,JSON.stringify([...prior,...pending]));
-   alert(pending.length+' partie(s) importée(s). '+duplicates+' doublon(s) ignoré(s).');
-   slVirtualHome();
-  }catch(e){alert('Importation impossible : '+e.message)}
-  finally{input.value=''}
- }).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
-}
-function slVirtualExport(){tmDownload('SwiingLab-Parcours-TrackMan.json',{format:'swiinglab-trackman-courses-v1',rounds:slVirtualData()})}
-function slVirtualExample(){tmDownload('Modele-Parcours-TrackMan.json',{format:'swiinglab-trackman-courses-v1',rounds:[{course:'Nom du parcours',date:'2026-10-24',holeCount:9,totalScore:33,totalPar:36,holes:[],stats:{fairwaysHitPct:50,girPct:67,averageDriveM:239.8,longestDriveM:273.7,scramblingPct:100},settings:{gameType:'Stroke play',putting:'Auto - Niveau pro'}}]})}
-function slVirtualDetail(index){
- const r=slVirtualData()[index];if(!r)return slVirtualHome();
- const statNames={fairwaysHitPct:'Fairways touchés',girPct:'Greens en régulation',scramblingPct:'Scrambling',averageDriveM:'Drive moyen',longestDriveM:'Drive le plus long'};
- const stats=Object.keys(r.stats||{}).map(k=>'<div class="stat"><span>'+safe(statNames[k]||k)+'</span><strong>'+r.stats[k]+(k.endsWith('Pct')?' %':' m')+'</strong></div>').join('');
- const holes=(r.holes||[]).map(h=>'<div class="histItem"><span>Trou '+h.number+' · Par '+h.par+(h.handicap===null?'':' · HCP '+h.handicap)+'</span><b>'+h.score+' coups</b></div>').join('');
- const settings=Object.entries(r.settings||{}).map(([k,v])=>'<div class="histItem"><span>'+safe(k)+'</span><span>'+safe(v)+'</span></div>').join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slVirtualHome()">‹ Parcours virtuels</button><span class="slEyebrow">PARTIE TRACKMAN</span><h1>'+safe(r.course)+'</h1><p>'+safe(r.date)+' · '+r.holeCount+' trous</p></div><div class="stats"><div class="stat">Score<strong>'+r.totalScore+'</strong></div><div class="stat">Par<strong>'+(r.totalPar??'—')+'</strong></div></div><div class="section"><h2>Statistiques</h2><div class="stats">'+(stats||'<p>Pas de statistiques complémentaires.</p>')+'</div></div><div class="section"><h2>Carte de score</h2>'+(holes||'<p>Carte trou par trou non disponible.</p>')+'</div><div class="section"><h2>Paramètres</h2>'+(settings||'<p>Non renseignés.</p>')+'</div>');
- setActiveTab('progression');
-}
-
-const realDraftKey='swiinglab_real_draft_v1';
-function realPersistDraft(){if(realDraft)localStorage.setItem(realDraftKey,JSON.stringify({draft:realDraft,at:realAt}))}
-function realResumeDraft(){try{let x=JSON.parse(localStorage.getItem(realDraftKey)||'null');if(!x?.draft||!Array.isArray(x.draft.holes))return realNew();realDraft=x.draft;realAt=Math.min(Math.max(0,x.at||0),realDraft.holes.length-1);realHole()}catch(e){realNew()}}
-function realDiscardDraft(){if(!confirm('Abandonner cette partie en cours ?'))return;localStorage.removeItem(realDraftKey);realDraft=null;realAt=0;realHome()}
-
-
-/* Import FFGolf : uniquement scores bruts, par, golf/parcours et HCP de trou facultatif. */
-function realImportPage(){
- realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
- setActiveTab('progression');
-}
-function realParseRound(raw){
- if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Partie invalide');
- const golf=String(raw.golf||'').trim(),name=String(raw.name||raw.course||'').trim(),date=String(raw.date||'').trim();
- if(!golf||!name||golf.length>180||name.length>180)throw Error('Nom du golf et du parcours obligatoires');
- if(date&&(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z'))))throw Error('Date incorrecte');
- if(!Array.isArray(raw.holes)||![9,18].includes(raw.holes.length))throw Error('Une carte de 9 ou 18 trous complète est nécessaire');
- const holes=raw.holes.map((h,i)=>{
-  const par=Number(h.par),shots=Number(h.shots??h.score),hcp=h.hcp??h.handicap;
-  if(![3,4,5].includes(par)||!Number.isInteger(shots)||shots<1||shots>30)throw Error('Trou '+(i+1)+' : par ou score brut incorrect');
-  const handicap=hcp===null||hcp===undefined||hcp===''?null:Number(hcp);
-  if(handicap!==null&&(!Number.isInteger(handicap)||handicap<1||handicap>18))throw Error('Trou '+(i+1)+' : HCP incorrect');
-  return {par,shots,putts:null,hcp:handicap};
- });
- return {id:Date.now()+'-'+Math.random().toString(36).slice(2,8),golf,name,date,count:holes.length,holes,source:'ffgolf-screenshots'};
-}
-function realRoundFingerprint(r){return [r.golf.toLowerCase().trim(),r.name.toLowerCase().trim(),r.date||'',r.holes.map(h=>h.par+':'+h.shots).join('|')].join('~')}
-/* Quatre cartes FFGolf embarquées : une seule insertion par empreinte, sans écraser les autres données. */
-const slPreloadedRealRounds=[["Golf de Saint-Malo","Surcouf","2026-08-18",[5,4,4,3,4,3,5,4,4,4,3,4,4,3,5,4,4,5],[5,4,4,3,5,4,5,5,4,4,2,4,5,4,3,5,5,3],[9,17,12,15,1,13,14,10,4,5,16,3,6,11,18,2,8,7]],["Dinard Golf","Dinard","2026-08-19",[4,4,4,5,4,4,3,4,3,4,4,3,3,4,4,4,3,4],[5,4,4,7,5,4,4,5,4,4,4,4,3,4,5,5,4,4],[9,1,5,15,3,11,17,13,7,6,8,4,10,12,16,2,18,14]],["Les Ormes Golf & Resort","Le Château","2026-08-20",[5,3,5,4,4,4,5,3,4,4,3,4,4,5,3,5,3,4],[5,4,4,4,4,4,5,4,4,4,3,5,4,4,4,5,4,5],[7,13,9,1,15,3,5,17,11,2,18,10,4,14,12,8,16,6]],["Golf du Gouverneur","Le Breuil","2026-09-13",[4,3,5,3,4,4,4,5,4,4,3,4,4,4,5,3,5,4],[5,4,4,3,6,7,4,6,5,6,4,5,5,5,8,5,7,7],[8,12,18,10,2,6,14,16,4,11,17,3,13,1,9,7,15,5]]];
-function slSeedRealRounds(){
- try{
-  const db=realGet();if(!db||!Array.isArray(db.rounds)||!Array.isArray(db.courses))return;
-  const seen=new Set(db.rounds.map(realRoundFingerprint));
-  let changed=false;
-  for(const [golf,name,date,pars,scores,hcps] of slPreloadedRealRounds){
-   const raw={golf,name,date,holes:pars.map((par,i)=>({par,shots:scores[i],hcp:hcps[i]}))};
-   const round=realParseRound(raw),fp=realRoundFingerprint(round);
-   if(seen.has(fp))continue;
-   db.rounds.push(round);seen.add(fp);changed=true;
-   if(!db.courses.some(c=>c.golf===golf&&c.name===name&&c.count===round.count))db.courses.push({golf,name,count:round.count,pars:pars.slice()});
-  }
-  if(changed)realSave(db);
- }catch(e){console.warn('Cartes FFGolf préchargées non ajoutées :',e)}
-}
-window.addEventListener('load',slSeedRealRounds);
-function realImportJSON(input){
- const f=input.files?.[0];if(!f)return;
- if(f.size>2000000){alert('Fichier trop volumineux');input.value='';return}
- f.text().then(t=>{try{
-  const payload=JSON.parse(t);
-  if(payload?.format!=='swiinglab-real-rounds-v1'||!Array.isArray(payload.rounds)||!payload.rounds.length||payload.rounds.length>100)throw Error('Format incompatible : fichier Parcours réels SwiingLab attendu');
-  const d=realGet(),rounds=payload.rounds.map(realParseRound),seen=new Set(d.rounds.map(realRoundFingerprint)),pending=[];
-  for(const round of rounds){const fp=realRoundFingerprint(round);if(!seen.has(fp)){pending.push(round);seen.add(fp)}}
-  if(pending.length){d.rounds.push(...pending);for(const r of pending){if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)})}realSave(d)}
-  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realHistory();
- }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}}).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
-}
-function realExportJSON(){tmDownload('SwiingLab-Parcours-Reels.json',{format:'swiinglab-real-rounds-v1',rounds:realGet().rounds})}
-function realNew(){
- const d=realGet();
- realUI('<h1>Nouvelle partie</h1><div class="info"><div class="field"><label>Parcours mémorisé</label><select id="rc" onchange="realAutofill()"><option value="">Nouveau parcours</option>'+d.courses.map((c,i)=>'<option value="'+i+'">'+safe(c.golf)+' — '+safe(c.name)+'</option>').join('')+'</select></div><div class="field"><label>Golf</label><input id="rg" placeholder="Golf de Bussy"></div><div class="field"><label>Parcours</label><input id="rn" placeholder="La Jonchère"></div><div class="field"><label>Nombre de trous</label><select id="rl"><option>18</option><option>9</option></select></div><div class="field"><label>Date</label><input type="date" id="rd" value="'+(()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')})()+'"></div><button onclick="realStart()">Commencer</button></div>');
-}
-function realAutofill(){
- const chosen=document.getElementById('rc').value;
- if(chosen==='')return;
- const c=realGet().courses[Number(chosen)];if(!c)return;
- document.getElementById('rg').value=c.golf;
- document.getElementById('rn').value=c.name;
- document.getElementById('rl').value=String(c.count);
-}
-function realStart(){
- let golf=document.getElementById('rg').value.trim(),name=document.getElementById('rn').value.trim(),count=+document.getElementById('rl').value;if(!golf||!name)return alert('Renseigne le golf et le parcours.');
- let c=realGet().courses.find(c=>c.golf===golf&&c.name===name&&c.count===count);
- realDraft={id:Date.now(),date:document.getElementById('rd').value,golf,name,count,holes:Array.from({length:count},(_,i)=>({par:c?.pars[i]||4,shots:null,putts:null}))};realAt=0;realPersistDraft();realHole();
-}
-function realHole(){
- let h=realDraft.holes[realAt];
- realUI('<h1>Trou '+(realAt+1)+' / '+realDraft.count+'</h1><p>'+safe(realDraft.golf)+' — '+safe(realDraft.name)+'</p><div class="info"><div class="field"><label>Par</label><select id="hp">'+[3,4,5,6].map(n=>'<option '+(n===h.par?'selected':'')+'>'+n+'</option>').join('')+'</select></div><div class="field"><label>Coups joués</label><input id="hs" type="number" min="1" max="30" value="'+(h.shots??'')+'"></div><div class="field"><label>Putts (facultatif)</label><input id="hu" type="number" min="0" max="15" value="'+(h.putts??'')+'"></div><button onclick="realNext()">'+(realAt===realDraft.count-1?'Enregistrer la partie':'Valider ce trou')+'</button> '+(realAt?'<button class="secondary" onclick="realBack()">Précédent</button>':'')+'</div>');
-}
-function realRecord(){let shotInput=document.getElementById('hs');if(!shotInput.value.trim()) {alert('Le nombre de coups est obligatoire.');return false}let a=Number(shotInput.value);if(!Number.isInteger(a)||a<1||a>30){alert('Entre le nombre de coups.');return false}let puttInput=document.getElementById('hu');let p=puttInput.value===''?null:Number(puttInput.value);if(p!==null&&(!Number.isInteger(p)||p<0||p>15||p>a)){alert('Le nombre de putts doit être compris entre 0 et le nombre de coups joués.');return false}realDraft.holes[realAt]={par:+document.getElementById('hp').value,shots:a,putts:p};realPersistDraft();return true}
-function realBack(){if(realRecord()){realAt--;realPersistDraft();realHole()}}
-function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realHistory()}
-function realStats(){
- let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
- let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
- let rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Statistiques de parcours</h1></div><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div>');
-}
+home();
 
 </script>
 
-<script>window.addEventListener('load',()=>slHome());
-const rlGoalKey='swiinglab_real_goals_v1';
-const rlGoals=()=>{try{return JSON.parse(localStorage.getItem(rlGoalKey)||'[]')}catch(e){return []}};
-const rlRelative=r=>r.holes.reduce((a,h)=>a+h.shots-h.par,0);
-const rlRoundTotal=r=>r.holes.reduce((a,h)=>a+h.shots,0);
-function rlRecords(){
- const rounds=realGet().rounds;
- if(!rounds.length)return '<p>Aucun record tant qu’aucune partie n’est enregistrée.</p>';
- const best=n=>rounds.filter(r=>r.count===n).sort((a,b)=>rlRelative(a)-rlRelative(b))[0];
- const result=r=>r?rlRoundTotal(r)+' coups ('+(rlRelative(r)>0?'+':'')+rlRelative(r)+'), '+safe(r.golf)+' — '+safe(r.name):'—';
- const mostBirdies=Math.max(...rounds.map(r=>r.holes.filter(h=>h.shots<h.par).length));
- const longest=rounds.reduce((best,r)=>{let n=0,m=0;for(const h of r.holes){n=h.shots===h.par?n+1:0;m=Math.max(n,m)}return Math.max(best,m)},0);
- const byCourse=new Map();
- for(const r of rounds){const k=r.golf+' / '+r.name+' / '+r.count;let old=byCourse.get(k);if(!old||rlRelative(r)<rlRelative(old))byCourse.set(k,r)}
- return '<div class="info"><h3>Records personnels — parcours réels</h3><p>Meilleur 9 trous : '+result(best(9))+'</p><p>Meilleur 18 trous : '+result(best(18))+'</p><p>Birdies ou mieux sur une partie : '+mostBirdies+'</p><p>Plus longue série de pars : '+longest+'</p><h4>Meilleures cartes par parcours</h4>'+[...byCourse.values()].map(result).map(x=>'<p>'+x+'</p>').join('')+'</div>';
-}
-function rlGoalsPage(){
- const goals=rlGoals(),rs=realGet().rounds;
- const items=goals.map((g,i)=>{
-  const matches=rs.filter(r=>r.count===g.count), recent=matches.slice(-5);
-  const value=recent.length?recent.reduce((a,r)=>a+rlRoundTotal(r),0)/recent.length:null;
-  const met=value!==null&&value<=g.target;
-  return '<div class="histItem"><div><b>'+g.count+' trous — objectif '+g.target+' coups</b><small>Moyenne des '+recent.length+' dernières cartes de ce format : '+(value===null?'—':value.toFixed(1))+'</small><small>'+(value===null?'En attente de cartes':met?'Objectif atteint':'Encore '+(value-g.target).toFixed(1)+' coups à gagner en moyenne')+'</small></div><button class="secondary" onclick="rlRemoveGoal('+i+')">Supprimer</button></div>';
- }).join('');
- realUI('<h1>Objectifs de performance</h1><p>Les objectifs de score suivent séparément les vraies cartes de 9 ou 18 trous.</p><div class="info"><label>Format</label><select id="rlgCount"><option value="18">18 trous</option><option value="9">9 trous</option></select><label>Score cible, au maximum</label><input type="number" min="18" max="200" id="rlgTarget" placeholder="Ex. 90"><button onclick="rlAddGoal()">Ajouter un objectif</button></div>'+items+'<button class="secondary" onclick="realHome()">Retour</button>');
-}
-function rlAddGoal(){
- const count=+document.getElementById('rlgCount').value,target=+document.getElementById('rlgTarget').value;
- if(!Number.isInteger(target)||target<count||target>200)return alert('Indique un objectif de score valide.');
- const goals=rlGoals();goals.push({count,target});localStorage.setItem(rlGoalKey,JSON.stringify(goals));rlGoalsPage();
-}
-function rlRemoveGoal(i){const goals=rlGoals();goals.splice(i,1);localStorage.setItem(rlGoalKey,JSON.stringify(goals));rlGoalsPage()}
-function rlComparison(){
- const rs=realGet().rounds;
- const months=[...new Set(rs.map(r=>(r.date||'').slice(0,7)).filter(Boolean))].sort().reverse();
- if(months.length<2){realUI('<h1>Comparaison mensuelle</h1><p>Il faut des parties enregistrées sur deux mois différents.</p><button onclick="realHome()">Retour</button>');return}
- const selector=(id,v)=>'<select id="'+id+'" onchange="rlCompareRender()">'+months.map(m=>'<option value="'+m+'" '+(m===v?'selected':'')+'>'+m+'</option>').join('')+'</select>';
- realUI('<h1>Comparaison mensuelle</h1><p>Statistiques des parcours réels uniquement.</p><label>Mois A</label>'+selector('rlMonthA',months[1])+'<label>Mois B</label>'+selector('rlMonthB',months[0])+'<div id="rlCompareData"></div><button class="secondary" onclick="realHome()">Retour</button>');rlCompareRender();
-}
-function rlCompareRender(){
- const area=document.getElementById('rlCompareData'),selA=document.getElementById('rlMonthA'),selB=document.getElementById('rlMonthB');
- if(!area||!selA||!selB)return;
- const d=realGet().rounds,a=selA.value,b=selB.value;
- if(a===b){area.innerHTML='<p class="muted">Choisis deux mois différents pour comparer les performances.</p>';return}
- const summarise=m=>{
-  const rounds=d.filter(x=>typeof x.date==='string'&&x.date.startsWith(m));
-  const holes=rounds.flatMap(x=>x.holes||[]);
-  const validPutts=holes.filter(x=>Number.isFinite(x.putts));
-  const byFormat=n=>rounds.filter(x=>x.count===n);
-  const meanScore=n=>{const rs=byFormat(n);return rs.length?rs.reduce((sum,x)=>sum+rlRoundTotal(x),0)/rs.length:null};
-  return {parties:rounds.length,score9:meanScore(9),score18:meanScore(18),
-   n9:byFormat(9).length,n18:byFormat(18).length,
-   puts:validPutts.length?validPutts.reduce((sum,x)=>sum+x.putts,0)/validPutts.length:null,
-   nPutts:validPutts.length,pars:holes.length?100*holes.filter(x=>x.shots===x.par).length/holes.length:null,nHoles:holes.length};
- };
- const A=summarise(a),B=summarise(b);
- const fmt=(v,unit='')=>v===null?'—':v.toFixed(1)+unit;
- const rows=[
-  {label:'Parties enregistrées',key:'parties',better:null,nA:A.parties,nB:B.parties},
-  {label:'Score moyen 9 trous',key:'score9',better:'down',nA:A.n9,nB:B.n9},
-  {label:'Score moyen 18 trous',key:'score18',better:'down',nA:A.n18,nB:B.n18},
-  {label:'Putts par trou renseigné',key:'puts',better:'down',nA:A.nPutts,nB:B.nPutts},
-  {label:'Pars par trou',key:'pars',better:'up',unit:' %',nA:A.nHoles,nB:B.nHoles}
- ];
- const signed=v=>(v>0?'+':'')+v.toFixed(1);
- area.innerHTML='<div class="info"><div class="histItem"><b>Indicateur</b><b>'+safe(a)+' → '+safe(b)+'</b></div>'+
- rows.map(row=>{
-  const x=A[row.key],y=B[row.key],unit=row.unit||'',comparable=x!==null&&y!==null;
-  const diff=comparable?y-x:null;
-  const trend=!comparable||!row.better?'':Math.abs(diff)<0.05?'Stable':(diff<0)===(row.better==='down')?'Amélioration':'Recul';
-  const indicator=comparable?'<small>Variation : '+signed(diff)+unit+(trend?' · '+trend:'')+'</small>':'<small>Comparaison indisponible : données insuffisantes sur un des mois</small>';
-  return '<div class="histItem"><div><b>'+row.label+'</b><small>Échantillons : '+row.nA+' / '+row.nB+'</small></div><div class="r">'+fmt(x,unit)+' → '+fmt(y,unit)+indicator+'</div></div>';
- }).join('')+'</div><p class="muted">Les scores des parties de 9 et 18 trous sont calculés séparément. Les putts non renseignés sont exclus. Une variation repose uniquement sur les données disponibles pour chaque mois.</p>';
-}
-function rlInsights(){
- const all=realGet().rounds.flatMap(r=>r.holes);
- if(!all.length){realUI('<h1>Points à travailler</h1><p>Ajoute des cartes de score pour obtenir une analyse.</p><button onclick="realHome()">Retour</button>');return}
- const byPar=[3,4,5].map(par=>{const a=all.filter(h=>h.par===par);return {par,n:a.length,over:a.length?a.reduce((s,h)=>s+h.shots-h.par,0)/a.length:null}}).filter(x=>x.n);
- const worst=byPar.slice().sort((a,b)=>b.over-a.over)[0],putts=all.filter(h=>h.putts!==null),pavg=putts.length?putts.reduce((s,h)=>s+h.putts,0)/putts.length:null;
- realUI('<h1>Points à travailler</h1><div class="info"><h3>Indicateurs des parcours réels</h3><p>Le type de trou avec le plus de coups au-dessus du par en moyenne est le <b>par '+worst.par+'</b> : '+worst.over.toFixed(2)+' coup(s) au-dessus du par sur '+worst.n+' trous.</p><p>Putts moyens : '+(pavg===null?'non renseignés':pavg.toFixed(2)+' sur '+putts.length+' trous documentés')+'</p><p class="muted">Ces scores indiquent où tes résultats sont les moins bons, mais ne permettent pas à eux seuls d’attribuer les coups perdus au drive, aux approches ou au putting.</p></div><button onclick="realHome()">Retour</button>');
-}
-
-
-/* PUTT TRACKER – exercices importés de l’application d’origine,
-   statistiques calculées uniquement sur les vrais résultats saisis. */
-const PUTT_TRACKER_EXERCISES = [
-  {
-    id: 'circle',
-    name: 'Circle Drill',
-    desc: 'Améliorez votre précision à courte distance.',
-    diff: 'Débutant',
-    time: '5 min',
-    obj: 'Améliorer la régularité et la précision des putts courts.',
-    setup: 'Placez 6 balles autour du trou à 1 mètre de distance en formant un cercle.',
-    rules: [
-      'Rentrez les 6 balles dans le trou.',
-      'Si vous en manquez une, recommencez depuis le début.',
-      'Objectif : réussir 3 séries complètes.'
-    ],
-    series: 3,
-    puttsPerSeries: 6,
-    distances: [1],
-    icon: 'circle'
-  },
-  {
-    id: 'ladder',
-    name: 'Ladder Drill',
-    desc: 'Travaillez votre contrôle de distance.',
-    diff: 'Intermédiaire',
-    time: '8 min',
-    obj: 'Développer le contrôle de la force et la précision sur différentes distances.',
-    setup: 'Placez 5 balles à 1m, 2m, 3m, 4m et 5m du trou.',
-    rules: [
-      'Puttez de la plus courte à la plus longue distance.',
-      'Objectif : rentrer chaque balle en 2 essais max.',
-      'Réussissez 2 séries complètes.'
-    ],
-    series: 2,
-    puttsPerSeries: 5,
-    distances: [1,2,3,4,5],
-    icon: 'ladder'
-  },
-  {
-    id: 'gate',
-    name: 'Gate Drill',
-    desc: 'Améliorez votre départ de putt.',
-    diff: 'Débutant',
-    time: '6 min',
-    obj: 'Assurer un alignement parfait de la face du putter au départ.',
-    setup: 'Placez deux tees à 30cm du trou, légèrement plus larges que votre putter.',
-    rules: [
-      'Puttez 6 balles à travers la porte.',
-      'Chaque contact de tee = raté.',
-      'Objectif : 6 passages propres en 3 séries.'
-    ],
-    series: 3,
-    puttsPerSeries: 6,
-    distances: [0.5, 1],
-    icon: 'gate'
-  },
-  {
-    id: '369',
-    name: '3-6-9 Drill',
-    desc: 'Contrôlez 3 distances essentielles.',
-    diff: 'Intermédiaire',
-    time: '10 min',
-    obj: 'Maîtriser les distances de 3, 6 et 9 mètres.',
-    setup: 'Placez 3 balles à 3m, 3 balles à 6m et 3 balles à 9m du trou.',
-    rules: [
-      'Puttez chaque groupe dans l\'ordre.',
-      'Comptez le total rentré sur 9.',
-      'Objectif : 7/9 ou plus sur 2 séries.'
-    ],
-    series: 2,
-    puttsPerSeries: 9,
-    distances: [3,6,9],
-    icon: '369'
-  },
-  {
-    id: 'pressure',
-    name: 'Pressure Drill',
-    desc: 'Entraînez-vous sous pression.',
-    diff: 'Avancé',
-    time: '10 min',
-    obj: 'Simuler la pression de compétition et renforcer la concentration.',
-    setup: 'Placez 10 balles à 1.5m autour du trou.',
-    rules: [
-      'Rentrez les 10 balles à la suite.',
-      'Si vous en ratez une, recommencez à 0.',
-      'Comptez le nombre de tentatives nécessaires.'
-    ],
-    series: 1,
-    puttsPerSeries: 10,
-    distances: [1.5],
-    icon: 'pressure'
-  },
-  {
-    id: 'random',
-    name: 'Random Drill',
-    desc: 'Travaillez votre régularité sur distances variées.',
-    diff: 'Avancé',
-    time: '12 min',
-    obj: 'Améliorer l\'adaptabilité et la lecture du green.',
-    setup: 'Placez 6 balles à des distances aléatoires entre 1m et 6m.',
-    rules: [
-      'Puttez les 6 balles sans ordre précis.',
-      'Notez chaque résultat.',
-      'Objectif : 4/6 sur 3 séries.'
-    ],
-    series: 3,
-    puttsPerSeries: 6,
-    distances: [1,2,3,4,5,6],
-    icon: 'random'
-  }
-];
-const PT_STORE='swiinglab_putt_tracker_v1';
-const ptSessions=()=>{try{const d=JSON.parse(localStorage.getItem(PT_STORE)||'[]');return Array.isArray(d)?d:[]}catch(e){return []}};
-let ptCurrent=null;
-const ptEscape=x=>safe(x);
-function puttTrackerHome(){
- const a=ptSessions(), attempts=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
- realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">PUTT TRACKER</span><h1>Centre d’entraînement putting</h1><p>Exercices, résultats et progression.</p></div>'+
- '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+attempts+'</strong></div><div class="stat">Réussite<strong>'+(attempts?Math.round(100*made/attempts)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+a.reduce((n,s)=>Math.max(n,s.maxStreak||0),0)+'</strong></div></div>'+
- '<div class="slTiles" style="margin-top:18px">'+slCard('◎','Mes entraînements','6 exercices de putting','ptList()',true)+slCard('▤','Historique','Mes séances enregistrées','ptHistory()')+slCard('↗','Progression','Mes statistiques réelles','ptStats()')+'</div>');
-}
-function ptList(){
- realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Mes entraînements</h1></div>'+
- '<div class="slTiles">'+PUTT_TRACKER_EXERCISES.map(e=>slCard('◉',ptEscape(e.name),ptEscape(e.desc)+' · '+ptEscape(e.diff),'ptDetail(\''+e.id+'\')')).join('')+'</div>');
-}
-function ptDetail(id){
- const e=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!e)return;
- realUI('<div class="slPageTop"><button class="slBack" onclick="ptList()">‹ Exercices</button><h1>'+ptEscape(e.name)+'</h1><p>'+ptEscape(e.obj)+'</p></div>'+
- '<div class="info"><h3>MISE EN PLACE</h3><p>'+ptEscape(e.setup)+'</p><h3>CONSIGNES</h3><div>'+e.rules.map(r=>'<p>• '+ptEscape(r)+'</p>').join('')+'</div><p class="muted">'+e.series+' série(s) de '+e.puttsPerSeries+' putts · '+ptEscape(e.diff)+' · '+ptEscape(e.time)+'</p><button class="primary" onclick="ptStart(\''+e.id+'\')">Commencer</button></div>');
-}
-function ptStart(id){
- const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!ex)return;
- ptCurrent={id,results:[],started:Date.now(),series:ex.series,perSeries:ex.puttsPerSeries};
- ptPlay();
-}
-function ptBest(results){let n=0,best=0;for(const r of results){n=r?n+1:0;best=Math.max(best,n)}return best}
-function ptPlay(){
- if(!ptCurrent)return puttTrackerHome();
- const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id),rs=ptCurrent.results,total=ex.series*ex.puttsPerSeries;
- const made=rs.filter(Boolean).length,serie=Math.min(ex.series,Math.floor(rs.length/ex.puttsPerSeries)+1);
- realUI('<div class="slPageTop"><button class="slBack" onclick="ptQuit()">‹ Quitter</button><h1>'+ptEscape(ex.name)+'</h1><p>Série '+serie+' / '+ex.series+' · Balle '+(Math.min(rs.length+1,total))+' / '+total+'</p></div>'+
- '<div class="info"><div class="statsGrid"><div class="stat">Réussis<strong>'+made+' / '+rs.length+'</strong></div><div class="stat">Réussite<strong>'+(rs.length?Math.round(made/rs.length*100)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+ptBest(rs)+'</strong></div><div class="stat">Progression<strong>'+rs.length+' / '+total+'</strong></div></div><div class="choice" style="margin-top:18px"><button class="ok" onclick="ptRecord(true)">Réussi</button><button class="no" onclick="ptRecord(false)">Manqué</button></div><button class="secondary" style="margin-top:12px" onclick="ptUndo()">Annuler le dernier putt</button><button class="secondary" style="margin-top:12px" onclick="ptEnd()">Terminer et sauvegarder</button></div>');
-}
-function ptRecord(ok){if(!ptCurrent)return;const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);ptCurrent.results.push(!!ok);if(ptCurrent.results.length>=ex.series*ex.puttsPerSeries)ptEnd();else ptPlay()}
-function ptUndo(){if(ptCurrent&&ptCurrent.results.length){ptCurrent.results.pop();ptPlay()}}
-function ptQuit(){if(!ptCurrent||!ptCurrent.results.length||confirm('Quitter sans enregistrer cette séance ?')){ptCurrent=null;puttTrackerHome()}}
-function ptEnd(){
- if(!ptCurrent)return;const r=ptCurrent.results;if(!r.length){alert('Aucun putt enregistré.');return}
- const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);
- const entry={id:Date.now(),exerciseId:ex.id,exercise:ex.name,date:new Date().toISOString(),results:r.slice(),made:r.filter(Boolean).length,attempts:r.length,maxStreak:ptBest(r),duration:Math.round((Date.now()-ptCurrent.started)/1000),planned:ex.series*ex.puttsPerSeries};
- try{localStorage.setItem(PT_STORE,JSON.stringify([...ptSessions(),entry]))}catch(e){alert('Enregistrement impossible : espace de stockage indisponible.');return}
- ptCurrent=null;ptStats();
-}
-function ptHistory(){
- const a=ptSessions().slice().reverse();
- realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Historique putting</h1></div>'+
- (a.length?a.map(s=>'<div class="histItem"><div><b>'+ptEscape(s.exercise)+'</b><small>'+new Date(s.date).toLocaleDateString('fr-FR')+' · '+s.attempts+' putts</small></div><div class="r"><b>'+s.made+'/'+s.attempts+'</b> '+Math.round(s.made/s.attempts*100)+' %</div></div>').join(''):'<p>Aucune séance enregistrée.</p>'));
-}
-function ptStats(){
- const a=ptSessions(),total=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
- const rows=PUTT_TRACKER_EXERCISES.map(e=>{const v=a.filter(s=>s.exerciseId===e.id),n=v.reduce((t,s)=>t+s.attempts,0),m=v.reduce((t,s)=>t+s.made,0);return '<div class="histItem"><div><b>'+ptEscape(e.name)+'</b><small>'+v.length+' séances · '+n+' putts</small></div><div class="r"><b>'+(n?Math.round(m/n*100)+' %':'—')+'</b></div></div>'}).join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Progression putting</h1></div>'+
- '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+total+'</strong></div><div class="stat">Taux de réussite<strong>'+(total?Math.round(made/total*100)+' %':'—')+'</strong></div><div class="stat">Record consécutif<strong>'+a.reduce((m,s)=>Math.max(m,s.maxStreak),0)+'</strong></div></div><h2>Par exercice</h2>'+rows+
- '<p class="muted">Statistiques fondées uniquement sur les coups enregistrés, sans valeurs de démonstration ni index putting estimé.</p>');
-}
-
-</script></body>
+</body>
 </html>
