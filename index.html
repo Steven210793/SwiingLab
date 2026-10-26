@@ -3153,7 +3153,7 @@ function slHome(){
  realUI('<section class="slWelcome"><span class="slEyebrow">SWIINGLAB · MON ESPACE GOLF</span><div class="slWelcomeHead"><span class="slWelcomeLogo"></span><span><h1>Bienvenue sur le green.</h1><p>Ton golf, tes progrès, à ton rythme.</p></span></div></section>'+
  '<div class="slSectionTitle"><h2>Que veux-tu faire ?</h2><span>Choisis un espace</span></div>'+
  '<div class="slTiles">'+
- slCard('◎','Entraînements','Exercices et séances','allExercises()',true)+
+ slCard('◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true)+
  slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
  slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
@@ -3188,7 +3188,7 @@ function realHome(){
  slCard('▤','Parcours réels',rounds.length+' partie(s) enregistrée(s)','realStats()',true)+
  slCard('＋','Importer une partie','Fichier JSON créé depuis FFGolf','realImportPage()')+
  
- slCard('◎','Entraînements','Résultats des exercices','allExercises()')+
+ 
  slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
  slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
  slCard('◈','Points à travailler','Identifier les priorités','rlInsights()')+
@@ -3459,6 +3459,174 @@ function rlInsights(){
  const byPar=[3,4,5].map(par=>{const a=all.filter(h=>h.par===par);return {par,n:a.length,over:a.length?a.reduce((s,h)=>s+h.shots-h.par,0)/a.length:null}}).filter(x=>x.n);
  const worst=byPar.slice().sort((a,b)=>b.over-a.over)[0],putts=all.filter(h=>h.putts!==null),pavg=putts.length?putts.reduce((s,h)=>s+h.putts,0)/putts.length:null;
  realUI('<h1>Points à travailler</h1><div class="info"><h3>Indicateurs des parcours réels</h3><p>Le type de trou avec le plus de coups au-dessus du par en moyenne est le <b>par '+worst.par+'</b> : '+worst.over.toFixed(2)+' coup(s) au-dessus du par sur '+worst.n+' trous.</p><p>Putts moyens : '+(pavg===null?'non renseignés':pavg.toFixed(2)+' sur '+putts.length+' trous documentés')+'</p><p class="muted">Ces scores indiquent où tes résultats sont les moins bons, mais ne permettent pas à eux seuls d’attribuer les coups perdus au drive, aux approches ou au putting.</p></div><button onclick="realHome()">Retour</button>');
+}
+
+
+/* PUTT TRACKER – exercices importés de l’application d’origine,
+   statistiques calculées uniquement sur les vrais résultats saisis. */
+const PUTT_TRACKER_EXERCISES = [
+  {
+    id: 'circle',
+    name: 'Circle Drill',
+    desc: 'Améliorez votre précision à courte distance.',
+    diff: 'Débutant',
+    time: '5 min',
+    obj: 'Améliorer la régularité et la précision des putts courts.',
+    setup: 'Placez 6 balles autour du trou à 1 mètre de distance en formant un cercle.',
+    rules: [
+      'Rentrez les 6 balles dans le trou.',
+      'Si vous en manquez une, recommencez depuis le début.',
+      'Objectif : réussir 3 séries complètes.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [1],
+    icon: 'circle'
+  },
+  {
+    id: 'ladder',
+    name: 'Ladder Drill',
+    desc: 'Travaillez votre contrôle de distance.',
+    diff: 'Intermédiaire',
+    time: '8 min',
+    obj: 'Développer le contrôle de la force et la précision sur différentes distances.',
+    setup: 'Placez 5 balles à 1m, 2m, 3m, 4m et 5m du trou.',
+    rules: [
+      'Puttez de la plus courte à la plus longue distance.',
+      'Objectif : rentrer chaque balle en 2 essais max.',
+      'Réussissez 2 séries complètes.'
+    ],
+    series: 2,
+    puttsPerSeries: 5,
+    distances: [1,2,3,4,5],
+    icon: 'ladder'
+  },
+  {
+    id: 'gate',
+    name: 'Gate Drill',
+    desc: 'Améliorez votre départ de putt.',
+    diff: 'Débutant',
+    time: '6 min',
+    obj: 'Assurer un alignement parfait de la face du putter au départ.',
+    setup: 'Placez deux tees à 30cm du trou, légèrement plus larges que votre putter.',
+    rules: [
+      'Puttez 6 balles à travers la porte.',
+      'Chaque contact de tee = raté.',
+      'Objectif : 6 passages propres en 3 séries.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [0.5, 1],
+    icon: 'gate'
+  },
+  {
+    id: '369',
+    name: '3-6-9 Drill',
+    desc: 'Contrôlez 3 distances essentielles.',
+    diff: 'Intermédiaire',
+    time: '10 min',
+    obj: 'Maîtriser les distances de 3, 6 et 9 mètres.',
+    setup: 'Placez 3 balles à 3m, 3 balles à 6m et 3 balles à 9m du trou.',
+    rules: [
+      'Puttez chaque groupe dans l\'ordre.',
+      'Comptez le total rentré sur 9.',
+      'Objectif : 7/9 ou plus sur 2 séries.'
+    ],
+    series: 2,
+    puttsPerSeries: 9,
+    distances: [3,6,9],
+    icon: '369'
+  },
+  {
+    id: 'pressure',
+    name: 'Pressure Drill',
+    desc: 'Entraînez-vous sous pression.',
+    diff: 'Avancé',
+    time: '10 min',
+    obj: 'Simuler la pression de compétition et renforcer la concentration.',
+    setup: 'Placez 10 balles à 1.5m autour du trou.',
+    rules: [
+      'Rentrez les 10 balles à la suite.',
+      'Si vous en ratez une, recommencez à 0.',
+      'Comptez le nombre de tentatives nécessaires.'
+    ],
+    series: 1,
+    puttsPerSeries: 10,
+    distances: [1.5],
+    icon: 'pressure'
+  },
+  {
+    id: 'random',
+    name: 'Random Drill',
+    desc: 'Travaillez votre régularité sur distances variées.',
+    diff: 'Avancé',
+    time: '12 min',
+    obj: 'Améliorer l\'adaptabilité et la lecture du green.',
+    setup: 'Placez 6 balles à des distances aléatoires entre 1m et 6m.',
+    rules: [
+      'Puttez les 6 balles sans ordre précis.',
+      'Notez chaque résultat.',
+      'Objectif : 4/6 sur 3 séries.'
+    ],
+    series: 3,
+    puttsPerSeries: 6,
+    distances: [1,2,3,4,5,6],
+    icon: 'random'
+  }
+];
+const PT_STORE='swiinglab_putt_tracker_v1';
+const ptSessions=()=>{try{const d=JSON.parse(localStorage.getItem(PT_STORE)||'[]');return Array.isArray(d)?d:[]}catch(e){return []}};
+let ptCurrent=null;
+const ptEscape=x=>safe(x);
+function puttTrackerHome(){
+ const a=ptSessions(), attempts=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">PUTT TRACKER</span><h1>Centre d’entraînement putting</h1><p>Exercices, résultats et progression.</p></div>'+
+ '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+attempts+'</strong></div><div class="stat">Réussite<strong>'+(attempts?Math.round(100*made/attempts)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+a.reduce((n,s)=>Math.max(n,s.maxStreak||0),0)+'</strong></div></div>'+
+ '<div class="slTiles" style="margin-top:18px">'+slCard('◎','Mes entraînements','6 exercices de putting','ptList()',true)+slCard('▤','Historique','Mes séances enregistrées','ptHistory()')+slCard('↗','Progression','Mes statistiques réelles','ptStats()')+'</div>');
+}
+function ptList(){
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Mes entraînements</h1></div>'+
+ '<div class="slTiles">'+PUTT_TRACKER_EXERCISES.map(e=>slCard('◉',ptEscape(e.name),ptEscape(e.desc)+' · '+ptEscape(e.diff),'ptDetail(\''+e.id+'\')')).join('')+'</div>');
+}
+function ptDetail(id){
+ const e=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!e)return;
+ realUI('<div class="slPageTop"><button class="slBack" onclick="ptList()">‹ Exercices</button><h1>'+ptEscape(e.name)+'</h1><p>'+ptEscape(e.obj)+'</p></div>'+
+ '<div class="info"><h3>MISE EN PLACE</h3><p>'+ptEscape(e.setup)+'</p><h3>CONSIGNES</h3><div>'+e.rules.map(r=>'<p>• '+ptEscape(r)+'</p>').join('')+'</div><p class="muted">'+e.series+' série(s) de '+e.puttsPerSeries+' putts · '+ptEscape(e.diff)+' · '+ptEscape(e.time)+'</p><button class="primary" onclick="ptStart(\''+e.id+'\')">Commencer</button></div>');
+}
+function ptStart(id){
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!ex)return;
+ ptCurrent={id,results:[],started:Date.now(),series:ex.series,perSeries:ex.puttsPerSeries};
+ ptPlay();
+}
+function ptBest(results){let n=0,best=0;for(const r of results){n=r?n+1:0;best=Math.max(best,n)}return best}
+function ptPlay(){
+ if(!ptCurrent)return puttTrackerHome();
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id),rs=ptCurrent.results,total=ex.series*ex.puttsPerSeries;
+ const made=rs.filter(Boolean).length,serie=Math.min(ex.series,Math.floor(rs.length/ex.puttsPerSeries)+1);
+ realUI('<div class="slPageTop"><button class="slBack" onclick="ptQuit()">‹ Quitter</button><h1>'+ptEscape(ex.name)+'</h1><p>Série '+serie+' / '+ex.series+' · Balle '+(Math.min(rs.length+1,total))+' / '+total+'</p></div>'+
+ '<div class="info"><div class="statsGrid"><div class="stat">Réussis<strong>'+made+' / '+rs.length+'</strong></div><div class="stat">Réussite<strong>'+(rs.length?Math.round(made/rs.length*100)+' %':'—')+'</strong></div><div class="stat">Meilleure série<strong>'+ptBest(rs)+'</strong></div><div class="stat">Progression<strong>'+rs.length+' / '+total+'</strong></div></div><div class="choice" style="margin-top:18px"><button class="ok" onclick="ptRecord(true)">Réussi</button><button class="no" onclick="ptRecord(false)">Manqué</button></div><button class="secondary" style="margin-top:12px" onclick="ptUndo()">Annuler le dernier putt</button><button class="secondary" style="margin-top:12px" onclick="ptEnd()">Terminer et sauvegarder</button></div>');
+}
+function ptRecord(ok){if(!ptCurrent)return;const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);ptCurrent.results.push(!!ok);if(ptCurrent.results.length>=ex.series*ex.puttsPerSeries)ptEnd();else ptPlay()}
+function ptUndo(){if(ptCurrent&&ptCurrent.results.length){ptCurrent.results.pop();ptPlay()}}
+function ptQuit(){if(!ptCurrent||!ptCurrent.results.length||confirm('Quitter sans enregistrer cette séance ?')){ptCurrent=null;puttTrackerHome()}}
+function ptEnd(){
+ if(!ptCurrent)return;const r=ptCurrent.results;if(!r.length){alert('Aucun putt enregistré.');return}
+ const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===ptCurrent.id);
+ const entry={id:Date.now(),exerciseId:ex.id,exercise:ex.name,date:new Date().toISOString(),results:r.slice(),made:r.filter(Boolean).length,attempts:r.length,maxStreak:ptBest(r),duration:Math.round((Date.now()-ptCurrent.started)/1000),planned:ex.series*ex.puttsPerSeries};
+ try{localStorage.setItem(PT_STORE,JSON.stringify([...ptSessions(),entry]))}catch(e){alert('Enregistrement impossible : espace de stockage indisponible.');return}
+ ptCurrent=null;ptStats();
+}
+function ptHistory(){
+ const a=ptSessions().slice().reverse();
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Historique putting</h1></div>'+
+ (a.length?a.map(s=>'<div class="histItem"><div><b>'+ptEscape(s.exercise)+'</b><small>'+new Date(s.date).toLocaleDateString('fr-FR')+' · '+s.attempts+' putts</small></div><div class="r"><b>'+s.made+'/'+s.attempts+'</b> '+Math.round(s.made/s.attempts*100)+' %</div></div>').join(''):'<p>Aucune séance enregistrée.</p>'));
+}
+function ptStats(){
+ const a=ptSessions(),total=a.reduce((n,s)=>n+s.attempts,0),made=a.reduce((n,s)=>n+s.made,0);
+ const rows=PUTT_TRACKER_EXERCISES.map(e=>{const v=a.filter(s=>s.exerciseId===e.id),n=v.reduce((t,s)=>t+s.attempts,0),m=v.reduce((t,s)=>t+s.made,0);return '<div class="histItem"><div><b>'+ptEscape(e.name)+'</b><small>'+v.length+' séances · '+n+' putts</small></div><div class="r"><b>'+(n?Math.round(m/n*100)+' %':'—')+'</b></div></div>'}).join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="puttTrackerHome()">‹ Putt Tracker</button><h1>Progression putting</h1></div>'+
+ '<div class="statsGrid"><div class="stat">Séances<strong>'+a.length+'</strong></div><div class="stat">Putts joués<strong>'+total+'</strong></div><div class="stat">Taux de réussite<strong>'+(total?Math.round(made/total*100)+' %':'—')+'</strong></div><div class="stat">Record consécutif<strong>'+a.reduce((m,s)=>Math.max(m,s.maxStreak),0)+'</strong></div></div><h2>Par exercice</h2>'+rows+
+ '<p class="muted">Statistiques fondées uniquement sur les coups enregistrés, sans valeurs de démonstration ni index putting estimé.</p>');
 }
 
 </script></body>
