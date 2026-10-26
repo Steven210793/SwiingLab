@@ -775,9 +775,7 @@ svg{
 
 <nav class="nav" aria-label="Navigation principale">
   <button id="navAccueil" onclick="slHome()"><span class="navIcon">⌂</span><span>Accueil</span></button>
-  <button id="navExercices" onclick="allExercises()"><span class="navIcon">◎</span><span>Exercices</span></button>
-  <button id="navProgression" onclick="realHome()"><span class="navIcon">▥</span><span>Données</span></button>
-  <button id="navProfil" onclick="profile()"><span class="navIcon">◯</span><span>Profil</span></button>
+
 </nav>
 
 <script>
@@ -1293,18 +1291,18 @@ return diagramApproachZone(20);
 
 function diagramPorte(dist){
 return `<svg viewBox="0 0 320 220" role="img" aria-label="Porte de deux tees à peine plus large qu’une balle, positionnée à 30 centimètres devant la balle">
-<rect width="320" height="220" rx="12" fill="#0a0908"/>
-<path d="M160 188 L160 32" stroke="#8c8172" stroke-width="1.5" stroke-dasharray="5 6" />
+<rect width="320" height="220" rx="12" fill="#f4f0e6"/>
+<path d="M160 188 L160 32" stroke="#292929" stroke-width="1.5" stroke-dasharray="5 6" />
 <circle cx="160" cy="188" r="12" fill="#f6f3e9" stroke="#c9c6b9" stroke-width="2"/>
 <circle cx="156" cy="185" r="1.5" fill="#c9c6b9"/><circle cx="164" cy="190" r="1.5" fill="#c9c6b9"/>
-<rect x="143" y="65" width="7" height="19" rx="2" fill="#e3b34a"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#e3b34a"/>
-<line x1="150" x2="170" y1="58" y2="58" stroke="#8ebca4" stroke-width="1.5"/>
-<path d="M150 54 V62 M170 54 V62" stroke="#8ebca4" stroke-width="1.5"/>
-<text x="160" y="45" text-anchor="middle" font-size="11" fill="#8ebca4">largeur d’une balle + marge</text>
-<line x1="225" y1="75" x2="225" y2="188" stroke="#e3b34a" stroke-width="1.8"/>
-<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#e3b34a" stroke-width="1.8" fill="none"/>
-<path d="M179 75 H234 M179 188 H234" stroke="#e3b34a" stroke-width="1" opacity=".55"/>
-<text x="235" y="135" font-size="13" fill="#e3b34a">30 cm</text>
+<rect x="143" y="65" width="7" height="19" rx="2" fill="#ffffff"/><rect x="170" y="65" width="7" height="19" rx="2" fill="#ffffff"/>
+<line x1="150" x2="170" y1="58" y2="58" stroke="#222222" stroke-width="1.5"/>
+<path d="M150 54 V62 M170 54 V62" stroke="#222222" stroke-width="1.5"/>
+<text x="160" y="45" text-anchor="middle" font-size="11" fill="#222222">largeur d’une balle + marge</text>
+<line x1="225" y1="75" x2="225" y2="188" stroke="#222222" stroke-width="1.8"/>
+<path d="M221 82 L225 73 L229 82 M221 181 L225 190 L229 181" stroke="#222222" stroke-width="1.8" fill="none"/>
+<path d="M179 75 H234 M179 188 H234" stroke="#222222" stroke-width="1" opacity=".55"/>
+<text x="235" y="135" font-size="13" fill="#ffffff">30 cm</text>
 <text x="160" y="210" font-size="11" text-anchor="middle" fill="#d8cdb8">balle</text>
 <text x="160" y="101" font-size="11" text-anchor="middle" fill="#d8cdb8">porte de tees</text>
 </svg>`;
@@ -2609,22 +2607,7 @@ S.innerHTML=`
 <span class="muted">Configure tes clubs et tes distances</span>
 </div>
 
-<div class="info" style="margin-top:10px">
-<h3>APPARENCE</h3>
-<div class="toggleRow">
-<span>Mode clair</span>
-<div class="switch ${loadTheme()==='light'?'on':''}" onclick="toggleTheme()"><i></i></div>
-</div>
-</div>
-
-<div class="statsGrid">
-<div class="stat">Séances<strong>${trainingSessions.length}</strong></div>
-<div class="stat">Balles jouées<strong>${totalBalls}</strong></div>
-<div class="stat">Réussite<strong>${evaluatedBalls?Math.round(successful/evaluatedBalls*100)+' %':'—'}</strong></div>
-<div class="stat">Meilleure série<strong>${bestTrainingStreak}</strong></div>
-</div>
-
-<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde</b><button class="secondary" onclick="tmBackup()">Télécharger / partager ma sauvegarde</button><div class="field"><label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
+<div class="menuCard" style="margin-top:16px"><b>TrackMan</b><span class="muted">Tes coups enregistrés apparaissent directement dans Progression.</span><div style="margin-top:8px"><b id="tmShotCount">${tmData().reduce((n,s)=>n+s.shots.length,0)} coups enregistrés</b></div><div class="field"><label>Importer d’autres données TrackMan (JSON)</label><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div><div class="menuCard" style="margin-top:10px"><b>Sauvegarde complète</b><p class="muted">Conserve ton profil, ton sac, tes distances, tes parties et tes statistiques sur Google Drive.</p><button class="secondary" onclick="tmBackup()">Sauvegarder mes données</button><div class="field"><label>Restaurer mes données depuis Drive ou le téléphone</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div><div class="menuCard" style="margin-top:16px" onclick="shareApp()">
 <b>Partager</b>
 <span class="muted">Envoie l’application par SMS, WhatsApp...</span>
 </div>
@@ -2991,7 +2974,7 @@ const tmMean=(shots,key)=>{const a=shots.map(s=>s.metrics[key]).filter(Number.is
 const tmShow=n=>n===null?'—':n.toLocaleString('fr-FR',{maximumFractionDigits:1});
 function tmDownload(name,obj){const url=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
 function tmBackup(){const keys={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('mag_')||k.startsWith('swiinglab_'))keys[k]=localStorage.getItem(k)}(async()=>{const data={format:'swiinglab-backup-v1',keys},file=new File([JSON.stringify(data,null,2)],'SwiingLab-sauvegarde.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:'Sauvegarde SwiingLab'});return}}catch(e){if(e.name==='AbortError')return}tmDownload(file.name,data)})()}
-function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));progressHub()}}catch(e){alert(e.message)}input.value=''})}
+function tmRestore(input){const f=input.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(o.format!=='swiinglab-backup-v1'||!o.keys||Object.entries(o.keys).some(([k,v])=>!(k.startsWith('mag_')||k.startsWith('swiinglab_'))||typeof v!=='string'))throw Error('Sauvegarde incorrecte');if(confirm('Restaurer cette sauvegarde et remplacer les données correspondantes ?')){Object.entries(o.keys).forEach(([k,v])=>localStorage.setItem(k,v));profile()}}catch(e){alert(e.message)}input.value=''})}
 // tmImport() V12 is implemented below (accepts both flat and normalized metrics).
 const tmClubs=()=>{const order=['Driver','Bois 3','Hybride 3','Fer 4','Fer 5','Fer 6','Fer 7','Fer 8','Fer 9','PW','50°','54°','60°'];const all=[...new Set([...Object.keys(loadBag()).filter(c=>loadBag()[c]?.checked).map(tmCanonClub),...tmData().flatMap(s=>s.shots.map(b=>tmCanonClub(b.club)))])].filter(c=>c!=='Putter');return all.sort((a,b)=>(order.indexOf(a)<0?100:order.indexOf(a))-(order.indexOf(b)<0?100:order.indexOf(b))||a.localeCompare(b,'fr'));};
 const tmSessions=c=>tmData().map(s=>({...s,shots:s.shots.filter(b=>tmCanonClub(b.club)===tmCanonClub(c))})).filter(s=>s.shots.length).sort((a,b)=>a.date.localeCompare(b.date));
@@ -3172,11 +3155,30 @@ function slHome(){
  '<div class="slTiles">'+
  slCard('◎','Entraînements','Exercices et séances','allExercises()',true)+
  slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
- slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','realHome()')+
+ slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
  slCard('◯','Mon profil','Sac et informations','profile()',true)+
  '</div>');
  setActiveTab('accueil');
+}
+function slRealHome(){
+ const rounds=realGet().rounds||[];
+ const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">MES PARTIES</span><h1>Parcours réel</h1><p>Enregistre et retrouve tes parties de golf.</p></div>'+pending+'<div class="slTiles">'+
+ slCard('＋','Importer une partie','Ajouter une carte de score','realImportPage()',true)+
+ slCard('▤','Historique',rounds.length+' partie(s) enregistrée(s)','realHistory()')+
+ slCard('▦','Statistiques de parcours','Scores par type de trou','realStats()')+
+ slCard('◇','Mes objectifs','Scores à atteindre','rlGoalsPage()')+
+ slCard('↗','Comparer les mois','Évolution de mes résultats','rlComparison()')+
+ '</div>');
+}
+function realHistory(){
+ const d=realGet();
+ const rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{
+ const score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);
+ return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' · '+r.count+' trous</small></div><div class="r"><b>'+score+'</b> '+(score-par>=0?'+':'')+(score-par)+'</div></div>';
+ }).join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Historique</h1></div>'+(rows||'<p>Aucune partie enregistrée.</p>'));
 }
 function realHome(){
  const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
@@ -3294,7 +3296,7 @@ function realDiscardDraft(){if(!confirm('Abandonner cette partie en cours ?'))re
 
 /* Import FFGolf : uniquement scores bruts, par, golf/parcours et HCP de trou facultatif. */
 function realImportPage(){
- realUI('<div class="slPageTop"><button class="slBack" onclick="realHome()">‹ Données</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><span class="slEyebrow">PARCOURS RÉELS</span><h1>Importer une partie</h1><p>Envoie-moi les captures FFGolf (compétition ou amicale) : je te prépare un fichier JSON.</p></div><div class="info"><h3>Choisir le fichier</h3><input type="file" accept=".json,application/json" onchange="realImportJSON(this)"><p class="muted">Les cartes déjà enregistrées sont conservées. Aucun score net, SBA ou coup rendu n’est importé.</p><button class="secondary" onclick="realExportJSON()">Exporter mes parties réelles</button></div>');
  setActiveTab('progression');
 }
 function realParseRound(raw){
@@ -3340,7 +3342,7 @@ function realImportJSON(input){
   const d=realGet(),rounds=payload.rounds.map(realParseRound),seen=new Set(d.rounds.map(realRoundFingerprint)),pending=[];
   for(const round of rounds){const fp=realRoundFingerprint(round);if(!seen.has(fp)){pending.push(round);seen.add(fp)}}
   if(pending.length){d.rounds.push(...pending);for(const r of pending){if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)})}realSave(d)}
-  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realStats();
+  alert(pending.length+' partie(s) importée(s) ; '+(rounds.length-pending.length)+' doublon(s) ignoré(s).');realHistory();
  }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}}).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
 }
 function realExportJSON(){tmDownload('SwiingLab-Parcours-Reels.json',{format:'swiinglab-real-rounds-v1',rounds:realGet().rounds})}
@@ -3367,12 +3369,12 @@ function realHole(){
 }
 function realRecord(){let shotInput=document.getElementById('hs');if(!shotInput.value.trim()) {alert('Le nombre de coups est obligatoire.');return false}let a=Number(shotInput.value);if(!Number.isInteger(a)||a<1||a>30){alert('Entre le nombre de coups.');return false}let puttInput=document.getElementById('hu');let p=puttInput.value===''?null:Number(puttInput.value);if(p!==null&&(!Number.isInteger(p)||p<0||p>15||p>a)){alert('Le nombre de putts doit être compris entre 0 et le nombre de coups joués.');return false}realDraft.holes[realAt]={par:+document.getElementById('hp').value,shots:a,putts:p};realPersistDraft();return true}
 function realBack(){if(realRecord()){realAt--;realPersistDraft();realHole()}}
-function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realStats()}
+function realNext(){if(!realRecord())return;if(++realAt<realDraft.count){realPersistDraft();realHole();return}let d=realGet(),r=realDraft;d.rounds.push(r);if(!d.courses.some(c=>c.golf===r.golf&&c.name===r.name&&c.count===r.count))d.courses.push({golf:r.golf,name:r.name,count:r.count,pars:r.holes.map(h=>h.par)});realSave(d);localStorage.removeItem(realDraftKey);realDraft=null;realHistory()}
 function realStats(){
  let d=realGet(),a=d.rounds.flatMap(r=>r.holes);
  let stats=[3,4,5].map(par=>{let h=a.filter(x=>x.par===par),n=h.length,pc=k=>n?Math.round(100*h.filter(x=>x.shots-x.par===k).length/n)+'%':'—',mean=n?(h.reduce((t,x)=>t+x.shots,0)/n).toFixed(2):'—';return '<div class="stat"><b>Par '+par+'</b><p>'+n+' trous · Moyenne '+mean+' coups · Birdies '+pc(-1)+' · Pars '+pc(0)+' · Bogeys '+pc(1)+' · Doubles '+pc(2)+'</p></div>'}).join('');
  let rows=d.rounds.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>{let score=r.holes.reduce((v,h)=>v+h.shots,0),par=r.holes.reduce((v,h)=>v+h.par,0);return '<div class="histItem"><div><b>'+safe(r.golf)+' — '+safe(r.name)+'</b><small>'+safe(r.date)+' • '+r.count+' trous</small></div><div class="r"><b>'+score+'</b>'+(score-par>=0?'+':'')+(score-par)+'</div></div>'}).join('');
- realUI('<h1>Parcours réels</h1><button onclick="realImportPage()">+ Nouvelle partie</button><button class="secondary" onclick="realHome()">Accueil données</button><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div><h2>Historique</h2>'+(rows||'<p>Aucune carte enregistrée.</p>'));
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slRealHome()">‹ Parcours réel</button><h1>Statistiques de parcours</h1></div><h2>Scores par type de trou</h2><div class="stats">'+stats+'</div>');
 }
 
 </script>
