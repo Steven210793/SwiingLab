@@ -3593,7 +3593,7 @@ function ptList(){
 function ptDetail(id){
  const e=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!e)return;
  realUI('<div class="slPageTop"><button class="slBack" onclick="ptList()">‹ Exercices</button><h1>'+ptEscape(e.name)+'</h1><p>'+ptEscape(e.obj)+'</p></div>'+
- '<div class="info"><h3>MISE EN PLACE</h3><p>'+ptEscape(e.setup)+'</p><h3>CONSIGNES</h3><div>'+e.rules.map(r=>'<p>• '+ptEscape(r)+'</p>').join('')+'</div><p class="muted">'+e.series+' série(s) de '+e.puttsPerSeries+' putts · '+ptEscape(e.diff)+' · '+ptEscape(e.time)+'</p><button class="primary" onclick="ptStart(\''+e.id+'\')">Commencer</button></div>');
+ '<div class="info"><img src="images/putt-tracker/'+e.id+'.png" alt="Mise en place : '+ptEscape(e.name)+'" loading="lazy" onerror="this.style.display=\'none\'" style="display:block;width:100%;height:auto;border-radius:12px;margin-bottom:16px">'+ '<h3>MISE EN PLACE</h3><p>'+ptEscape(e.setup)+'</p><h3>CONSIGNES</h3><div>'+e.rules.map(r=>'<p>• '+ptEscape(r)+'</p>').join('')+'</div><p class="muted">'+e.series+' série(s) de '+e.puttsPerSeries+' putts · '+ptEscape(e.diff)+' · '+ptEscape(e.time)+'</p><button class="primary" onclick="ptStart(\''+e.id+'\')">Commencer</button></div>');
 }
 function ptStart(id){
  const ex=PUTT_TRACKER_EXERCISES.find(x=>x.id===id);if(!ex)return;
