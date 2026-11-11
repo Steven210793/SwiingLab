@@ -96,12 +96,19 @@ function slxGoalSave(ev,id){
 }
 function slxGoalDelete(id){if(!confirm("Supprimer cet objectif ?"))return;slxWrite("swiinglab_goals_v1",slxRead("swiinglab_goals_v1",[]).filter(x=>x.id!==id));slxGoals()}
 function slxRecords(){
- const comps=slxCompsGet(),real=realGet().rounds||[],virt=slVirtualData(),indices=comps.map(x=>slxNum(x.index)).filter(x=>x!==null);
- const scores=virt.filter(x=>slxNum(x.totalScore)!==null).map(x=>({score:Number(x.totalScore),name:x.course,src:"Simulateur",holes:x.holeCount}));
+ const comps=slxCompsGet(),real=realGet().rounds||[],virt=slVirtualData(),putts=ptSessions();
+ const nums=a=>a.filter(x=>x!==null&&Number.isFinite(x));
+ const min=a=>a.length?Math.min(...a):null;
+ const ix=min(nums(comps.map(x=>slxNum(x.index))));
+ const gross=min(nums(comps.map(x=>slxNum(x.gross))));
+ const real18=min(nums(real.filter(x=>(Number(x.count)||x.holes?.length)===18).map(x=>Array.isArray(x.holes)&&x.holes.length===18?x.holes.reduce((v,h)=>v+(slxNum(h.shots)??0),0):null)));
+ const virt18=min(nums(virt.filter(x=>Number(x.holeCount)===18).map(x=>slxNum(x.totalScore))));
+ const streak=Math.max(0,...putts.map(x=>slxNum(x.maxStreak)||0));
  const records=slxRead("swiinglab_records_v1",[]);
+ const info=[["Meilleur index compétition",ix],["Meilleur brut compétition",gross],["Meilleur score réel · 18 trous",real18],["Meilleur score simulateur · 18 trous",virt18],["Plus longue série de putts réussis",streak||null]];
  realUI(slxTop("Mon Hall of Fame","slxData()","Centre de données")+
- '<div class="statsGrid"><div class="stat">Meilleur index<strong>'+(indices.length?Math.min(...indices):"—")+'</strong></div><div class="stat">Meilleur score simulateur<strong>'+(scores.length?Math.min(...scores.map(x=>x.score)):"—")+'</strong></div></div>'+
- '<p class="muted">Sources identifiées séparément : compétitions, parcours réels et simulateur. Les records de putting exigent une mesure réellement enregistrée.</p>'+
+ '<div class="statsGrid">'+info.map(([name,v])=>'<div class="stat">'+safe(name)+'<strong>'+(v===null?"—":safe(v))+'</strong></div>').join('')+'</div>'+
+ '<p class="muted">Records séparés par source. Les cartes 9 trous ne sont pas comparées aux cartes 18 trous. Aucune mesure manquante n’est estimée.</p>'+
  '<button class="primary" onclick="slxRecordAdd()">＋ Ajouter un exploit personnel</button>'+
  records.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+safe(x.date)+'</span></div>').join(''));
 }
