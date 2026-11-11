@@ -109,10 +109,15 @@ function slxRecordAdd(){const name=prompt("Exploit personnel (eagle, trou en un�
 function slxBagHome(){slxNav("Mon sac","slHome()",[['◉','Mes clubs','Fiches individuelles et carry','slxClubs()',true],['▥','Mes distances','Mémo du carry en mètres','slxDistances()',true],['▤','Carnet d’entretien','Interventions et réglages','slxMaintenance()',true]])}
 const slxClubsGet=()=>{
  const existing=slxRead("swiinglab_clubs_v1",[]);
- if(existing.length||localStorage.getItem("swiinglab_clubs_migrated_v1"))return existing;
- const legacy=loadBag(),out=Object.entries(legacy).filter(([k,v])=>v&&v.checked).map(([type,v])=>({id:slxId(),type,brand:"",model:"",shaft:"",flex:"",loft:"",lie:"",grip:"",carry:v.distance||""}));
- if(out.length)slxWrite("swiinglab_clubs_v1",out);
- localStorage.setItem("swiinglab_clubs_migrated_v1","1");
+ if(Array.isArray(existing)&&existing.length)return existing;
+ if(localStorage.getItem("swiinglab_clubs_migrated_v1"))return [];
+ const legacy=loadBag(),out=Object.entries(legacy).filter(([k,v])=>v&&v.checked).map(([type,v])=>({
+  id:slxId(),type,brand:"",model:"",shaft:"",flex:"",loft:"",lie:"",grip:"",
+  // Ne jamais considérer automatiquement une distance totale comme un carry.
+  carry:v.basis==="Total"?"":(slxNum(v.distance)??"")
+ }));
+ if(out.length&&!slxWrite("swiinglab_clubs_v1",out))return out;
+ try{localStorage.setItem("swiinglab_clubs_migrated_v1","1")}catch(e){}
  return out;
 };
 function slxClubs(){
@@ -132,7 +137,7 @@ function slxClubForm(id){
 function slxClubSave(ev,id){
  ev.preventDefault();const d=Object.fromEntries(new FormData(ev.target)),a=slxClubsGet(),i=a.findIndex(x=>x.id===id);d.id=id||slxId();
  if(i>=0)a[i]=d;else a.push(d);
- if(slxWrite("swiinglab_clubs_v1",a)){const bag=loadBag(),c=d.type;if(!bag[c])bag[c]={};bag[c].checked=true;bag[c].distance=d.carry===""?"":Number(d.carry);bag[c].basis="carry";saveBag(bag);slxClubs()}
+ if(slxWrite("swiinglab_clubs_v1",a)){const bag=loadBag(),c=d.type;if(!bag[c])bag[c]={};bag[c].checked=true;bag[c].distance=d.carry===""?"":Number(d.carry);bag[c].basis="Carry";saveBag(bag);slxClubs()}
 }
 function slxClubDelete(id){if(!confirm("Supprimer cette fiche ?"))return;slxWrite("swiinglab_clubs_v1",slxClubsGet().filter(x=>x.id!==id));slxClubs()}
 function slxDistances(){
