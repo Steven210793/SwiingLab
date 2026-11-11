@@ -211,17 +211,27 @@ function slxBallEdit(id){const a=slxCollectionGet(),x=a.find(v=>v.id===id);if(!x
 let slxPuttRange="max";
 function slxPuttingRows(){
  const now=Date.now(),cut=slxPuttRange==="max"?0:now-(slxPuttRange==="3m"?90:30)*86400000;
- return ptSessions().filter(x=>Number(new Date(x.date||0))>=cut&&Number(x.distance)>0&&Number(x.attempts)>0&&Number(x.made)>=0&&Number(x.made)<=Number(x.attempts));
+ const rows=[];
+ for(const x of ptSessions()){
+  const time=Date.parse(x.date||"");
+  if(!Number.isFinite(time)||time<cut)continue;
+  const d=slxNum(x.distance),a=slxNum(x.attempts),m=slxNum(x.made);
+  if(d>0&&Number.isInteger(a)&&a>0&&Number.isInteger(m)&&m>=0&&m<=a){rows.push({distance:d,attempts:a,made:m});continue}
+  if(!Array.isArray(x.results)||!x.results.every(v=>typeof v==="boolean"))continue;
+  const distances=x.exerciseId==="circle"?x.results.map(()=>1):x.exerciseId==="pressure"?x.results.map(()=>1.5):x.exerciseId==="369"?x.results.map((_,i)=>[3,6,9][Math.floor((i%9)/3)]):[];
+  distances.forEach((distance,i)=>rows.push({distance,attempts:1,made:x.results[i]?1:0}));
+ }
+ return rows;
 }
 function slxPuttGraph(){
- const rows=slxPuttingRows(),distances=[1,2,3,5,8],buttons=[["max","Max"],["3m","3 mois"],["1m","1 mois"]].map(([value,label])=>'<button class="secondary" style="'+(slxPuttRange===value?'border-color:var(--gold);':'')+'" onclick="slxPuttRange=\''+value+'\';puttTrackerHome()">'+label+'</button>').join('');
+ const rows=slxPuttingRows(),distances=[...new Set([1,2,3,5,8,...rows.map(x=>x.distance)])].sort((a,b)=>a-b),buttons=[["max","Max"],["3m","3 mois"],["1m","1 mois"]].map(([value,label])=>'<button class="secondary" style="'+(slxPuttRange===value?'border-color:var(--gold);':'')+'" onclick="slxPuttRange=\''+value+'\';puttTrackerHome()">'+label+'</button>').join('');
  return '<div class="info"><h3>Précision au putting</h3><div style="display:flex;gap:8px;margin-bottom:16px">'+buttons+'</div>'+
  distances.map(d=>{const v=rows.filter(x=>Number(x.distance)===d),a=v.reduce((n,x)=>n+Number(x.attempts),0),m=v.reduce((n,x)=>n+Number(x.made),0),pct=a?Math.round(100*m/a):null;return '<div style="margin:12px 0"><div style="display:flex;justify-content:space-between"><b>'+d+' m</b><span>'+(pct===null?'Aucune donnée':pct+' %')+'</span></div><div class="bar"><i style="width:'+(pct||0)+'%"></i></div></div>'}).join('')+
  '<p class="muted">Uniquement les séries où distance, nombre tenté et réussite sont connus.</p></div>';
 }
 puttTrackerHome=function(){
  realUI(slxTop("Putt Tracker","slxTraining()","Entraînement")+slxPuttGraph()+
- slxMenu([['◎','Mes entraînements','6 exercices existants','ptList()',true],['＋','Entraînement libre','Choisir distance et nombre de balles','slxPuttFree()',true],['▤','Historique','Séances enregistrées','ptHistory()',true],['↗','Progression','Statistiques des exercices','ptStats()',true]]));
+ slxMenu([['◎','Mes entraînements','7 exercices disponibles','ptList()',true],['▤','Historique','Séances enregistrées','ptHistory()',true],['↗','Progression','Statistiques des exercices','ptStats()',true]]));
 };
 function slxPuttFree(){
  realUI(slxTop("Entraînement libre","puttTrackerHome()","Putt Tracker")+'<form class="info" onsubmit="slxPuttFreeSave(event)">'+
@@ -236,3 +246,36 @@ function slxPuttFreeSave(ev){
  const a=ptSessions();a.push({id:slxId(),date:new Date().toISOString(),exerciseId:"free",exercise:"Entraînement libre",distance,attempts,made,maxStreak:0});
  if(slxWrite(PT_STORE,a)){alert(made+" putts réussis sur "+attempts+" à "+distance+" m.");slxPuttFree()}
 }
+
+/* L'entraînement libre est la septième tuile au-dessous des six précédentes. */
+const slxOriginalPtList=ptList;
+ptList=function(){
+ slxOriginalPtList();
+ const area=document.querySelector("#screen .slTiles");
+ if(area)area.insertAdjacentHTML("beforeend",slCard("＋","Entraînement libre","Distance et nombre de balles au choix","slxPuttFree()",true));
+};
+let slxFreeDraft=null;
+slxPuttFree=function(){
+ slxFreeDraft=null;
+ realUI(slxTop("Entraînement libre","ptList()","Mes entraînements")+
+ '<form class="info" onsubmit="slxPuttFreeStart(event)">'+
+ '<div class="field"><label>Distance (m)</label><input name="distance" type="number" min="0.1" step="0.1" value="1" required></div>'+
+ '<div class="field"><label>Nombre de balles</label><input name="attempts" type="number" min="1" step="1" value="5" required></div>'+
+ '<button class="primary" type="submit">Commencer</button></form>');
+};
+function slxPuttFreeStart(ev){
+ ev.preventDefault();const f=new FormData(ev.target),distance=Number(f.get("distance")),attempts=Number(f.get("attempts"));
+ if(!Number.isFinite(distance)||distance<=0||!Number.isInteger(attempts)||attempts<1)return alert("Distance ou nombre de balles incorrect.");
+ slxFreeDraft={distance,attempts};
+ realUI(slxTop("Résultat de la série","slxPuttFree()","Entraînement libre")+
+ '<div class="info"><p>'+attempts+' balles à '+distance+' m.</p><form onsubmit="slxPuttFreeSave(event)">'+
+ '<div class="field"><label>Combien de putts réussis ?</label><input name="made" type="number" min="0" max="'+attempts+'" step="1" required></div>'+
+ '<button class="primary" type="submit">Valider la série</button></form></div>');
+}
+slxPuttFreeSave=function(ev){
+ ev.preventDefault();if(!slxFreeDraft)return slxPuttFree();
+ const {distance,attempts}=slxFreeDraft,made=Number(new FormData(ev.target).get("made"));
+ if(!Number.isInteger(made)||made<0||made>attempts)return alert("Nombre de putts incorrect.");
+ const a=ptSessions();a.push({id:slxId(),date:new Date().toISOString(),exerciseId:"free",exercise:"Entraînement libre",distance,attempts,made,maxStreak:0});
+ if(slxWrite(PT_STORE,a)){slxFreeDraft=null;alert(made+" putts réussis sur "+attempts+" à "+distance+" m.");puttTrackerHome()}
+};
