@@ -5,7 +5,7 @@ const slxWrite=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))
 const slxBack=(fn,label="Retour")=>'<button class="slBack" onclick="'+fn+'">‹ '+label+'</button>';
 const slxTop=(title,fn="slHome()",label="Accueil")=>'<div class="slPageTop">'+slxBack(fn,label)+'<h1>'+safe(title)+'</h1></div>';
 const slxMenu=(items)=>'<div class="slTiles">'+items.map(x=>slCard(x[0],x[1],x[2],x[3],!!x[4])).join('')+'</div>';
-const slxNum=x=>{const n=Number(String(x??"").replace(",","."));return Number.isFinite(n)?n:null};
+const slxNum=x=>{if(x===null||x===undefined||String(x).trim()==="")return null;const n=Number(String(x).replace(",","."));return Number.isFinite(n)?n:null};
 const slxId=()=>String(Date.now())+'-'+Math.random().toString(36).slice(2,7);
 const slxDate=x=>x?new Date(x).toLocaleDateString("fr-FR"):"—";
 const slxEmpty='<p class="muted">Aucune donnée enregistrée pour le moment.</p>';
@@ -107,7 +107,14 @@ function slxRecords(){
 }
 function slxRecordAdd(){const name=prompt("Exploit personnel (eagle, trou en un…)");if(!name||!name.trim())return;const a=slxRead("swiinglab_records_v1",[]);a.push({id:slxId(),name:name.trim(),date:new Date().toISOString().slice(0,10)});slxWrite("swiinglab_records_v1",a);slxRecords()}
 function slxBagHome(){slxNav("Mon sac","slHome()",[['◉','Mes clubs','Fiches individuelles et carry','slxClubs()',true],['▥','Mes distances','Mémo du carry en mètres','slxDistances()',true],['▤','Carnet d’entretien','Interventions et réglages','slxMaintenance()',true]])}
-const slxClubsGet=()=>slxRead("swiinglab_clubs_v1",[]);
+const slxClubsGet=()=>{
+ const existing=slxRead("swiinglab_clubs_v1",[]);
+ if(existing.length||localStorage.getItem("swiinglab_clubs_migrated_v1"))return existing;
+ const legacy=loadBag(),out=Object.entries(legacy).filter(([k,v])=>v&&v.checked).map(([type,v])=>({id:slxId(),type,brand:"",model:"",shaft:"",flex:"",loft:"",lie:"",grip:"",carry:v.distance||""}));
+ if(out.length)slxWrite("swiinglab_clubs_v1",out);
+ localStorage.setItem("swiinglab_clubs_migrated_v1","1");
+ return out;
+};
 function slxClubs(){
  const a=slxClubsGet();
  realUI(slxTop("Mes clubs","slxBagHome()","Mon sac")+'<button class="primary" onclick="slxClubForm()">＋ Ajouter un club</button>'+
