@@ -279,3 +279,46 @@ slxPuttFreeSave=function(ev){
  const a=ptSessions();a.push({id:slxId(),date:new Date().toISOString(),exerciseId:"free",exercise:"Entraînement libre",distance,attempts,made,maxStreak:0});
  if(slxWrite(PT_STORE,a)){slxFreeDraft=null;alert(made+" putts réussis sur "+attempts+" à "+distance+" m.");puttTrackerHome()}
 };
+
+/* Compléments : évolution mensuelle des scores et archivage annuel différé. */
+function slxMonthlyScoreChart(){
+ const games=slVirtualData().filter(x=>/^\d{4}-\d{2}/.test(String(x.date||""))&&slxNum(x.totalScore)!==null);
+ const grouped=new Map();
+ games.forEach(x=>{const k=String(x.date).slice(0,7),a=grouped.get(k)||[];a.push(slxNum(x.totalScore));grouped.set(k,a)});
+ const points=[...grouped].sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([k,a])=>({k,y:a.reduce((u,v)=>u+v,0)/a.length,n:a.length}));
+ if(!points.length)return '<p class="muted">Le graphique apparaîtra après l\'importation d\'une partie TrackMan avec un score.</p>';
+ const low=Math.floor(Math.min(...points.map(x=>x.y))-2),high=Math.ceil(Math.max(...points.map(x=>x.y))+2),span=Math.max(1,high-low);
+ return '<div class="info"><h3>Évolution du score moyen — simulateur</h3><div style="overflow-x:auto"><svg viewBox="0 0 330 180" role="img" aria-label="Courbe des scores moyens par mois" style="width:100%;min-width:260px;max-width:650px">'+
+ '<line x1="35" y1="15" x2="35" y2="145" stroke="currentColor" opacity=".4"/><line x1="35" y1="145" x2="320" y2="145" stroke="currentColor" opacity=".4"/>'+
+ '<text x="5" y="20" font-size="11" fill="currentColor">'+high+'</text><text x="5" y="145" font-size="11" fill="currentColor">'+low+'</text>'+
+ '<polyline fill="none" stroke="#1ca478" stroke-width="3" points="'+points.map((p,i)=>(35+i*285/Math.max(1,points.length-1))+','+(145-125*(p.y-low)/span)).join(' ')+'"/>'+
+ points.map((p,i)=>{const x=35+i*285/Math.max(1,points.length-1),y=145-125*(p.y-low)/span;return '<circle cx="'+x+'" cy="'+y+'" r="4" fill="#1ca478"><title>'+safe(p.k)+' : '+p.y.toFixed(1)+' coups ('+p.n+' partie(s))</title></circle>'+(i===0||i===points.length-1?'<text x="'+x+'" y="166" font-size="10" text-anchor="middle" fill="currentColor">'+safe(p.k.slice(2))+'</text>':'')}).join('')+
+ '</svg></div><p class="muted">Moyennes mensuelles calculées uniquement à partir des scores enregistrés sur simulateur.</p></div>';
+}
+const slxOldStats=slxStats;
+slxStats=function(){
+ slxOldStats();
+ document.querySelector("#screen")?.insertAdjacentHTML("beforeend",slxMonthlyScoreChart());
+};
+slxWrappedCheck=function(){
+ const now=new Date(),year=now.getFullYear();
+ const due=now.getMonth()===11&&now.getDate()===31&&now.getHours()>=17;
+ const years=new Set();
+ for(const x of (realGet().rounds||[]).concat(slVirtualData(),slxCompsGet())){
+  const d=String(x.date||"");if(/^\d{4}/.test(d))years.add(Number(d.slice(0,4)));
+ }
+ if(due)years.add(year);
+ const a=slxRead("swiinglab_wrapped_v1",[]);
+ let changed=false,currentCreated=false;
+ [...years].sort((x,y)=>x-y).forEach(y=>{
+  if(y>year||(y===year&&!due)||a.some(x=>x.year===y))return;
+  const real=(realGet().rounds||[]).filter(x=>String(x.date||"").startsWith(y));
+  const virt=slVirtualData().filter(x=>String(x.date||"").startsWith(y));
+  const comps=slxCompsGet().filter(x=>String(x.date||"").startsWith(y));
+  a.push({year:y,real:real.length,virtual:virt.length,comps:comps.length,courses:new Set(real.map(x=>x.golf||x.course).filter(Boolean)).size});
+  changed=true;if(y===year)currentCreated=true;
+ });
+ if(changed&&slxWrite("swiinglab_wrapped_v1",a)&&currentCreated){
+  setTimeout(()=>{if(confirm("Ton Golf Wrapped "+year+" est prêt ! Le consulter ?"))slxYearView(year)},150);
+ }
+};
