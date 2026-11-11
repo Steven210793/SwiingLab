@@ -1,0 +1,226 @@
+
+/* SwiingLab — navigation et carnets 2026-11-11. Préserve les stockages existants. */
+const slxRead=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key));return v??fallback}catch(e){return fallback}};
+const slxWrite=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){alert("Enregistrement impossible. Vérifie l’espace de stockage.");return false}};
+const slxBack=(fn,label="Retour")=>'<button class="slBack" onclick="'+fn+'">‹ '+label+'</button>';
+const slxTop=(title,fn="slHome()",label="Accueil")=>'<div class="slPageTop">'+slxBack(fn,label)+'<h1>'+safe(title)+'</h1></div>';
+const slxMenu=(items)=>'<div class="slTiles">'+items.map(x=>slCard(x[0],x[1],x[2],x[3],!!x[4])).join('')+'</div>';
+const slxNum=x=>{const n=Number(String(x??"").replace(",","."));return Number.isFinite(n)?n:null};
+const slxId=()=>String(Date.now())+'-'+Math.random().toString(36).slice(2,7);
+const slxDate=x=>x?new Date(x).toLocaleDateString("fr-FR"):"—";
+const slxEmpty='<p class="muted">Aucune donnée enregistrée pour le moment.</p>';
+function slxNav(title,back,items){realUI(slxTop(title,back)+slxMenu(items));setActiveTab("accueil")}
+slHome=function(){
+ const year=new Date().getFullYear(),goals=slxRead("swiinglab_goals_v1",[]).filter(g=>g.year===year).slice(0,3);
+ realUI('<section class="slWelcome"><span class="slEyebrow">SWIINGLAB · MON ESPACE GOLF</span><div class="slWelcomeHead"><span class="slWelcomeLogo"></span><span><h1>Bienvenue sur le green.</h1><p>Ton golf, tes progrès, à ton rythme.</p></span></div></section>'+
+ (goals.length?'<div class="info"><h3>Mes objectifs '+year+'</h3>'+goals.map(g=>slxProgressLine(g)).join('')+'</div>':'')+
+ slxMenu([['◎','Entraînement','TrackMan · Putt Tracker','slxTraining()',true],['▣','Compétition','Carnet · Index · Palmarès','slxCompetition()',true],['▥','Centre de données','Statistiques · Objectifs · Records','slxData()',true],['◉','Mon sac','Clubs · Distances · Entretien','slxBagHome()',true],['⛳','Mes parcours','Carnet des golfs joués','slxCourses()',true],['◯','Mon profil','Profil · Imports · Sauvegarde','profile()',true]]));
+ setActiveTab("accueil");
+ slxWrappedCheck();
+};
+function slxTraining(){slxNav("Entraînement","slHome()",[['◉','TrackMan','Practice · Parcours','slTrackmanHome()',true],['◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true],['▤','Historique des séances','Entraînements enregistrés','slxTrainingHistory()',true]])}
+function slxTrainingHistory(){
+ const h=loadHistory(),pt=ptSessions();
+ realUI(slxTop("Historique des séances","slxTraining()","Entraînement")+
+ '<h2>Entraînements</h2>'+(h.length?h.slice().reverse().map(s=>'<div class="histItem"><b>'+safe(s.nom||s.exercise||s.id||s.club||"Séance")+'</b><span>'+safe(s.date||"")+'</span></div>').join(''):slxEmpty)+
+ '<h2>Putt Tracker</h2>'+(pt.length?pt.slice().reverse().map(s=>'<div class="histItem"><b>'+safe(s.exercise||"Putting")+'</b><span>'+Number(s.made||0)+'/'+Number(s.attempts||0)+'</span></div>').join(''):slxEmpty));
+}
+function slxCompetition(){slxNav("Compétition","slHome()",[['▤','Carnet de compétitions','Saisie et historique','slxComps()',true],['↘','Suivi de mon index WHS','Historique des index saisis','slxIndex()',true],['★','Mon palmarès','Résultats en tournoi','slxPalmares()',true]])}
+const slxCompsGet=()=>slxRead("swiinglab_competitions_v1",[]);
+function slxComps(){
+ const a=slxCompsGet().slice().sort((x,y)=>y.date.localeCompare(x.date));
+ realUI(slxTop("Carnet de compétitions","slxCompetition()","Compétition")+
+ '<button class="primary" onclick="slxCompForm()">＋ Ajouter une compétition</button>'+
+ (a.length?a.map(x=>'<div class="menuCard" onclick="slxCompForm(\''+x.id+'\')"><b>'+safe(x.name)+'</b><span class="muted">'+safe(x.date)+' · '+safe(x.course||"")+' · '+safe(x.format||"")+'</span><p>Brut '+safe(x.gross||"—")+' · Net '+safe(x.net||"—")+' · '+safe(x.place||"—")+' / '+safe(x.players||"—")+'</p></div>').join(''):slxEmpty));
+}
+function slxCompForm(id){
+ const e=slxCompsGet().find(x=>x.id===id)||{},fields=[["name","Nom de la compétition","text"],["date","Date","date"],["course","Parcours","text"],["format","Formule de jeu","text"],["gross","Score brut","number"],["net","Score net","number"],["place","Position au classement","number"],["players","Nombre de participants","number"],["index","Index après compétition","number"]];
+ realUI(slxTop(id?"Modifier une compétition":"Nouvelle compétition","slxComps()","Carnet")+
+ '<div class="info"><form id="slxCompForm" onsubmit="slxCompSave(event,\''+(id||"")+'\')">'+fields.map(([key,label,type])=>'<div class="field"><label>'+label+'</label><input name="'+key+'" type="'+type+'" '+(type==="number"?'min="0" step="'+(key==="index"?'0.1':'1')+'"':'')+' value="'+safe(e[key]??(key==="date"?new Date().toISOString().slice(0,10):""))+'"></div>').join('')+
+ '<button class="primary" type="submit">Enregistrer</button></form>'+(id?'<button class="secondary" onclick="slxCompDelete(\''+id+'\')">Supprimer</button>':'')+'</div>');
+}
+function slxCompSave(ev,id){
+ ev.preventDefault();const f=new FormData(ev.target),r=Object.fromEntries(f.entries());if(!r.name.trim()){alert("Nom de compétition requis");return}
+ if(r.place&&r.players&&Number(r.place)>Number(r.players)){alert("La position dépasse le nombre de participants.");return}
+ const a=slxCompsGet(),i=a.findIndex(x=>x.id===id);r.id=id||slxId();if(i>=0)a[i]=r;else a.push(r);if(slxWrite("swiinglab_competitions_v1",a))slxComps();
+}
+function slxCompDelete(id){if(!confirm("Supprimer cette compétition ?"))return;slxWrite("swiinglab_competitions_v1",slxCompsGet().filter(x=>x.id!==id));slxComps()}
+function slxIndex(){
+ const all=slxCompsGet().filter(x=>x.index!==""&&slxNum(x.index)!==null).sort((a,b)=>a.date.localeCompare(b.date)),last=all.at(-1),best=all.length?Math.min(...all.map(x=>slxNum(x.index))):null;
+ realUI(slxTop("Suivi de mon index WHS","slxCompetition()","Compétition")+'<div class="statsGrid"><div class="stat">Index actuel<strong>'+(last?safe(last.index):"—")+'</strong></div><div class="stat">Meilleur index<strong>'+(best===null?"—":best)+'</strong></div></div>'+
+ '<p class="muted">Évolution interne selon les index saisis dans tes compétitions. L’index officiel reste celui de la FFGolf.</p>'+
+ (all.length?all.map(x=>'<div class="histItem"><b>'+safe(x.date)+'</b><span>'+safe(x.index)+' · '+safe(x.name)+'</span></div>').join(''):slxEmpty));
+}
+function slxPalmares(){const a=slxCompsGet(),ranked=a.filter(x=>slxNum(x.place)>0),wins=ranked.filter(x=>Number(x.place)===1).length;
+ realUI(slxTop("Mon palmarès","slxCompetition()","Compétition")+'<div class="statsGrid"><div class="stat">Compétitions<strong>'+a.length+'</strong></div><div class="stat">Victoires<strong>'+wins+'</strong></div></div>'+
+ (ranked.length?ranked.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+safe(x.place)+'e sur '+safe(x.players||"—")+'</span></div>').join(''):slxEmpty));
+}
+function slxData(){slxNav("Centre de données","slHome()",[['▥','Mes statistiques','Résultats par source','slxStats()',true],['◎','Mes objectifs','1 à 3 objectifs annuels','slxGoals()',true],['★','Mon Hall of Fame','Records personnels','slxRecords()',true]])}
+function slxStats(){
+ const real=(realGet().rounds||[]),virt=slVirtualData(),scores=virt.map(x=>slxNum(x.totalScore)).filter(x=>x!==null);
+ realUI(slxTop("Mes statistiques","slxData()","Centre de données")+
+ '<h2>Parcours sur simulateur</h2><div class="statsGrid"><div class="stat">Parties<strong>'+virt.length+'</strong></div><div class="stat">Score moyen<strong>'+(scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"—")+'</strong></div></div>'+
+ '<p class="muted">Les fairways, GIR et putts ne sont calculés que lorsqu’ils sont présents dans les données TrackMan. Aucune donnée manquante n’est inventée.</p>'+
+ '<h2>Parcours réels</h2><div class="statsGrid"><div class="stat">Cartes enregistrées<strong>'+real.length+'</strong></div><div class="stat">Compétitions<strong>'+slxCompsGet().length+'</strong></div></div>'+
+ slxMenu([['▥','Statistiques TrackMan Practice','Mesures techniques et exercices','progressHub()',true],['▤','Parcours virtuels','Scores des simulateurs','slVirtualHome()',true],['◉','Putting','Précision par distance','puttTrackerHome()',true]]));
+}
+function slxProgressLine(g){
+ const current=slxGoalValue(g),base=slxNum(g.start),target=slxNum(g.target);
+ const pct=base!==null&&target!==null&&current!==null&&target!==base?Math.max(0,Math.min(100,Math.round((current-base)/(target-base)*100))):0;
+ return '<div style="margin:12px 0"><b>'+safe(g.name)+'</b><div class="muted">'+(current===null?'Aucune donnée':safe(current))+' / objectif '+safe(g.target)+'</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+}
+function slxGoalValue(g){
+ if(g.source==="index"){const a=slxCompsGet().filter(x=>slxNum(x.index)!==null).sort((a,b)=>a.date.localeCompare(b.date));return a.length?slxNum(a.at(-1).index):null}
+ if(g.source==="manual")return slxNum(g.current);
+ return null;
+}
+function slxGoals(){
+ const y=new Date().getFullYear(),a=slxRead("swiinglab_goals_v1",[]).filter(x=>x.year===y);
+ realUI(slxTop("Mes objectifs "+y,"slxData()","Centre de données")+
+ (a.length?a.map(g=>'<div class="info">'+slxProgressLine(g)+'<button class="secondary" onclick="slxGoalForm(\''+g.id+'\')">Modifier</button><button class="secondary" onclick="slxGoalDelete(\''+g.id+'\')">Supprimer</button></div>').join(''):slxEmpty)+
+ (a.length<3?'<button class="primary" onclick="slxGoalForm()">＋ Ajouter un objectif</button>':'<p class="muted">Maximum : 3 objectifs pour cette année.</p>'));
+}
+function slxGoalForm(id){
+ const a=slxRead("swiinglab_goals_v1",[]),g=a.find(x=>x.id===id)||{};
+ realUI(slxTop("Objectif annuel","slxGoals()","Mes objectifs")+'<form id="slxGoalForm" class="info" onsubmit="slxGoalSave(event,\''+(id||"")+'\')">'+
+ '<div class="field"><label>Intitulé</label><input name="name" required value="'+safe(g.name||"")+'"></div>'+
+ '<div class="field"><label>Source</label><select name="source"><option value="manual" '+(g.source!=="index"?"selected":"")+'>Saisie manuelle</option><option value="index" '+(g.source==="index"?"selected":"")+'>Index des compétitions</option></select></div>'+
+ [['start','Valeur de départ'],['current','Valeur actuelle si manuelle'],['target','Objectif']].map(([k,t])=>'<div class="field"><label>'+t+'</label><input type="number" step="0.1" name="'+k+'" value="'+safe(g[k]??"")+'"></div>').join('')+
+ '<button class="primary" type="submit">Enregistrer</button></form>');
+}
+function slxGoalSave(ev,id){
+ ev.preventDefault();const f=Object.fromEntries(new FormData(ev.target)),a=slxRead("swiinglab_goals_v1",[]),year=new Date().getFullYear(),i=a.findIndex(x=>x.id===id);
+ if(i<0&&a.filter(x=>x.year===year).length>=3)return alert("Maximum trois objectifs.");
+ const g={...f,id:id||slxId(),year};if(i>=0)a[i]=g;else a.push(g);
+ if(slxWrite("swiinglab_goals_v1",a))slxGoals();
+}
+function slxGoalDelete(id){if(!confirm("Supprimer cet objectif ?"))return;slxWrite("swiinglab_goals_v1",slxRead("swiinglab_goals_v1",[]).filter(x=>x.id!==id));slxGoals()}
+function slxRecords(){
+ const comps=slxCompsGet(),real=realGet().rounds||[],virt=slVirtualData(),indices=comps.map(x=>slxNum(x.index)).filter(x=>x!==null);
+ const scores=virt.filter(x=>slxNum(x.totalScore)!==null).map(x=>({score:Number(x.totalScore),name:x.course,src:"Simulateur",holes:x.holeCount}));
+ const records=slxRead("swiinglab_records_v1",[]);
+ realUI(slxTop("Mon Hall of Fame","slxData()","Centre de données")+
+ '<div class="statsGrid"><div class="stat">Meilleur index<strong>'+(indices.length?Math.min(...indices):"—")+'</strong></div><div class="stat">Meilleur score simulateur<strong>'+(scores.length?Math.min(...scores.map(x=>x.score)):"—")+'</strong></div></div>'+
+ '<p class="muted">Sources identifiées séparément : compétitions, parcours réels et simulateur. Les records de putting exigent une mesure réellement enregistrée.</p>'+
+ '<button class="primary" onclick="slxRecordAdd()">＋ Ajouter un exploit personnel</button>'+
+ records.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+safe(x.date)+'</span></div>').join(''));
+}
+function slxRecordAdd(){const name=prompt("Exploit personnel (eagle, trou en un…)");if(!name||!name.trim())return;const a=slxRead("swiinglab_records_v1",[]);a.push({id:slxId(),name:name.trim(),date:new Date().toISOString().slice(0,10)});slxWrite("swiinglab_records_v1",a);slxRecords()}
+function slxBagHome(){slxNav("Mon sac","slHome()",[['◉','Mes clubs','Fiches individuelles et carry','slxClubs()',true],['▥','Mes distances','Mémo du carry en mètres','slxDistances()',true],['▤','Carnet d’entretien','Interventions et réglages','slxMaintenance()',true]])}
+const slxClubsGet=()=>slxRead("swiinglab_clubs_v1",[]);
+function slxClubs(){
+ const a=slxClubsGet();
+ realUI(slxTop("Mes clubs","slxBagHome()","Mon sac")+'<button class="primary" onclick="slxClubForm()">＋ Ajouter un club</button>'+
+ (a.length?a.map(x=>'<div class="menuCard" onclick="slxClubForm(\''+x.id+'\')"><b>'+safe(x.type)+'</b><span class="muted">'+safe([x.brand,x.model].filter(Boolean).join(" "))+' · Carry '+safe(x.carry||"—")+' m</span></div>').join(''):slxEmpty)+
+ '<p class="muted">Le carry est une référence personnelle, jamais remplacée par une séance TrackMan. Les anciens réglages de ton sac sont conservés.</p>');
+}
+function slxClubForm(id){
+ const c=slxClubsGet().find(x=>x.id===id)||{},types=['Driver','Bois 3','Bois 5','Bois 7','Hybride 3','Hybride 4','Hybride 5','Fer 2','Fer 3','Fer 4','Fer 5','Fer 6','Fer 7','Fer 8','Fer 9','PW','50°','52°','54°','56°','58°','60°','Putter'];
+ realUI(slxTop("Fiche de club","slxClubs()","Mes clubs")+'<form class="info" onsubmit="slxClubSave(event,\''+(id||"")+'\')">'+
+ '<div class="field"><label>Club</label><select name="type">'+types.map(t=>'<option '+(c.type===t?"selected":"")+'>'+t+'</option>').join('')+'</select></div>'+
+ [['brand','Marque'],['model','Modèle'],['shaft','Shaft'],['flex','Flex'],['loft','Loft'],['lie','Lie'],['grip','Grip'],['carry','Carry de référence (m)']].map(([k,l])=>'<div class="field"><label>'+l+'</label><input name="'+k+'" '+(k==="carry"?'type="number" min="0" step="0.1"':'')+' value="'+safe(c[k]||"")+'"></div>').join('')+
+ '<button class="primary" type="submit">Enregistrer</button></form>'+
+ (id?'<button class="secondary" onclick="slxClubDelete(\''+id+'\')">Supprimer ce club</button>':''));
+}
+function slxClubSave(ev,id){
+ ev.preventDefault();const d=Object.fromEntries(new FormData(ev.target)),a=slxClubsGet(),i=a.findIndex(x=>x.id===id);d.id=id||slxId();
+ if(i>=0)a[i]=d;else a.push(d);
+ if(slxWrite("swiinglab_clubs_v1",a)){const bag=loadBag(),c=d.type;if(!bag[c])bag[c]={};bag[c].checked=true;bag[c].distance=d.carry===""?"":Number(d.carry);bag[c].basis="carry";saveBag(bag);slxClubs()}
+}
+function slxClubDelete(id){if(!confirm("Supprimer cette fiche ?"))return;slxWrite("swiinglab_clubs_v1",slxClubsGet().filter(x=>x.id!==id));slxClubs()}
+function slxDistances(){
+ const a=slxClubsGet();
+ realUI(slxTop("Mes distances","slxBagHome()","Mon sac")+'<div class="info"><h3>Mémo Carry</h3>'+
+ (a.length?'<table style="width:100%"><thead><tr><th>Club</th><th>Carry</th></tr></thead><tbody>'+a.map(x=>'<tr><td>'+safe(x.type)+'</td><td style="text-align:right">'+safe(x.carry||"—")+' m</td></tr>').join('')+'</tbody></table>':slxEmpty)+
+ '<p class="muted">Pour modifier une valeur, ouvre la fiche du club dans « Mes clubs ».</p></div>');
+}
+const slxMaintGet=()=>slxRead("swiinglab_maintenance_v1",[]);
+function slxMaintenance(){
+ const a=slxMaintGet();
+ realUI(slxTop("Carnet d’entretien","slxBagHome()","Mon sac")+'<button class="primary" onclick="slxMaintForm()">＋ Ajouter une intervention</button>'+
+ (a.length?a.slice().reverse().map(x=>'<div class="menuCard" onclick="slxMaintForm(\''+x.id+'\')"><b>'+safe(x.club)+' · '+safe(x.action)+'</b><span class="muted">'+safe(x.date)+'</span></div>').join(''):slxEmpty));
+}
+function slxMaintForm(id){const x=slxMaintGet().find(v=>v.id===id)||{},a=slxClubsGet();
+ realUI(slxTop("Intervention","slxMaintenance()","Entretien")+'<form class="info" onsubmit="slxMaintSave(event,\''+(id||"")+'\')">'+
+ '<div class="field"><label>Club</label><select name="club">'+a.map(v=>'<option '+(x.club===v.type?"selected":"")+'>'+safe(v.type)+'</option>').join('')+'</select></div>'+
+ [['date','Date','date'],['action','Intervention','text'],['notes','Notes','text'],['cost','Coût facultatif (€)','number']].map(([k,l,t])=>'<div class="field"><label>'+l+'</label><input name="'+k+'" type="'+t+'" '+(t==="number"?'min="0" step="0.01"':'')+' value="'+safe(x[k]||"")+'"></div>').join('')+
+ '<button class="primary" type="submit">Enregistrer</button></form>');
+}
+function slxMaintSave(ev,id){ev.preventDefault();const r=Object.fromEntries(new FormData(ev.target)),a=slxMaintGet(),i=a.findIndex(x=>x.id===id);r.id=id||slxId();if(i>=0)a[i]=r;else a.push(r);if(slxWrite("swiinglab_maintenance_v1",a))slxMaintenance()}
+function slxCourses(){
+ const db=realGet(),rounds=db.rounds||[],additional=slxRead("swiinglab_courses_v1",[]),names=[...new Set([...rounds.map(r=>String(r.golf||r.course||"").trim()),...additional.map(x=>x.name)].filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+ realUI(slxTop("Mes parcours","slHome()")+'<button class="primary" onclick="slxCourseAdd()">＋ Ajouter un golf joué</button>'+
+ (names.length?names.map(n=>'<div class="menuCard" onclick="slxCourseView(decodeURIComponent(\''+encodeURIComponent(n)+'\'))"><b>'+safe(n)+'</b><span class="muted">'+rounds.filter(r=>(r.golf||r.course)===n).length+' carte(s) réelle(s)</span></div>').join(''):slxEmpty)+
+ '<button class="secondary" onclick="slRealHome()">Mes cartes de parties réelles</button>');
+}
+function slxCourseAdd(){const name=prompt("Nom du golf joué");if(!name||!name.trim())return;const a=slxRead("swiinglab_courses_v1",[]);if(!a.some(x=>x.name.toLowerCase()===name.trim().toLowerCase()))a.push({name:name.trim(),date:new Date().toISOString().slice(0,10)});slxWrite("swiinglab_courses_v1",a);slxCourses()}
+function slxCourseView(name){const x=slxRead("swiinglab_courses_meta_v1",{}),m=x[name]||{};
+ realUI(slxTop(name,"slxCourses()","Mes parcours")+'<div class="info"><div class="field"><label>Pays / localisation</label><input id="slxCourseCountry" value="'+safe(m.country||"")+'"></div><div class="field"><label>Note personnelle sur 10</label><input id="slxCourseRating" type="number" min="0" max="10" value="'+safe(m.rating||"")+'"></div><div class="field"><label>Commentaires</label><textarea id="slxCourseNotes">'+safe(m.notes||"")+'</textarea></div><button class="primary" onclick="slxCourseSave(decodeURIComponent(\''+encodeURIComponent(name)+'\'))">Enregistrer</button></div>')}
+function slxCourseSave(name){const d=slxRead("swiinglab_courses_meta_v1",{});d[name]={country:document.getElementById("slxCourseCountry").value,rating:document.getElementById("slxCourseRating").value,notes:document.getElementById("slxCourseNotes").value};if(slxWrite("swiinglab_courses_meta_v1",d))slxCourses()}
+profile=function(){slxNav("Mon profil","slHome()",[['◯','Profil','Nom, index et apparence','slxPlayer()',true],['↥','TrackMan','Importer / exporter JSON','slxImport()',true],['▣','Sauvegarde','Sauvegarde complète et restauration','slxBackup()',true],['◉','Mon passeport golf','Pays et parcours découverts','slxPassport()',true],['★','Mes années golf','Archives Golf Wrapped','slxYears()',true],['◎','Ma collection de balles','Balles logotées et doubles','slxCollection()',true],['↗','Partager','SMS, WhatsApp…','shareApp()',true]])};
+function slxPlayer(){const p=loadProfile();
+ realUI(slxTop("Profil du joueur","profile()","Mon profil")+'<form class="info" onsubmit="slxSavePlayer(event)"><div class="field"><label>Nom</label><input name="name" value="'+safe(p.name||"")+'"></div><div class="field"><label>Index de golf</label><input name="index" value="'+safe(p.index||"")+'"></div><button class="primary" type="submit">Sauvegarder</button></form>'+
+ '<div class="info"><h3>Apparence</h3><button class="secondary" onclick="toggleTheme();slxPlayer()">Changer de thème</button></div>');
+}
+function slxSavePlayer(ev){ev.preventDefault();if(slxWrite("mag_profile",Object.fromEntries(new FormData(ev.target)))){alert("Profil sauvegardé.");profile()}}
+function slxImport(){realUI(slxTop("TrackMan — Importation JSON","profile()","Mon profil")+'<div class="info"><h3>Importer des données</h3><input type="file" accept=".json,application/json" onchange="tmImport(this)"><p class="muted">'+tmData().reduce((a,x)=>a+(x.shots||[]).length,0)+' coups TrackMan enregistrés.</p><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div>')}
+function slxBackup(){realUI(slxTop("Sauvegarde complète","profile()","Mon profil")+'<div class="info"><button class="primary" onclick="tmBackup()">Télécharger / partager ma sauvegarde</button><div class="field"><label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div>')}
+function slxPassport(){
+ const names=[...new Set([...(realGet().rounds||[]).map(x=>x.golf||x.course),...slxRead("swiinglab_courses_v1",[]).map(x=>x.name)].filter(Boolean))],meta=slxRead("swiinglab_courses_meta_v1",{}),countries=[...new Set(names.map(n=>meta[n]?.country).filter(Boolean))];
+ realUI(slxTop("Mon passeport golf","profile()","Mon profil")+'<div class="statsGrid"><div class="stat">Parcours découverts<strong>'+names.length+'</strong></div><div class="stat">Pays renseignés<strong>'+countries.length+'</strong></div></div>'+
+ (names.length?names.map(n=>'<div class="histItem"><b>'+safe(n)+'</b><span>'+safe(meta[n]?.country||"Pays à préciser")+'</span></div>').join(''):slxEmpty)+
+ '<p class="muted">Les parcours sont reliés à « Mes parcours » : pas de double saisie.</p>');
+}
+function slxYears(){
+ const a=slxRead("swiinglab_wrapped_v1",[]);
+ realUI(slxTop("Mes années golf","profile()","Mon profil")+
+ (a.length?a.slice().reverse().map(x=>'<div class="menuCard" onclick="slxYearView('+x.year+')"><b>Golf Wrapped '+x.year+'</b><span class="muted">Bilan archivé</span></div>').join(''):slxEmpty));
+}
+function slxYearView(year){const d=slxRead("swiinglab_wrapped_v1",[]).find(x=>x.year===year);if(!d)return;
+ realUI(slxTop("Golf Wrapped "+year,"slxYears()","Mes années golf")+'<div class="statsGrid"><div class="stat">Parties réelles<strong>'+d.real+'</strong></div><div class="stat">Parcours virtuels<strong>'+d.virtual+'</strong></div><div class="stat">Compétitions<strong>'+d.comps+'</strong></div><div class="stat">Parcours différents<strong>'+d.courses+'</strong></div></div>');
+}
+function slxWrappedCheck(){
+ const now=new Date(),year=now.getFullYear(),date=now.getMonth()===11&&now.getDate()===31&&now.getHours()>=17;
+ if(!date)return;const a=slxRead("swiinglab_wrapped_v1",[]);if(a.some(x=>x.year===year))return;
+ const real=(realGet().rounds||[]).filter(x=>String(x.date||"").startsWith(year)),virt=slVirtualData().filter(x=>String(x.date||"").startsWith(year)),comps=slxCompsGet().filter(x=>String(x.date||"").startsWith(year));
+ a.push({year,real:real.length,virtual:virt.length,comps:comps.length,courses:new Set(real.map(x=>x.golf||x.course).filter(Boolean)).size});
+ if(slxWrite("swiinglab_wrapped_v1",a))setTimeout(()=>{if(confirm("Ton Golf Wrapped "+year+" est prêt ! Le consulter ?"))slxYearView(year)},150);
+}
+const slxCollectionGet=()=>slxRead("swiinglab_ball_collection_v1",[]);
+function slxCollection(){
+ const a=slxCollectionGet().slice().sort((x,y)=>x.name.localeCompare(y.name,"fr"));
+ realUI(slxTop("Ma collection de balles","profile()","Mon profil")+'<button class="primary" onclick="slxBallAdd()">＋ Ajouter une balle logotée</button>'+
+ (a.length?a.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+("★".repeat(Math.min(30,Number(x.extra)||0))||"—")+' <button class="secondary" onclick="slxBallEdit(\''+x.id+'\')">Modifier</button></span></div>').join(''):slxEmpty)+
+ '<p class="muted">Une étoile = une balle supplémentaire disponible pour échange.</p>');
+}
+function slxBallAdd(){const name=prompt("Nom du golf ou logo");if(!name||!name.trim())return;const extra=prompt("Nombre d’exemplaires en supplément (0 si aucun)","0");if(extra===null||!Number.isInteger(Number(extra))||Number(extra)<0)return alert("Nombre invalide");const a=slxCollectionGet();a.push({id:slxId(),name:name.trim(),extra:Number(extra)});if(slxWrite("swiinglab_ball_collection_v1",a))slxCollection()}
+function slxBallEdit(id){const a=slxCollectionGet(),x=a.find(v=>v.id===id);if(!x)return;const name=prompt("Nom",x.name);if(name===null)return;const extra=prompt("Exemplaires en supplément",x.extra);if(extra===null)return;if(!name.trim()||!Number.isInteger(Number(extra))||Number(extra)<0)return alert("Valeur invalide");x.name=name.trim();x.extra=Number(extra);if(slxWrite("swiinglab_ball_collection_v1",a))slxCollection()}
+/* Putt Tracker : graphe par distance et septième exercice libre, sans altérer les six précédents. */
+let slxPuttRange="max";
+function slxPuttingRows(){
+ const now=Date.now(),cut=slxPuttRange==="max"?0:now-(slxPuttRange==="3m"?90:30)*86400000;
+ return ptSessions().filter(x=>Number(new Date(x.date||0))>=cut&&Number(x.distance)>0&&Number(x.attempts)>0&&Number(x.made)>=0&&Number(x.made)<=Number(x.attempts));
+}
+function slxPuttGraph(){
+ const rows=slxPuttingRows(),distances=[1,2,3,5,8],buttons=[["max","Max"],["3m","3 mois"],["1m","1 mois"]].map(([value,label])=>'<button class="secondary" style="'+(slxPuttRange===value?'border-color:var(--gold);':'')+'" onclick="slxPuttRange=\''+value+'\';puttTrackerHome()">'+label+'</button>').join('');
+ return '<div class="info"><h3>Précision au putting</h3><div style="display:flex;gap:8px;margin-bottom:16px">'+buttons+'</div>'+
+ distances.map(d=>{const v=rows.filter(x=>Number(x.distance)===d),a=v.reduce((n,x)=>n+Number(x.attempts),0),m=v.reduce((n,x)=>n+Number(x.made),0),pct=a?Math.round(100*m/a):null;return '<div style="margin:12px 0"><div style="display:flex;justify-content:space-between"><b>'+d+' m</b><span>'+(pct===null?'Aucune donnée':pct+' %')+'</span></div><div class="bar"><i style="width:'+(pct||0)+'%"></i></div></div>'}).join('')+
+ '<p class="muted">Uniquement les séries où distance, nombre tenté et réussite sont connus.</p></div>';
+}
+puttTrackerHome=function(){
+ realUI(slxTop("Putt Tracker","slxTraining()","Entraînement")+slxPuttGraph()+
+ slxMenu([['◎','Mes entraînements','6 exercices existants','ptList()',true],['＋','Entraînement libre','Choisir distance et nombre de balles','slxPuttFree()',true],['▤','Historique','Séances enregistrées','ptHistory()',true],['↗','Progression','Statistiques des exercices','ptStats()',true]]));
+};
+function slxPuttFree(){
+ realUI(slxTop("Entraînement libre","puttTrackerHome()","Putt Tracker")+'<form class="info" onsubmit="slxPuttFreeSave(event)">'+
+ '<div class="field"><label>Distance (m)</label><input name="distance" type="number" min="0.1" step="0.1" value="1" required></div>'+
+ '<div class="field"><label>Nombre de balles jouées</label><input name="attempts" type="number" min="1" step="1" value="5" required></div>'+
+ '<div class="field"><label>Putts réussis à la fin de la série</label><input name="made" type="number" min="0" step="1" value="0" required></div>'+
+ '<button class="primary" type="submit">Valider le résultat</button></form>');
+}
+function slxPuttFreeSave(ev){
+ ev.preventDefault();const x=Object.fromEntries(new FormData(ev.target)),attempts=Number(x.attempts),made=Number(x.made),distance=Number(x.distance);
+ if(!Number.isInteger(attempts)||attempts<1||!Number.isInteger(made)||made<0||made>attempts||!Number.isFinite(distance)||distance<=0)return alert("Vérifie le nombre de putts et la distance.");
+ const a=ptSessions();a.push({id:slxId(),date:new Date().toISOString(),exerciseId:"free",exercise:"Entraînement libre",distance,attempts,made,maxStreak:0});
+ if(slxWrite(PT_STORE,a)){alert(made+" putts réussis sur "+attempts+" à "+distance+" m.");slxPuttFree()}
+}
