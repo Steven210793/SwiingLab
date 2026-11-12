@@ -178,7 +178,7 @@ function slxCourseView(name){const x=slxRead("swiinglab_courses_meta_v1",{}),m=x
 function slxCourseSave(name){const d=slxRead("swiinglab_courses_meta_v1",{});d[name]={country:document.getElementById("slxCourseCountry").value,rating:document.getElementById("slxCourseRating").value,notes:document.getElementById("slxCourseNotes").value};if(slxWrite("swiinglab_courses_meta_v1",d))slxCourses()}
 profile=function(){slxNav("Mon profil","slHome()",[['◯','Profil','Nom, index et apparence','slxPlayer()',true],['↥','TrackMan','Importer / exporter JSON','slxImport()',true],['▣','Sauvegarde','Sauvegarde complète et restauration','slxBackup()',true],['◉','Mon passeport golf','Pays et parcours découverts','slxPassport()',true],['★','Mes années golf','Archives Golf Wrapped','slxYears()',true],['◎','Ma collection de balles','Balles logotées et doubles','slxCollection()',true],['↗','Partager','SMS, WhatsApp…','shareApp()',true]])};
 function slxPlayer(){const p=loadProfile();
- realUI(slxTop("Profil du joueur","profile()","Mon profil")+'<form class="info" onsubmit="slxSavePlayer(event)"><div class="field"><label>Nom</label><input name="name" value="'+safe(p.name||"")+'"></div><div class="field"><label>Index de golf</label><input name="index" value="'+safe(p.index||"")+'"></div><button class="primary" type="submit">Sauvegarder</button></form>'+
+ realUI(slxTop("Profil du joueur","profile()","Mon profil")+'<p class="muted">SwiingLab · '+slxAppVersion+' · Mise à jour du '+slxAppVersionDate+'</p>'+'<form class="info" onsubmit="slxSavePlayer(event)"><div class="field"><label>Nom</label><input name="name" value="'+safe(p.name||"")+'"></div><div class="field"><label>Index de golf</label><input name="index" value="'+safe(p.index||"")+'"></div><button class="primary" type="submit">Sauvegarder</button></form>'+
  '<div class="info"><h3>Apparence</h3><button class="secondary" onclick="toggleTheme();slxPlayer()">Changer de thème</button></div>');
 }
 function slxSavePlayer(ev){ev.preventDefault();if(slxWrite("mag_profile",Object.fromEntries(new FormData(ev.target)))){alert("Profil sauvegardé.");profile()}}
@@ -205,7 +205,7 @@ function slxWrappedCheck(){
  a.push({year,real:real.length,virtual:virt.length,comps:comps.length,courses:new Set(real.map(x=>x.golf||x.course).filter(Boolean)).size});
  if(slxWrite("swiinglab_wrapped_v1",a))setTimeout(()=>{if(confirm("Ton Golf Wrapped "+year+" est prêt ! Le consulter ?"))slxYearView(year)},150);
 }
-const slxCollectionGet=()=>slxRead("swiinglab_ball_collection_v1",[]);
+const slxCollectionGet=()=>{slxSeedBalls();return slxRead("swiinglab_ball_collection_v1",[])};
 function slxCollection(){
  const a=slxCollectionGet().slice().sort((x,y)=>x.name.localeCompare(y.name,"fr"));
  realUI(slxTop("Ma collection de balles","profile()","Mon profil")+'<button class="primary" onclick="slxBallAdd()">＋ Ajouter une balle logotée</button>'+
@@ -329,3 +329,15 @@ slxWrappedCheck=function(){
   setTimeout(()=>{if(confirm("Ton Golf Wrapped "+year+" est prêt ! Le consulter ?"))slxYearView(year)},150);
  }
 };
+
+/* SwiingLab V1.0.0 — 12/11/2026. Catalogue de départ : n'écrase jamais la collection locale existante. */
+const slxAppVersion="V1.0.0";
+const slxAppVersionDate="12/11/2026";
+const slxInitialBalls=[["Bassin Bleu Golf — La Réunion",1],["Bussy-Saint-Georges",3],["Castillo de Gorraiz Golf Club",0],["Dinard Golf",0],["Disneyland Paris — édition 1",0],["Disneyland Paris — édition 2",0],["Domont Montmorency",0],["Eurodisney",0],["Golf de Disneyland",0],["Golf de Saint-Cast — Centenaire",0],["Golf de Saint-Cast — Classique",0],["Golf de Sainte-Maxime",0],["Golf de Seignosse",0],["Golf de Saly",0],["Golf des Gets",0],["Golf du Gouverneur",0],["Golf du Pic Saint-Loup",0],["Golf de Villacoublay",0],["Golf Club de Hossegor La Ferrière",0],["Golf Club Lyon-Salvagny",0],["Golf de Saint-Donat",0],["Hua Hin Golf Club",2],["Koh Samui Golf Club",2],["Les Ormes Golf & Resort",0],["Loch Palm Golf Club",2],["Malaisie",2],["Niagara Falls",0],["Old Course Cannes Golf Links — blanc",0],["Old Course Cannes Golf Links — orange",0],["Old Course Cannes Golf Links — rose",0],["Old Course Cannes Golf Links — rouge",0],["Old Course Cannes Golf Links — vert",0],["Oliva Nova Golf Club",1],["Pérou",0],["PGA Riviera Maya",0],["Red Mountain Golf Club",2],["Ryder Cup 2023 — Marco Simone",0],["Saint Andrews",0],["Saint-Malo Golf Resort",0],["Southwood G.C.",0],["TaylorMade TP5 — Halloween",0],["TaylorMade TP5 — Piment",0],["TaylorMade TP5 — Cornichon",0],["TaylorMade TP5 — Tacos",0],["TaylorMade TP5 — Dés de casino",0],["TaylorMade TP5 — Fléchettes",0],["TaylorMade TP5 — Pêches",0],["TaylorMade TP5 — Tête de dragon",0]];
+function slxSeedBalls(){
+ const key="swiinglab_ball_collection_v1";
+ if(localStorage.getItem(key)!==null)return;
+ const a=slxInitialBalls.map(([name,extra],i)=>({id:"initial-ball-"+String(i+1).padStart(2,"0"),name,extra}));
+ slxWrite(key,a);
+}
+slxSeedBalls();
