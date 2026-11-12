@@ -1,0 +1,169 @@
+{
+  "format": "swiinglab-real-rounds-v1",
+  "rounds": [
+    {
+      "golf": "Golf de Saint-Cast",
+      "name": "Côte d'Émeraude",
+      "date": "2026-08-17",
+      "index": 9.1,
+      "type": "loisir",
+      "count": 18,
+      "holes": [
+        {
+          "par": 5,
+          "shots": 7
+        },
+        {
+          "par": 3,
+          "shots": 3
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 3,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 3,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 3,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 5,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 3,
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "golf": "Golf Club Lyon-Salvagny",
+      "name": "Lyon-Salvagny",
+      "date": "2026-09-14",
+      "index": 9.1,
+      "type": "loisir",
+      "count": 18,
+      "holes": [
+        {
+          "par": 4,
+          "shots": 6
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 5,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 3,
+          "shots": 6
+        },
+        {
+          "par": 5,
+          "shots": 6
+        },
+        {
+          "par": 3,
+          "shots": 3
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 5,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 5
+        },
+        {
+          "par": 4,
+          "shots": 7
+        },
+        {
+          "par": 3,
+          "shots": 4
+        },
+        {
+          "par": 5,
+          "shots": 6
+        },
+        {
+          "par": 4,
+          "shots": 4
+        },
+        {
+          "par": 3,
+          "shots": 4
+        },
+        {
+          "par": 4,
+          "shots": 4
+        }
+      ]
+    }
+  ]
+}
