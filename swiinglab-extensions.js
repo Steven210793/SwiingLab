@@ -118,7 +118,7 @@ function slxRecords(){
  '<div class="statsGrid">'+info.map(([name,v])=>'<div class="stat">'+safe(name)+'<strong>'+(v===null?"—":safe(v))+'</strong></div>').join('')+'</div>'+
  '<p class="muted">Records séparés par source. Les cartes 9 trous ne sont pas comparées aux cartes 18 trous. Aucune mesure manquante n’est estimée.</p>'+
  
- records.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+safe(x.date)+'</span></div>').join(''));
+ '');
 }
 function slxRecordAdd(){const name=prompt("Exploit personnel (eagle, trou en un…)");if(!name||!name.trim())return;const a=slxRead("swiinglab_records_v1",[]);a.push({id:slxId(),name:name.trim(),date:new Date().toISOString().slice(0,10)});slxWrite("swiinglab_records_v1",a);slxRecords()}
 function slxBagHome(){slxNav("Mon sac","slHome()",[['◉','Mes clubs','Fiches individuelles et carry','slxClubs()',true],['▥','Mes distances','Mémo du carry en mètres','slxDistances()',true],['▤','Carnet d’entretien','Interventions et réglages','slxMaintenance()',true]])}
@@ -194,8 +194,16 @@ function slxBackup(){realUI(slxTop("Sauvegarde complète","profile()","Mon profi
 function slxPassport(){
  const names=[...new Set([...(realGet().rounds||[]).map(x=>x.golf||x.course),...slxRead("swiinglab_courses_v1",[]).map(x=>x.name)].filter(Boolean))],meta=slxRead("swiinglab_courses_meta_v1",{}),countries=[...new Set(names.map(n=>meta[n]?.country).filter(Boolean))];
  realUI(slxTop("Mon passeport golf","profile()","Mon profil")+'<div class="statsGrid"><div class="stat">Parcours découverts<strong>'+names.length+'</strong></div><div class="stat">Pays renseignés<strong>'+countries.length+'</strong></div></div>'+
- (names.length?names.map(n=>'<div class="histItem"><b>'+safe(n)+'</b><span>'+safe(meta[n]?.country||"Pays à préciser")+'</span></div>').join(''):slxEmpty)+
- '<p class="muted">Les parcours sont reliés à « Mes parcours » : pas de double saisie.</p>');
+ (names.length?names.map(n=>'<div class="histItem"><b>'+safe(meta[n]?.displayName||n)+'</b><span>'+safe(meta[n]?.country||"Pays à préciser")+' <button class="secondary" onclick="slxPassportEdit(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">Modifier</button></span></div>').join(''):slxEmpty));
+}
+function slxPassportEdit(name){
+ const meta=slxRead("swiinglab_courses_meta_v1",{}),m=meta[name]||{};
+ realUI(slxTop("Modifier le parcours","slxPassport()","Mon passeport golf")+'<form class="info" onsubmit="slxPassportSave(event,decodeURIComponent(\''+encodeURIComponent(name)+'\'))"><div class="field"><label>Nom du golf</label><input name="displayName" required value="'+safe(m.displayName||name)+'"></div><div class="field"><label>Pays</label><input name="country" value="'+safe(m.country||"")+'"></div><button class="primary" type="submit">Enregistrer</button></form>');
+}
+function slxPassportSave(ev,name){
+ ev.preventDefault();const f=new FormData(ev.target),d=slxRead("swiinglab_courses_meta_v1",{});
+ d[name]={...(d[name]||{}),displayName:String(f.get("displayName")||"").trim(),country:String(f.get("country")||"").trim()};
+ if(slxWrite("swiinglab_courses_meta_v1",d))slxPassport();
 }
 function slxYears(){
  const a=slxRead("swiinglab_wrapped_v1",[]);
@@ -216,11 +224,45 @@ const slxCollectionGet=()=>{slxSeedBalls();return slxRead("swiinglab_ball_collec
 function slxCollection(){
  const a=slxCollectionGet().slice().sort((x,y)=>x.name.localeCompare(y.name,"fr"));
  realUI(slxTop("Ma collection de balles","profile()","Mon profil")+'<button class="primary" onclick="slxBallAdd()">＋ Ajouter une balle logotée</button>'+
- (a.length?a.map(x=>'<div class="histItem"><b>'+safe(x.name)+'</b><span>'+("★".repeat(Math.min(30,Number(x.extra)||0))||"—")+' <button class="secondary" onclick="slxBallEdit(\''+x.id+'\')">Modifier</button></span></div>').join(''):slxEmpty)+
+ (a.length?a.map(x=>'<button class="histItem" style="width:100%;text-align:left;background:transparent;color:inherit;border:0;cursor:pointer;display:flex;align-items:center" onclick="slxBallSheet(decodeURIComponent(\''+encodeURIComponent(x.id)+'\'))"><b>'+safe(x.name)+'</b><span>'+("★".repeat(Math.min(30,Number(x.extra)||0))||"—")+'</span></button>').join(''):slxEmpty)+
  '<p class="muted">Une étoile = une balle supplémentaire disponible pour échange.</p>');
 }
-function slxBallAdd(){const name=prompt("Nom du golf ou logo");if(!name||!name.trim())return;const extra=prompt("Nombre d’exemplaires en supplément (0 si aucun)","0");if(extra===null||!Number.isInteger(Number(extra))||Number(extra)<0)return alert("Nombre invalide");const a=slxCollectionGet();a.push({id:slxId(),name:name.trim(),extra:Number(extra)});if(slxWrite("swiinglab_ball_collection_v1",a))slxCollection()}
-function slxBallEdit(id){const a=slxCollectionGet(),x=a.find(v=>v.id===id);if(!x)return;const name=prompt("Nom",x.name);if(name===null)return;const extra=prompt("Exemplaires en supplément",x.extra);if(extra===null)return;if(!name.trim()||!Number.isInteger(Number(extra))||Number(extra)<0)return alert("Valeur invalide");x.name=name.trim();x.extra=Number(extra);if(slxWrite("swiinglab_ball_collection_v1",a))slxCollection()}
+function slxBallAdd(){
+ const name=prompt("Nom du golf ou logo");if(!name||!name.trim())return;
+ const extra=prompt("Nombre d’exemplaires en supplément (0 si aucun)","0");if(extra===null||!Number.isInteger(Number(extra))||Number(extra)<0)return alert("Nombre invalide");
+ const a=slxCollectionGet(),id=slxId();a.push({id,name:name.trim(),extra:Number(extra),country:""});
+ if(slxWrite("swiinglab_ball_collection_v1",a))slxBallSheet(id);
+}
+function slxBallSheet(id){
+ const x=slxCollectionGet().find(v=>v.id===id);if(!x)return;
+ const ident=encodeURIComponent(id);
+ realUI(slxTop("Fiche de balle","slxCollection()","Collection")+
+ '<form class="info" onsubmit="slxBallSave(event,decodeURIComponent(\''+ident+'\'))">'+
+ (x.photo?'<img src="'+safe(x.photo)+'" alt="Photo de la balle" style="width:100%;max-height:280px;object-fit:contain;border-radius:12px;margin-bottom:12px">':'<p class="muted">Aucune photo enregistrée.</p>')+
+ '<div class="field"><label>Prendre une photo</label><input type="file" accept="image/*" capture="environment" onchange="slxBallCapture(this,decodeURIComponent(\''+ident+'\'))"></div>'+
+ '<div class="field"><label>Nom</label><input name="name" required value="'+safe(x.name)+'"></div>'+
+ '<div class="field"><label>Pays</label><input name="country" value="'+safe(x.country||"")+'"></div>'+
+ '<div class="field"><label>Balles supplémentaires (étoiles)</label><input name="extra" type="number" min="0" step="1" value="'+Number(x.extra||0)+'"></div>'+
+ '<button class="primary" type="submit">Enregistrer</button></form>');
+}
+function slxBallCapture(input,id){
+ const file=input.files&&input.files[0];if(!file)return;
+ const img=new Image(),url=URL.createObjectURL(file);
+ img.onload=()=>{
+  const canvas=document.createElement("canvas"),scale=Math.min(1,850/Math.max(img.width,img.height));
+  canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+  canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);URL.revokeObjectURL(url);
+  const photo=canvas.toDataURL("image/jpeg",0.6),a=slxCollectionGet(),ball=a.find(x=>x.id===id);
+  if(ball){ball.photo=photo;if(slxWrite("swiinglab_ball_collection_v1",a))slxBallSheet(id)}
+ };
+ img.onerror=()=>{URL.revokeObjectURL(url);alert("Impossible de lire cette photo.")};img.src=url;
+}
+function slxBallSave(ev,id){
+ ev.preventDefault();const f=new FormData(ev.target),a=slxCollectionGet(),ball=a.find(x=>x.id===id);
+ if(!ball)return;const extra=Number(f.get("extra"));if(!Number.isInteger(extra)||extra<0)return alert("Nombre de balles invalide.");
+ ball.name=String(f.get("name")||"").trim();ball.country=String(f.get("country")||"").trim();ball.extra=extra;
+ if(!ball.name)return alert("Nom requis.");if(slxWrite("swiinglab_ball_collection_v1",a))slxBallSheet(id);
+}
 /* Putt Tracker : graphe par distance et septième exercice libre, sans altérer les six précédents. */
 let slxPuttRange="max";
 function slxPuttingRows(){
@@ -386,3 +428,20 @@ function slxSeedFreeRounds2026(){
  }catch(e){console.warn("Parties libres non importées",e)}
 }
 window.addEventListener("load",()=>{slxSeedComps2026();slxSeedFreeRounds2026()});
+
+/* Bouton Retour contextuel à côté du bouton Accueil. */
+function slxGoBack(){
+ const target=document.querySelector("#screen .slBack, #screen .back");
+ if(target){target.click();return}slHome();
+}
+function slxReturnNav(){
+ const nav=document.querySelector("nav.nav");if(!nav)return;
+ if(!document.getElementById("slxNavReturn"))nav.insertAdjacentHTML("beforeend",'<button id="slxNavReturn" type="button" onclick="slxGoBack()"><span class="navIcon">‹</span><span>Retour</span></button>');
+ const btn=document.getElementById("slxNavReturn");if(btn)btn.style.display=document.querySelector("#screen .slBack, #screen .back")?"":"none";
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",slxReturnNav);else slxReturnNav();
+const slxScreen=document.getElementById("screen");
+if(slxScreen)new MutationObserver(slxReturnNav).observe(slxScreen,{childList:true,subtree:false});
+const slxStyle=document.createElement("style");
+slxStyle.textContent="#screen .slPageTop>.slBack{display:none}#slxNavReturn{flex:1}";
+document.head.appendChild(slxStyle);
