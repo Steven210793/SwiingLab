@@ -1,0 +1,286 @@
+{
+  "format": "swiinglab-collection-seed-v1",
+  "note": "Données de référence, pas de remplacement automatique des données locales. Les étoiles indiquent quantity-1.",
+  "items": [
+    {
+      "name": "Bassin Bleu Golf",
+      "location": "La Réunion, France",
+      "quantity": 2,
+      "category": "logotee"
+    },
+    {
+      "name": "Bussy-Saint-Georges",
+      "location": "France",
+      "quantity": 4,
+      "category": "logotee"
+    },
+    {
+      "name": "Castillo de Gorraiz Golf Club",
+      "location": "Espagne",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Dinard Golf",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Disneyland Paris — édition 1",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Disneyland Paris — édition 2",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Domont Montmorency",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Eurodisney",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Disneyland",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Saint-Cast — Centenaire",
+      "location": "Côte d’Émeraude, France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Saint-Cast — Classique",
+      "location": "Côte d’Émeraude, France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Sainte-Maxime",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Seignosse",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Saly",
+      "location": "Sénégal",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf des Gets",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf du Gouverneur",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf du Pic Saint-Loup",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Villacoublay",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf Club de Hossegor La Ferrière",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf Club Lyon-Salvagny",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Golf de Saint-Donat",
+      "location": "Grasse, France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Hua Hin Golf Club",
+      "location": "Thaïlande",
+      "quantity": 3,
+      "category": "logotee"
+    },
+    {
+      "name": "Koh Samui Golf Club",
+      "location": "Thaïlande",
+      "quantity": 3,
+      "category": "logotee"
+    },
+    {
+      "name": "Les Ormes Golf & Resort",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Loch Palm Golf Club",
+      "location": "Phuket, Thaïlande",
+      "quantity": 3,
+      "category": "logotee"
+    },
+    {
+      "name": "Malaisie",
+      "location": "Malaisie",
+      "quantity": 3,
+      "category": "logotee"
+    },
+    {
+      "name": "Niagara Falls",
+      "location": "Pays à confirmer",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Old Course Cannes Golf Links — blanc",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Old Course Cannes Golf Links — orange",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Old Course Cannes Golf Links — rose",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Old Course Cannes Golf Links — rouge",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Old Course Cannes Golf Links — vert",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Oliva Nova Golf Club",
+      "location": "Espagne",
+      "quantity": 2,
+      "category": "logotee"
+    },
+    {
+      "name": "Pérou",
+      "location": "Pérou",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "PGA Riviera Maya",
+      "location": "Mexique",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Red Mountain Golf Club",
+      "location": "Phuket, Thaïlande",
+      "quantity": 3,
+      "category": "logotee"
+    },
+    {
+      "name": "Ryder Cup 2023 — Marco Simone",
+      "location": "Rome, Italie",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Saint Andrews",
+      "location": "Écosse, Royaume-Uni",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Saint-Malo Golf Resort",
+      "location": "France",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "Southwood G.C.",
+      "location": "Pays à confirmer",
+      "quantity": 1,
+      "category": "logotee"
+    },
+    {
+      "name": "TaylorMade TP5 — Halloween",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Piment",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Cornichon",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Tacos",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Dés de casino",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Fléchettes",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Pêches",
+      "quantity": 1,
+      "category": "thematique"
+    },
+    {
+      "name": "TaylorMade TP5 — Tête de dragon",
+      "quantity": 1,
+      "category": "thematique"
+    }
+  ]
+}
