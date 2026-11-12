@@ -176,7 +176,7 @@ function slxCourseAdd(){const name=prompt("Nom du golf joué");if(!name||!name.t
 function slxCourseView(name){const x=slxRead("swiinglab_courses_meta_v1",{}),m=x[name]||{};
  realUI(slxTop(name,"slxCourses()","Mes parcours")+'<div class="info"><div class="field"><label>Pays / localisation</label><input id="slxCourseCountry" value="'+safe(m.country||"")+'"></div><div class="field"><label>Note personnelle sur 10</label><input id="slxCourseRating" type="number" min="0" max="10" value="'+safe(m.rating||"")+'"></div><div class="field"><label>Commentaires</label><textarea id="slxCourseNotes">'+safe(m.notes||"")+'</textarea></div><button class="primary" onclick="slxCourseSave(decodeURIComponent(\''+encodeURIComponent(name)+'\'))">Enregistrer</button></div>')}
 function slxCourseSave(name){const d=slxRead("swiinglab_courses_meta_v1",{});d[name]={country:document.getElementById("slxCourseCountry").value,rating:document.getElementById("slxCourseRating").value,notes:document.getElementById("slxCourseNotes").value};if(slxWrite("swiinglab_courses_meta_v1",d))slxCourses()}
-profile=function(){slxNav("Mon profil","slHome()",[['◯','Profil','Nom, index et apparence','slxPlayer()',true],['↥','TrackMan','Importer / exporter JSON','slxImport()',true],['▣','Sauvegarde','Sauvegarde complète et restauration','slxBackup()',true],['◉','Mon passeport golf','Pays et parcours découverts','slxPassport()',true],['★','Mes années golf','Archives Golf Wrapped','slxYears()',true],['◎','Ma collection de balles','Balles logotées et doubles','slxCollection()',true],['↗','Partager','SMS, WhatsApp…','shareApp()',true]])};
+profile=function(){slxNav("Mon profil","slHome()",[['◯','Profil','Nom, index et apparence','slxPlayer()',true],['↥','TrackMan','Importer / exporter JSON','slxImport()',true],['▣','Sauvegarde','Sauvegarde complète et restauration','slxBackup()',true],['◉','Mon passeport golf','Pays et parcours découverts','slxPassport()',true],['★','Mes années golf','Archives Golf Wrapped','slxYears()',true],['◎','Ma collection de balles','Balles logotées et doubles','slxCollection()',true],['↗','Partager','SMS, WhatsApp…','shareApp()',true]]);const el=document.getElementById('screen');if(el)el.insertAdjacentHTML('afterbegin','<p class="muted" style="text-align:center;margin:4px 0 14px">Version '+slxAppVersion+' · '+slxAppVersionDate+'</p>')};
 function slxPlayer(){const p=loadProfile();
  realUI(slxTop("Profil du joueur","profile()","Mon profil")+'<p class="muted">SwiingLab · '+slxAppVersion+' · Mise à jour du '+slxAppVersionDate+'</p>'+'<form class="info" onsubmit="slxSavePlayer(event)"><div class="field"><label>Nom</label><input name="name" value="'+safe(p.name||"")+'"></div><div class="field"><label>Index de golf</label><input name="index" value="'+safe(p.index||"")+'"></div><button class="primary" type="submit">Sauvegarder</button></form>'+
  '<div class="info"><h3>Apparence</h3><button class="secondary" onclick="toggleTheme();slxPlayer()">Changer de thème</button></div>');
@@ -331,7 +331,7 @@ slxWrappedCheck=function(){
 };
 
 /* SwiingLab V1.0.0 — 12/11/2026. Catalogue de départ : n'écrase jamais la collection locale existante. */
-const slxAppVersion="V1.0.0";
+const slxAppVersion="V1.1.0";
 const slxAppVersionDate="12/11/2026";
 const slxInitialBalls=[["Bassin Bleu Golf — La Réunion",1],["Bussy-Saint-Georges",3],["Castillo de Gorraiz Golf Club",0],["Dinard Golf",0],["Disneyland Paris — édition 1",0],["Disneyland Paris — édition 2",0],["Domont Montmorency",0],["Eurodisney",0],["Golf de Disneyland",0],["Golf de Saint-Cast — Centenaire",0],["Golf de Saint-Cast — Classique",0],["Golf de Sainte-Maxime",0],["Golf de Seignosse",0],["Golf de Saly",0],["Golf des Gets",0],["Golf du Gouverneur",0],["Golf du Pic Saint-Loup",0],["Golf de Villacoublay",0],["Golf Club de Hossegor La Ferrière",0],["Golf Club Lyon-Salvagny",0],["Golf de Saint-Donat",0],["Hua Hin Golf Club",2],["Koh Samui Golf Club",2],["Les Ormes Golf & Resort",0],["Loch Palm Golf Club",2],["Malaisie",2],["Niagara Falls",0],["Old Course Cannes Golf Links — blanc",0],["Old Course Cannes Golf Links — orange",0],["Old Course Cannes Golf Links — rose",0],["Old Course Cannes Golf Links — rouge",0],["Old Course Cannes Golf Links — vert",0],["Oliva Nova Golf Club",1],["Pérou",0],["PGA Riviera Maya",0],["Red Mountain Golf Club",2],["Ryder Cup 2023 — Marco Simone",0],["Saint Andrews",0],["Saint-Malo Golf Resort",0],["Southwood G.C.",0],["TaylorMade TP5 — Halloween",0],["TaylorMade TP5 — Piment",0],["TaylorMade TP5 — Cornichon",0],["TaylorMade TP5 — Tacos",0],["TaylorMade TP5 — Dés de casino",0],["TaylorMade TP5 — Fléchettes",0],["TaylorMade TP5 — Pêches",0],["TaylorMade TP5 — Tête de dragon",0]];
 function slxSeedBalls(){
@@ -341,3 +341,36 @@ function slxSeedBalls(){
  slxWrite(key,a);
 }
 slxSeedBalls();
+
+
+/* Données initiales du 12 novembre 2026 : aucune partie existante n'est remplacée. */
+const slxInitialComps2026=[["Coupe du Directeur","2026-10-04","La Jonchère","Blancs",93],["Départ Florence – Coupe du perso","2022-09-03","La Jonchère","Blancs",95],["Heritage World Cup","2022-04-03","La Jonchère","Blancs",84],["Coupe du Président","2021-06-26","La Jonchère","Blancs",82],["Grand Trophée LIONS","2021-05-30","La Jonchère","Jaunes",81],["Championnat du club","2021-05-09","La Jonchère","Jaunes",87],["Classement Galette des Rois","2019-01-06","Les Cerfs","Jaunes",99],["Classement dimanche 04 novembre 2018","2018-11-04","Hyverneaux-Corbuches","Jaunes",94],["Coupe USCL","2013-10-27","Hyverneaux-Corbuches","Jaunes",85]];
+function slxSeedComps2026(){
+ try{
+  const key="swiinglab_competitions_v1",rows=slxCompsGet();if(!Array.isArray(rows))return;
+  let changed=false;
+  const norm=x=>String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+  for(const [name,date,course,tees,sba] of slxInitialComps2026){
+   if(rows.some(x=>x.date===date&&norm(x.name)===norm(name)))continue;
+   rows.push({id:"ffgolf-"+date+"-"+norm(name),name,date,course,format:"Stableford · "+tees,gross:"",net:"",place:"",players:"",index:"",sba,source:"Capture FFGolf"});
+   changed=true;
+  }
+  if(changed)slxWrite(key,rows);
+ }catch(e){console.warn("Compétitions non importées",e)}
+}
+const slxInitialFreeRounds2026=[["Lyon Salvagny Golf Club","Les Étangs","2026-09-14",[4,4,5,4,3,5,3,4,4,5,4,4,4,3,5,4,3,4],[6,5,5,4,6,6,3,5,4,5,5,5,7,4,6,4,4,4],[11,7,17,1,15,5,13,3,9,10,4,14,2,8,16,18,6,12]],["Golf de Saint-Cast Côte d'Émeraude","Links 1926","2026-08-17",[5,3,4,3,4,4,4,4,4,3,4,3,4,4,5,4,4,3],[7,3,4,4,4,4,4,4,4,4,4,5,4,5,5,4,5,3],[10,16,4,18,2,14,8,6,12,17,13,15,11,1,3,5,7,9]]];
+function slxSeedFreeRounds2026(){
+ try{
+  const db=realGet();if(!Array.isArray(db.rounds)||!Array.isArray(db.courses))return;
+  const seen=new Set(db.rounds.map(realRoundFingerprint));let changed=false;
+  for(const [golf,name,date,pars,scores,hcps] of slxInitialFreeRounds2026){
+   const round=realParseRound({golf,name,date,holes:pars.map((par,i)=>({par,shots:scores[i],hcp:hcps[i]}))});
+   const fp=realRoundFingerprint(round);
+   if(seen.has(fp))continue;
+   db.rounds.push(round);seen.add(fp);changed=true;
+   if(!db.courses.some(c=>c.golf===golf&&c.name===name&&c.count===round.count))db.courses.push({golf,name,count:round.count,pars:pars.slice()});
+  }
+  if(changed)realSave(db);
+ }catch(e){console.warn("Parties libres non importées",e)}
+}
+window.addEventListener("load",()=>{slxSeedComps2026();slxSeedFreeRounds2026()});
