@@ -337,7 +337,7 @@ const slxInitialBalls=[["Bassin Bleu Golf — La Réunion",1],["Bussy-Saint-Geor
 function slxSeedBalls(){
  const key="swiinglab_ball_collection_v1",stored=localStorage.getItem(key);
  const a=slxRead(key,[]);if(!Array.isArray(a))return;
- const norm=x=>String(x||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+ const norm=x=>String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
  let changed=stored===null;
  for(const [name,extra] of slxInitialBalls){
   if(a.some(x=>norm(x.name)===norm(name)))continue;
