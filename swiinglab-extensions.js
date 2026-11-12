@@ -335,10 +335,15 @@ const slxAppVersion="V1.1.0";
 const slxAppVersionDate="12/11/2026";
 const slxInitialBalls=[["Bassin Bleu Golf — La Réunion",1],["Bussy-Saint-Georges",3],["Castillo de Gorraiz Golf Club",0],["Dinard Golf",0],["Disneyland Paris — édition 1",0],["Disneyland Paris — édition 2",0],["Domont Montmorency",0],["Eurodisney",0],["Golf de Disneyland",0],["Golf de Saint-Cast — Centenaire",0],["Golf de Saint-Cast — Classique",0],["Golf de Sainte-Maxime",0],["Golf de Seignosse",0],["Golf de Saly",0],["Golf des Gets",0],["Golf du Gouverneur",0],["Golf du Pic Saint-Loup",0],["Golf de Villacoublay",0],["Golf Club de Hossegor La Ferrière",0],["Golf Club Lyon-Salvagny",0],["Golf de Saint-Donat",0],["Hua Hin Golf Club",2],["Koh Samui Golf Club",2],["Les Ormes Golf & Resort",0],["Loch Palm Golf Club",2],["Malaisie",2],["Niagara Falls",0],["Old Course Cannes Golf Links — blanc",0],["Old Course Cannes Golf Links — orange",0],["Old Course Cannes Golf Links — rose",0],["Old Course Cannes Golf Links — rouge",0],["Old Course Cannes Golf Links — vert",0],["Oliva Nova Golf Club",1],["Pérou",0],["PGA Riviera Maya",0],["Red Mountain Golf Club",2],["Ryder Cup 2023 — Marco Simone",0],["Saint Andrews",0],["Saint-Malo Golf Resort",0],["Southwood G.C.",0],["TaylorMade TP5 — Halloween",0],["TaylorMade TP5 — Piment",0],["TaylorMade TP5 — Cornichon",0],["TaylorMade TP5 — Tacos",0],["TaylorMade TP5 — Dés de casino",0],["TaylorMade TP5 — Fléchettes",0],["TaylorMade TP5 — Pêches",0],["TaylorMade TP5 — Tête de dragon",0]];
 function slxSeedBalls(){
- const key="swiinglab_ball_collection_v1";
- if(localStorage.getItem(key)!==null)return;
- const a=slxInitialBalls.map(([name,extra],i)=>({id:"initial-ball-"+String(i+1).padStart(2,"0"),name,extra}));
- slxWrite(key,a);
+ const key="swiinglab_ball_collection_v1",stored=localStorage.getItem(key);
+ const a=slxRead(key,[]);if(!Array.isArray(a))return;
+ const norm=x=>String(x||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+ let changed=stored===null;
+ for(const [name,extra] of slxInitialBalls){
+  if(a.some(x=>norm(x.name)===norm(name)))continue;
+  a.push({id:"initial-ball-"+String(a.length+1).padStart(2,"0"),name,extra});changed=true;
+ }
+ if(changed)slxWrite(key,a);
 }
 slxSeedBalls();
 
