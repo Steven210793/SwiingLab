@@ -31,10 +31,10 @@ function slxComps(){
  const a=slxCompsGet().slice().sort((x,y)=>y.date.localeCompare(x.date));
  realUI(slxTop("Carnet de compétitions","slxCompetition()","Compétition")+
  '<button class="primary" onclick="slxCompForm()">＋ Ajouter une compétition</button>'+
- (a.length?a.map(x=>'<div class="menuCard" onclick="slxCompForm(\''+x.id+'\')"><b>'+safe(x.name)+'</b><span class="muted">'+safe(x.date)+' · '+safe(x.course||"")+' · '+safe(x.format||"")+'</span><p>Brut '+safe(x.gross||"—")+' · Net '+safe(x.net||"—")+' · '+safe(x.place||"—")+' / '+safe(x.players||"—")+'</p></div>').join(''):slxEmpty));
+ (a.length?a.map(x=>'<div class="menuCard" onclick="slxCompForm(\''+x.id+'\')"><b>'+safe(x.name)+'</b><span class="muted">'+safe(x.date)+' · '+safe(x.course||"")+' · '+safe(x.format||"")+'</span><p>Brut '+safe(x.gross||"—")+' · '+safe(x.place||"—")+' / '+safe(x.players||"—")+'</p></div>').join(''):slxEmpty));
 }
 function slxCompForm(id){
- const e=slxCompsGet().find(x=>x.id===id)||{},fields=[["name","Nom de la compétition","text"],["date","Date","date"],["course","Parcours","text"],["format","Formule de jeu","text"],["gross","Score brut","number"],["net","Score net","number"],["place","Position au classement","number"],["players","Nombre de participants","number"],["index","Index après compétition","number"]];
+ const e=slxCompsGet().find(x=>x.id===id)||{},fields=[["name","Nom de la compétition","text"],["date","Date","date"],["course","Parcours","text"],["format","Formule de jeu","text"],["gross","Score brut","number"],["place","Position au classement","number"],["players","Nombre de participants","number"],["index","Index après compétition","number"]];
  realUI(slxTop(id?"Modifier une compétition":"Nouvelle compétition","slxComps()","Carnet")+
  '<div class="info"><form id="slxCompForm" onsubmit="slxCompSave(event,\''+(id||"")+'\')">'+fields.map(([key,label,type])=>'<div class="field"><label>'+label+'</label><input name="'+key+'" type="'+type+'" '+(type==="number"?'min="0" step="'+(key==="index"?'0.1':'1')+'"':'')+' value="'+safe(e[key]??(key==="date"?new Date().toISOString().slice(0,10):""))+'"></div>').join('')+
  '<button class="primary" type="submit">Enregistrer</button></form>'+(id?'<button class="secondary" onclick="slxCompDelete(\''+id+'\')">Supprimer</button>':'')+'</div>');
@@ -42,14 +42,14 @@ function slxCompForm(id){
 function slxCompSave(ev,id){
  ev.preventDefault();const f=new FormData(ev.target),r=Object.fromEntries(f.entries());if(!r.name.trim()){alert("Nom de compétition requis");return}
  if(r.place&&r.players&&Number(r.place)>Number(r.players)){alert("La position dépasse le nombre de participants.");return}
- const a=slxCompsGet(),i=a.findIndex(x=>x.id===id);r.id=id||slxId();if(i>=0)a[i]=r;else a.push(r);if(slxWrite("swiinglab_competitions_v1",a))slxComps();
+ const a=slxCompsGet(),i=a.findIndex(x=>x.id===id);if(i>=0&&a[i].net!==undefined)r.net=a[i].net;r.id=id||slxId();if(i>=0)a[i]=r;else a.push(r);if(slxWrite("swiinglab_competitions_v1",a))slxComps();
 }
 function slxCompDelete(id){if(!confirm("Supprimer cette compétition ?"))return;slxWrite("swiinglab_competitions_v1",slxCompsGet().filter(x=>x.id!==id));slxComps()}
 function slxIndex(){
  const all=slxCompsGet().filter(x=>x.index!==""&&slxNum(x.index)!==null).sort((a,b)=>a.date.localeCompare(b.date)),last=all.at(-1),best=all.length?Math.min(...all.map(x=>slxNum(x.index))):null;
  realUI(slxTop("Suivi de mon index WHS","slxCompetition()","Compétition")+'<div class="statsGrid"><div class="stat">Index actuel<strong>'+(last?safe(last.index):"—")+'</strong></div><div class="stat">Meilleur index<strong>'+(best===null?"—":best)+'</strong></div></div>'+
  '<p class="muted">Évolution interne selon les index saisis dans tes compétitions. L’index officiel reste celui de la FFGolf.</p>'+
- slxWHSChart(all)+(all.length?all.map(x=>'<div class="histItem"><b>'+safe(x.date)+'</b><span>'+safe(x.index)+' · '+safe(x.name)+'</span></div>').join(''):slxEmpty));
+ slxWHSChart(all)+(all.length?all.slice().reverse().map(x=>'<div class="histItem"><b>'+safe(x.date)+'</b><span>'+safe(x.index)+' · '+safe(x.name)+'</span></div>').join(''):slxEmpty));
 }
 function slxWHSChart(all){
  const a=all.filter(x=>slxNum(x.index)!==null&&/^\\d{4}-\\d{2}-\\d{2}$/.test(x.date||""));
@@ -177,12 +177,12 @@ function slxMaintSave(ev,id){ev.preventDefault();const r=Object.fromEntries(new 
 function slxCourses(){
  const db=realGet(),rounds=db.rounds||[],additional=slxRead("swiinglab_courses_v1",[]),names=[...new Set([...rounds.map(r=>String(r.golf||r.course||"").trim()),...additional.map(x=>x.name)].filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
  realUI(slxTop("Mes parcours","slHome()")+'<button class="primary" onclick="slxCourseAdd()">＋ Ajouter un golf joué</button>'+
- (names.length?names.map(n=>'<div class="menuCard" onclick="slxCourseView(decodeURIComponent(\''+encodeURIComponent(n)+'\'))"><b>'+safe(n)+'</b><span class="muted">'+rounds.filter(r=>(r.golf||r.course)===n).length+' carte(s) réelle(s)</span></div>').join(''):slxEmpty)+
+ (names.length?names.map(n=>'<div class="menuCard" onclick="slxCourseView(decodeURIComponent(\''+slxSafeURIComponent(n)+'\'))"><b>'+safe(n)+'</b><span class="muted">'+rounds.filter(r=>(r.golf||r.course)===n).length+' carte(s) réelle(s)</span></div>').join(''):slxEmpty)+
  '<button class="secondary" onclick="slRealHome()">Mes cartes de parties réelles</button>');
 }
 function slxCourseAdd(){const name=prompt("Nom du golf joué");if(!name||!name.trim())return;const a=slxRead("swiinglab_courses_v1",[]);if(!a.some(x=>x.name.toLowerCase()===name.trim().toLowerCase()))a.push({name:name.trim(),date:new Date().toISOString().slice(0,10)});slxWrite("swiinglab_courses_v1",a);slxCourses()}
 function slxCourseView(name){const x=slxRead("swiinglab_courses_meta_v1",{}),m=x[name]||{};
- realUI(slxTop(name,"slxCourses()","Mes parcours")+'<div class="info"><div class="field"><label>Pays / localisation</label><input id="slxCourseCountry" value="'+safe(m.country||"")+'"></div><div class="field"><label>Note personnelle sur 10</label><input id="slxCourseRating" type="number" min="0" max="10" value="'+safe(m.rating||"")+'"></div><div class="field"><label>Commentaires</label><textarea id="slxCourseNotes">'+safe(m.notes||"")+'</textarea></div><button class="primary" onclick="slxCourseSave(decodeURIComponent(\''+encodeURIComponent(name)+'\'))">Enregistrer</button></div>')}
+ realUI(slxTop(name,"slxCourses()","Mes parcours")+'<div class="info"><div class="field"><label>Pays / localisation</label><input id="slxCourseCountry" value="'+safe(m.country||"")+'"></div><div class="field"><label>Note personnelle sur 10</label><input id="slxCourseRating" type="number" min="0" max="10" value="'+safe(m.rating||"")+'"></div><div class="field"><label>Commentaires</label><textarea id="slxCourseNotes">'+safe(m.notes||"")+'</textarea></div><button class="primary" onclick="slxCourseSave(decodeURIComponent(\''+slxSafeURIComponent(name)+'\'))">Enregistrer</button></div>')}
 function slxCourseSave(name){const d=slxRead("swiinglab_courses_meta_v1",{});d[name]={country:document.getElementById("slxCourseCountry").value,rating:document.getElementById("slxCourseRating").value,notes:document.getElementById("slxCourseNotes").value};if(slxWrite("swiinglab_courses_meta_v1",d))slxCourses()}
 profile=function(){slxNav("Mon profil","slHome()",[['◯','Profil','Nom et index','slxPlayer()',true],['↥','TrackMan','Importer / exporter JSON','slxImport()',true],['▣','Sauvegarde','Sauvegarde complète et restauration','slxBackup()',true],['◉','Mon passeport golf','Pays et parcours découverts','slxPassport()',true],['★','Mes années golf','Archives Golf Wrapped','slxYears()',true],['◎','Ma collection de balles','Balles logotées et doubles','slxCollection()',true],['↗','Partager','SMS, WhatsApp…','shareApp()',true]]);const el=document.getElementById('screen');if(el)el.insertAdjacentHTML('afterbegin','<p class="muted" style="text-align:center;margin:4px 0 14px">Version '+slxAppVersion+' · '+slxAppVersionDate+'</p>')};
 function slxPlayer(){const p=loadProfile();
@@ -191,14 +191,15 @@ function slxPlayer(){const p=loadProfile();
 function slxSavePlayer(ev){ev.preventDefault();if(slxWrite("mag_profile",Object.fromEntries(new FormData(ev.target)))){alert("Profil sauvegardé.");profile()}}
 function slxImport(){realUI(slxTop("TrackMan — Importation JSON","profile()","Mon profil")+'<div class="info"><h3>Importer des données</h3><input type="file" accept=".json,application/json" onchange="tmImport(this)"><p class="muted">'+tmData().reduce((a,x)=>a+(x.shots||[]).length,0)+' coups TrackMan enregistrés.</p><button class="secondary" onclick="tmExport()">Exporter mes données TrackMan</button></div>')}
 function slxBackup(){realUI(slxTop("Sauvegarde complète","profile()","Mon profil")+'<div class="info"><button class="primary" onclick="tmBackup()">Télécharger / partager ma sauvegarde</button><div class="field"><label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="tmRestore(this)"></div></div>')}
+function slxSafeURIComponent(value){return encodeURIComponent(value).replace(/'/g,'%27')}
 function slxPassport(){
  const names=[...new Set([...(realGet().rounds||[]).map(x=>x.golf||x.course),...slxRead("swiinglab_courses_v1",[]).map(x=>x.name)].filter(Boolean))],meta=slxRead("swiinglab_courses_meta_v1",{}),countries=[...new Set(names.map(n=>meta[n]?.country).filter(Boolean))];
  realUI(slxTop("Mon passeport golf","profile()","Mon profil")+'<div class="statsGrid"><div class="stat">Parcours découverts<strong>'+names.length+'</strong></div><div class="stat">Pays renseignés<strong>'+countries.length+'</strong></div></div>'+
- (names.length?names.map(n=>'<div class="histItem"><b>'+safe(meta[n]?.displayName||n)+'</b><span>'+safe(meta[n]?.country||"Pays à préciser")+' <button class="secondary" onclick="slxPassportEdit(decodeURIComponent(\''+encodeURIComponent(n)+'\'))">Modifier</button></span></div>').join(''):slxEmpty));
+ (names.length?names.map(n=>'<div class="histItem"><b>'+safe(meta[n]?.displayName||n)+'</b><span>'+safe(meta[n]?.country||"Pays à préciser")+' <button class="secondary" onclick="slxPassportEdit(decodeURIComponent(\''+slxSafeURIComponent(n)+'\'))">Modifier</button></span></div>').join(''):slxEmpty));
 }
 function slxPassportEdit(name){
  const meta=slxRead("swiinglab_courses_meta_v1",{}),m=meta[name]||{};
- realUI(slxTop("Modifier le parcours","slxPassport()","Mon passeport golf")+'<form class="info" onsubmit="slxPassportSave(event,decodeURIComponent(\''+encodeURIComponent(name)+'\'))"><div class="field"><label>Nom du golf</label><input name="displayName" required value="'+safe(m.displayName||name)+'"></div><div class="field"><label>Pays</label><input name="country" value="'+safe(m.country||"")+'"></div><button class="primary" type="submit">Enregistrer</button></form>');
+ realUI(slxTop("Modifier le parcours","slxPassport()","Mon passeport golf")+'<form class="info" onsubmit="slxPassportSave(event,decodeURIComponent(\''+slxSafeURIComponent(name)+'\'))"><div class="field"><label>Nom du golf</label><input name="displayName" required value="'+safe(m.displayName||name)+'"></div><div class="field"><label>Pays</label><input name="country" value="'+safe(m.country||"")+'"></div><button class="primary" type="submit">Enregistrer</button></form>');
 }
 function slxPassportSave(ev,name){
  ev.preventDefault();const f=new FormData(ev.target),d=slxRead("swiinglab_courses_meta_v1",{});
@@ -380,7 +381,7 @@ slxWrappedCheck=function(){
 };
 
 /* SwiingLab V1.0.0 — 12/11/2026. Catalogue de départ : n'écrase jamais la collection locale existante. */
-const slxAppVersion="V1.2.0";
+const slxAppVersion="V1.2.1";
 const slxAppVersionDate="12/11/2026";
 const slxInitialBalls=[["Bassin Bleu Golf — La Réunion",1],["Bussy-Saint-Georges",3],["Castillo de Gorraiz Golf Club",0],["Dinard Golf",0],["Disneyland Paris — édition 1",0],["Disneyland Paris — édition 2",0],["Domont Montmorency",0],["Eurodisney",0],["Golf de Disneyland",0],["Golf de Saint-Cast — Centenaire",0],["Golf de Saint-Cast — Classique",0],["Golf de Sainte-Maxime",0],["Golf de Seignosse",0],["Golf de Saly",0],["Golf des Gets",0],["Golf du Gouverneur",0],["Golf du Pic Saint-Loup",0],["Golf de Villacoublay",0],["Golf Club de Hossegor La Ferrière",0],["Golf Club Lyon-Salvagny",0],["Golf de Saint-Donat",0],["Hua Hin Golf Club",2],["Koh Samui Golf Club",2],["Les Ormes Golf & Resort",0],["Loch Palm Golf Club",2],["Malaisie",2],["Niagara Falls",0],["Old Course Cannes Golf Links — blanc",0],["Old Course Cannes Golf Links — orange",0],["Old Course Cannes Golf Links — rose",0],["Old Course Cannes Golf Links — rouge",0],["Old Course Cannes Golf Links — vert",0],["Oliva Nova Golf Club",1],["Pérou",0],["PGA Riviera Maya",0],["Red Mountain Golf Club",2],["Ryder Cup 2023 — Marco Simone",0],["Saint Andrews",0],["Saint-Malo Golf Resort",0],["Southwood G.C.",0],["TaylorMade TP5 — Halloween",0],["TaylorMade TP5 — Piment",0],["TaylorMade TP5 — Cornichon",0],["TaylorMade TP5 — Tacos",0],["TaylorMade TP5 — Dés de casino",0],["TaylorMade TP5 — Fléchettes",0],["TaylorMade TP5 — Pêches",0],["TaylorMade TP5 — Tête de dragon",0]];
 function slxSeedBalls(){
