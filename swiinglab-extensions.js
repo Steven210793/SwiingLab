@@ -443,5 +443,5 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 const slxScreen=document.getElementById("screen");
 if(slxScreen)new MutationObserver(slxReturnNav).observe(slxScreen,{childList:true,subtree:false});
 const slxStyle=document.createElement("style");
-slxStyle.textContent="#screen .slPageTop>.slBack{display:none}#slxNavReturn{flex:1}";
+slxStyle.textContent="#screen .slPageTop>.slBack{display:none}nav.nav{grid-template-columns:repeat(2,minmax(0,1fr));justify-items:stretch;gap:8px}nav.nav:has(#slxNavReturn[style*=\"display: none\"]){grid-template-columns:minmax(0,1fr);justify-items:center}nav.nav button{width:100%;max-width:none;box-sizing:border-box}#slxNavReturn{min-width:0}";
 document.head.appendChild(slxStyle);
