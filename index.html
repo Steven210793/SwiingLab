@@ -2584,7 +2584,7 @@ const bestTrainingStreak=evaluated.reduce((best,s)=>Math.max(best,bestStreak(Arr
 
 S.innerHTML=`
 
-<div class="muted">SwiingLab · V2.0</div>
+<div class="muted">SwiingLab · V2.1</div>
 <h1>Profil</h1>
 
 <div class="info">
@@ -3159,11 +3159,94 @@ function slHome(){
  slCard('◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true)+
  slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
  slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
+ slCard('🏆','Compétition','Évolution de mon index','slCompetitionHome()',true)+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
  slCard('◯','Mon profil','Sac et informations','profile()',true)+
  '</div>');
  setActiveTab('accueil');
 }
+
+/* V2.1 : index WHS déclaré, jamais calculé à partir d'un score brut. */
+const slCompetitionKey='swiinglab_competition_index_v1';
+function slCompetitionRecords(){
+ try{const a=JSON.parse(localStorage.getItem(slCompetitionKey)||'[]');return Array.isArray(a)?a.filter(x=>x&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&Number.isFinite(Number(x.index))):[]}
+ catch(e){return []}
+}
+function slCompetitionAddIndex(date,value){
+ const v=Number(String(value).replace(',','.'));
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z'))||!Number.isFinite(v)||v< -10||v>54)throw Error('Date ou index invalide (de -10 à 54).');
+ const list=slCompetitionRecords();
+ const found=list.findIndex(x=>x.date===date);
+ if(found>=0)list[found]={date,index:v};else list.push({date,index:v});
+ localStorage.setItem(slCompetitionKey,JSON.stringify(list));
+}
+function slCompetitionGraph(){
+ const list=slCompetitionRecords().sort((a,b)=>a.date.localeCompare(b.date));
+ if(!list.length)return '<div class="info"><p class="muted">Aucune évolution enregistrée. Ajoute ton index officiel après une compétition pour commencer le graphique.</p></div>';
+ const width=320,height=215,left=40,right=12,top=22,bottom=48;
+ const min=Math.min(...list.map(x=>Number(x.index))),max=Math.max(...list.map(x=>Number(x.index)));
+ const lo=Math.floor((min-0.5)*2)/2,hi=Math.ceil((max+0.5)*2)/2;
+ const plotW=width-left-right,plotH=height-top-bottom;
+ const xp=i=>left+(list.length===1?plotW/2:i*plotW/(list.length-1));
+ const yp=v=>top+(hi-v)/(hi-lo)*plotH;
+ const coords=list.map((x,i)=>xp(i).toFixed(1)+','+yp(x.index).toFixed(1));
+ const ticks=[0,1,2,3,4].map(i=>{
+  const val=lo+(hi-lo)*i/4,y=yp(val);
+  return '<line x1="'+left+'" y1="'+y+'" x2="'+(width-right)+'" y2="'+y+'" stroke="currentColor" opacity=".13"/><text x="'+(left-7)+'" y="'+(y+4)+'" font-size="10" text-anchor="end" fill="currentColor">'+val.toFixed(1)+'</text>'
+ }).join('');
+ const dates=[...new Set([0,Math.floor((list.length-1)/2),list.length-1])].map(i=>'<text x="'+xp(i)+'" y="'+(height-20)+'" font-size="9" text-anchor="middle" fill="currentColor">'+safe(list[i].date.slice(5))+'</text>').join('');
+ const points=list.map((x,i)=>'<circle cx="'+xp(i)+'" cy="'+yp(x.index)+'" r="3.5" fill="#e3b34a"><title>'+safe(x.date)+' : '+x.index.toFixed(1)+'</title></circle>').join('');
+ return '<div class="info"><svg viewBox="0 0 320 215" role="img" aria-label="Évolution de l’index par date" style="width:100%;height:auto;color:var(--text)">'+ticks+
+ (list.length>1?'<polyline points="'+coords.join(' ')+'" fill="none" stroke="#e3b34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>':'')+
+ points+dates+'</svg><p class="muted">Dates en bas · Index sur l’axe vertical · Dernier index : <strong>'+list[list.length-1].index.toFixed(1)+'</strong></p></div>';
+}
+function slCompetitionHome(){
+ const list=slCompetitionRecords().sort((a,b)=>b.date.localeCompare(a.date));
+ const today=new Date(),localDate=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">COMPÉTITION</span><h1>Évolution de mon index</h1><p>Suivi de l’index officiel après chaque compétition.</p></div>'+
+ slCompetitionGraph()+
+ '<div class="info"><h3>Enregistrer mon index après compétition</h3><div class="field"><label>Date</label><input id="slCompetitionDate" type="date" value="'+localDate+'"></div><div class="field"><label>Nouvel index officiel</label><input id="slCompetitionIndex" type="number" min="-10" max="54" step="0.1" placeholder="Ex. : 18.4"></div><button onclick="slCompetitionSave()">Ajouter au graphique</button><p class="muted">L’index est celui communiqué officiellement : il ne peut pas être déduit d’une simple carte de score.</p></div>'+
+ '<div class="info"><h3>Importer une carte de compétition</h3><p class="muted">Fichier JSON SwiingLab de parcours réels. Si le fichier contient « indexAfter », l’index sera ajouté automatiquement au graphique.</p><input type="file" accept=".json,application/json" onchange="slCompetitionImport(this)"></div>'+
+ (list.length?'<div class="info"><h3>Index enregistrés</h3>'+list.slice(0,12).map(r=>'<div class="histItem"><span>'+safe(r.date)+'</span><b>'+Number(r.index).toFixed(1)+'</b></div>').join('')+'</div>':''));
+ setActiveTab('progression');
+}
+function slCompetitionSave(){
+ try{
+  slCompetitionAddIndex(document.getElementById('slCompetitionDate').value,document.getElementById('slCompetitionIndex').value);
+  slCompetitionHome();
+ }catch(e){alert(e.message)}
+}
+function slCompetitionImport(input){
+ const f=input.files&&input.files[0];if(!f)return;
+ if(f.size>2000000){alert('Fichier trop volumineux.');input.value='';return}
+ f.text().then(t=>{
+  try{
+   const payload=JSON.parse(t);
+   if(payload?.format!=='swiinglab-real-rounds-v1'||!Array.isArray(payload.rounds)||!payload.rounds.length||payload.rounds.length>100)throw Error('Fichier de parcours réels SwiingLab attendu.');
+   const parsed=payload.rounds.map(raw=>({raw,round:realParseRound(raw)}));
+   const d=realGet(),seen=new Set(d.rounds.map(realRoundFingerprint));
+   let added=0,indices=0;
+   const updates=[];
+   for(const {raw,round} of parsed){
+    const fp=realRoundFingerprint(round);
+    if(!seen.has(fp)){round.source='competition';d.rounds.push(round);seen.add(fp);added++;
+     if(!d.courses.some(c=>c.golf===round.golf&&c.name===round.name&&c.count===round.count))d.courses.push({golf:round.golf,name:round.name,count:round.count,pars:round.holes.map(h=>h.par)})}
+    const indexAfter=raw.indexAfter??raw.handicapIndexAfter;
+    if(indexAfter!==null&&indexAfter!==undefined&&indexAfter!==''){
+      const v=Number(String(indexAfter).replace(',','.'));
+      if(!round.date||!Number.isFinite(v)||v< -10||v>54)throw Error('indexAfter ou date incorrect dans une carte.');
+      updates.push({date:round.date,index:v});
+    }
+   }
+   if(added)realSave(d);
+   for(const u of updates){slCompetitionAddIndex(u.date,u.index);indices++}
+   alert(added+' carte(s) importée(s), '+indices+' point(s) d’index mis à jour.');
+   slCompetitionHome();
+  }catch(e){alert('Import impossible : '+e.message)}
+  finally{input.value=''}
+ }).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
+}
+
 function slRealHome(){
  const rounds=realGet().rounds||[];
  const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
