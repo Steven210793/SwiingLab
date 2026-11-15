@@ -491,3 +491,60 @@ function sl22Begin(e){e.preventDefault();const f=e.target;sl22Draft={id:slxId(),
 function sl22Hole(i){if(!sl22Draft)return sl22Start();const h=sl22Draft.holes[i]||{};realUI(slxTop("Trou "+(i+1)+" / "+sl22Draft.holeCount,"sl22Prev("+i+")","Retour")+'<form class="info" onsubmit="sl22Next(event,'+i+')"><div class="field"><label>Par du trou</label><select name="par">'+[3,4,5].map(p=>'<option value="'+p+'" '+(h.par===p?'selected':'')+'>Par '+p+'</option>').join("")+'</select></div><div class="field"><label>Nombre de coups</label><input type="number" name="score" min="1" max="30" required value="'+safe(String(h.score||""))+'"></div><div class="field"><label>Putts (facultatif)</label><input type="number" name="putts" min="0" max="30" value="'+safe(String(h.putts??""))+'"></div><button class="primary" type="submit">'+(i+1===sl22Draft.holeCount?'Enregistrer':'Suivant')+'</button></form>')}
 function sl22Prev(i){if(i>0)sl22Hole(i-1);else sl22Start()}
 function sl22Next(e,i){e.preventDefault();const f=e.target,score=Number(f.elements.score.value),putt=f.elements.putts.value===''?null:Number(f.elements.putts.value);if(!Number.isInteger(score)||score<1||score>30||putt!==null&&(!Number.isInteger(putt)||putt<0||putt>score)){alert("Vérifie le nombre de coups et de putts.");return}sl22Draft.holes[i]={number:i+1,par:Number(f.elements.par.value),score,putts:putt};if(i+1<sl22Draft.holeCount)return sl22Hole(i+1);const a=sl22Rounds();a.push(sl22Draft);if(slxWrite(sl22Key,a)){sl22Draft=null;sl22Real()}}
+
+/* V2.2 TrackMan archives, format-specific score chart, and safe reset. */
+const sl23Fmt=r=>Number(r.holeCount)===9?9:18;
+const sl23Month=d=>/^\\d{4}-\\d{2}/.test(String(d||''))?String(d).slice(0,7):'Date inconnue';
+const sl23MonthName=m=>m==='Date inconnue'?m:new Date(m+'-01T12:00:00').toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+function sl23Folders(items,kind){
+ const groups={};items.forEach((r,i)=>{const m=sl23Month(r.date);(groups[m]??=[]).push({r,i})});
+ return Object.keys(groups).sort().reverse().map(m=>'<details class="info" style="margin:8px 0"><summary>📁 '+safe(sl23MonthName(m))+' ('+groups[m].length+')</summary>'+groups[m].map(({r,i})=>'<div class="histItem"><button class="secondary" style="width:100%;text-align:left" onclick="'+(kind==='virtual'?'slVirtualDetail('+i+')':'sl23PracticeDetail('+i+')')+'">'+safe(kind==='virtual'?(r.course||'Parcours'):(r.venue||'Séance Practice'))+' · '+safe(String(r.date||'').slice(0,10))+(kind==='virtual'?' · '+sl23Fmt(r)+' trous':'')+'</button></div>').join('')+'</details>').join('')||'<p class="muted">Aucun fichier enregistré.</p>';
+}
+function slPracticeImportHome(){
+ const sessions=tmData();
+ realUI(slxTop('Practice','slTrackmanHome()','TrackMan')+'<div class="info"><h3>Importer une séance Practice</h3><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div><h2>Mes séances par mois</h2>'+sl23Folders(sessions,'practice'));
+ setActiveTab('progression');
+}
+function sl23PracticeDetail(i){
+ const r=tmData()[i];if(!r)return slPracticeImportHome();
+ const rows=(r.shots||[]).map((sh,n)=>'<details class="info"><summary>Coup '+(n+1)+' · '+safe(sh.club||'Club')+'</summary>'+Object.entries(sh.metrics||{}).map(([k,v])=>'<div class="histItem"><span>'+safe(tmFields[k]||k)+'</span><b>'+safe(String(v))+'</b></div>').join('')+'</details>').join('');
+ realUI(slxTop('Séance Practice','slPracticeImportHome()','Practice')+'<p>'+safe(r.date||'')+' · '+safe(r.venue||'TrackMan')+'</p><button class="secondary" onclick="tmDownload(\'TrackMan-Practice-'+i+'.json\',tmData()['+i+'])">Télécharger JSON</button><h2>Coups ('+(r.shots||[]).length+')</h2>'+rows);
+}
+function slVirtualHome(){
+ realUI(slxTop('Parcours virtuels','slTrackmanHome()','TrackMan')+'<div class="info"><h3>Importer un 18 trous</h3><input type="file" accept=".json,application/json" onchange="sl23VirtualImport(this,18)"></div><div class="info"><h3>Importer un 9 trous</h3><input type="file" accept=".json,application/json" onchange="sl23VirtualImport(this,9)"></div><h2>Mes parcours par mois</h2>'+sl23Folders(slVirtualData(),'virtual')+'<div class="info"><button class="secondary" onclick="sl23ResetVirtual()">Supprimer les parcours virtuels enregistrés</button><p class="muted">Supprime uniquement les parcours virtuels et leurs statistiques. Les séances Practice restent intactes.</p></div>');
+ setActiveTab('progression');
+}
+function sl23VirtualImport(input,format){
+ const f=input.files?.[0];if(!f)return;
+ if(f.size>2000000){alert('Fichier trop volumineux.');input.value='';return}
+ f.text().then(content=>{try{
+ const o=JSON.parse(content);if(o?.format!=='swiinglab-trackman-courses-v1'||!Array.isArray(o.rounds)||!o.rounds.length||o.rounds.length>100)throw Error('Fichier de parcours TrackMan incompatible.');
+ const prior=slVirtualData(),seen=new Set(prior.map(slVirtualFingerprint));let added=0,duplicates=0;
+ for(const raw of o.rounds){const r=slVirtualNormalize({...raw,holeCount:format});r.holeCount=format;const fp=slVirtualFingerprint(r);if(seen.has(fp)){duplicates++;continue}seen.add(fp);prior.push(r);added++}
+ if(added)localStorage.setItem(slVirtualKey,JSON.stringify(prior));
+ alert(added+' partie(s) importée(s) comme '+format+' trous. '+duplicates+' doublon(s).');slVirtualHome();
+ }catch(e){alert('Import impossible : '+e.message)}finally{input.value=''}}).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
+}
+function sl23ResetVirtual(){
+ const a=slVirtualData();if(!a.length){alert('Aucun parcours virtuel à supprimer.');return}
+ if(!confirm('Supprimer définitivement les '+a.length+' parties virtuelles enregistrées et leurs statistiques ? Les séances Practice ne seront pas modifiées. Vérifie que tu as conservé tes fichiers avant de confirmer.'))return;
+ localStorage.removeItem(slVirtualKey);slVirtualHome();
+}
+function sl23ScoreChart(rounds){
+ const a=rounds.map(r=>({date:String(r.date||'').slice(0,10),score:slxNum(r.totalScore),fmt:sl23Fmt(r),course:r.course||'Parcours'})).filter(r=>r.date&&r.score!==null).sort((x,y)=>x.date.localeCompare(y.date));
+ if(!a.length)return '<p class="muted">Aucun score disponible.</p>';
+ const w=340,h=205,p=37,lo=Math.max(0,Math.min(...a.map(r=>r.score))-3),hi=Math.max(...a.map(r=>r.score))+3;
+ const xy=(r,i)=>[p+(a.length===1?.5:i/(a.length-1))*(w-p-10),160-(r.score-lo)/(hi-lo||1)*130];
+ const points=a.map(xy);let svg='<svg viewBox="0 0 340 205" role="img" aria-label="Scores 9 et 18 trous" style="width:100%"><line x1="37" y1="20" x2="37" y2="160" stroke="currentColor"/><line x1="37" y1="160" x2="330" y2="160" stroke="currentColor"/><text x="3" y="22" fill="currentColor" font-size="11">'+hi+'</text><text x="3" y="160" fill="currentColor" font-size="11">'+lo+'</text>';
+ for(const fmt of [9,18]){let segment=[];a.forEach((r,i)=>{if(r.fmt===fmt)segment.push(points[i].join(','));else{if(segment.length>1)svg+='<polyline fill="none" stroke="'+(fmt===9?'#3399ef':'#e3b34a')+'" stroke-width="2.5" points="'+segment.join(' ')+'"/>';segment=[]}});if(segment.length>1)svg+='<polyline fill="none" stroke="'+(fmt===9?'#3399ef':'#e3b34a')+'" stroke-width="2.5" points="'+segment.join(' ')+'"/>';}
+ a.forEach((r,i)=>{const [x,y]=points[i];svg+='<circle cx="'+x+'" cy="'+y+'" r="4.5" fill="'+(r.fmt===9?'#3399ef':'#e3b34a')+'"><title>'+safe(r.course)+' · '+safe(r.date)+' · '+r.score+' coups ('+r.fmt+' trous)</title></circle>'});
+ svg+='<text x="37" y="186" font-size="10" fill="currentColor">'+safe(a[0].date)+'</text><text x="330" y="186" text-anchor="end" font-size="10" fill="currentColor">'+safe(a.at(-1).date)+'</text></svg>';
+ return '<div class="info">'+svg+'<p><span style="color:#3399ef">●</span> 9 trous &nbsp; <span style="color:#e3b34a">●</span> 18 trous</p></div>';
+}
+function sl22Virtual(){
+ const a=slVirtualData(),by=f=>a.filter(r=>sl23Fmt(r)===f).map(r=>slxNum(r.totalScore)).filter(v=>v!==null);
+ const nine=by(9),eighteen=by(18);
+ const stat=k=>{const v=a.map(r=>({value:slxNum(r.stats?.[k]),holes:sl23Fmt(r)})).filter(x=>x.value!==null);return v.length?(v.reduce((s,x)=>s+x.value*x.holes,0)/v.reduce((s,x)=>s+x.holes,0)).toFixed(1)+' %':'—'};
+ const scoreLabel=(n,e)=>'18 trous : '+e+' / 9 trous : '+n;
+ realUI(slxTop('Parcours virtuel','slxStats()','Mes statistiques')+sl22Grid([['Parties jouées',a.length],['Score moyen',scoreLabel(sl22Mean(nine),sl22Mean(eighteen))],['Meilleur score',scoreLabel(nine.length?Math.min(...nine):'—',eighteen.length?Math.min(...eighteen):'—')],['Fairways touchés',stat('fairwaysHitPct')],['GIR',stat('girPct')],['Scrambling',stat('scramblingPct')]])+'<h2>Évolution des scores</h2>'+sl23ScoreChart(a)+'<h2>Scores par type de trou</h2>'+sl22Grid(sl22Pars(a))+'<h2>Mes parties</h2>'+sl23Folders(a,'virtual'));
+}
