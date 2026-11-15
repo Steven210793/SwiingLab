@@ -2584,6 +2584,7 @@ const bestTrainingStreak=evaluated.reduce((best,s)=>Math.max(best,bestStreak(Arr
 
 S.innerHTML=`
 
+<div class="muted">SwiingLab · V2.0</div>
 <h1>Profil</h1>
 
 <div class="info">
@@ -3214,21 +3215,19 @@ function slVirtualFingerprint(r){
 function slTrackmanHome(){
  const count=slVirtualData().length;
  realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">ENTRAÎNEMENT VIRTUEL</span><h1>TrackMan</h1><p>Deux espaces indépendants pour tes données TrackMan.</p></div><div class="slTiles">'+
- slCard('◎','Practice','Séances, clubs et distances','progressHub()',true)+
+ slCard('◎','Practice','Importer une séance TrackMan','slPracticeImportHome()',true)+
  slCard('⛳','Parcours',count+' partie(s) virtuelle(s)','slVirtualHome()',true)+
  '</div>');
  setActiveTab('progression');
 }
+function slPracticeImportHome(){
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slTrackmanHome()">‹ TrackMan</button><span class="slEyebrow">TRACKMAN / PRACTICE</span><h1>Practice</h1></div>'+
+ '<div class="info"><h3>Importer une séance Practice</h3><p class="muted">Sélectionne ton fichier JSON TrackMan pour ajouter les coups à tes données existantes.</p><input type="file" accept=".json,application/json" onchange="tmImport(this)"></div>');
+ setActiveTab('progression');
+}
 function slVirtualHome(){
- const rounds=slVirtualData();
- const tiles=rounds.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(r=>{
-  const n=rounds.indexOf(r),score=r.totalScore,par=r.totalPar;
-  const delta=Number.isFinite(score)&&Number.isFinite(par)?' ('+(score-par>0?'+':'')+(score-par)+')':'';
-  return '<button class="slTile slWide" onclick="slVirtualDetail('+n+')"><span class="slTileIcon">⛳</span><span class="slTileCopy"><strong>'+safe(r.course)+'</strong><small>'+safe(r.date)+' · '+r.holeCount+' trous · '+(score===null?'Score non renseigné':score+' coups'+delta)+'</small></span><span class="slTileArrow">›</span></button>';
- }).join('');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slTrackmanHome()">‹ TrackMan</button><span class="slEyebrow">TRACKMAN / PARCOURS</span><h1>Parcours virtuels</h1><p>Parties jouées sur simulateur, distinctes de tes cartes réelles.</p></div>'+
- '<div class="info"><h3>Importer une partie</h3><p class="muted">Envoie tes captures TrackMan dans notre conversation. Je te fournirai un fichier JSON à importer ici.</p><input type="file" id="slVirtualFile" accept=".json,application/json" onchange="slVirtualImport(this)"><button class="secondary" onclick="slVirtualExample()">Télécharger un modèle JSON</button><button class="secondary" onclick="slVirtualExport()">Exporter mes parties</button></div>'+
- '<div class="slSectionTitle"><h2>Mes parties</h2><span>'+rounds.length+' enregistrée(s)</span></div><div class="slTiles">'+(tiles||'<p class="muted">Aucune partie importée pour le moment.</p>')+'</div>');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slTrackmanHome()">‹ TrackMan</button><span class="slEyebrow">TRACKMAN / PARCOURS</span><h1>Parcours virtuels</h1></div>'+
+ '<div class="info"><h3>Importer une partie</h3><p class="muted">Sélectionne ton fichier JSON de parcours TrackMan.</p><input type="file" id="slVirtualFile" accept=".json,application/json" onchange="slVirtualImport(this)"></div>');
  setActiveTab('progression');
 }
 function slVirtualNormalize(raw){
