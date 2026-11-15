@@ -1,2 +1,17 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Cache-Control" content="no-store"><title>SwiingLab — diagnostic</title><style>body{background:#111;color:#f2e9d8;font:16px system-ui,sans-serif;padding:28px;line-height:1.6}strong{color:#e3b34a;font-size:28px}</style></head><body><h1>Diagnostic SwiingLab</h1><p>Version attendue : <strong>V2.1</strong></p><p>Révision de contrôle : <code>20261115-b</code></p><p>Cette page est indépendante de l'application et ne lit ni ne modifie les données du téléphone.</p></body></html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-store"><title>Diagnostic SwiingLab V2.1</title>
+<style>body{background:#101010;color:#f2e9d8;font:16px system-ui,sans-serif;padding:22px;line-height:1.5}h1{font-size:23px}strong{color:#e3b34a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#222;border-radius:10px;padding:14px}a{color:#e3b34a}</style></head>
+<body><h1>Diagnostic SwiingLab</h1><p>Révision de contrôle : <strong>20261115-c</strong></p><p>Résultat de lecture du fichier principal :</p><pre id="result">Test en cours…</pre><p>Ce test ne touche pas aux données de l'application.</p>
+<script>
+(async()=>{
+ const out=document.getElementById('result');
+ try{
+  const res=await fetch('./index.html?diagnostic='+Date.now(),{cache:'no-store',redirect:'follow'});
+  const html=await res.text();
+  const hasV21=html.includes('SwiingLab · V2.1');
+  const hasCompetition=html.includes('function slCompetitionNotebook(){');
+  const oldVersion=html.includes('V1.2.1')||html.includes('v1.2.1');
+  out.textContent='HTTP : '+res.status+'\nVersion V2.1 présente dans le code : '+(hasV21?'OUI':'NON')+'\nCarnet Compétition V2.1 présent : '+(hasCompetition?'OUI':'NON')+'\nAncienne étiquette V1.2.1 présente : '+(oldVersion?'OUI':'NON')+'\nTaille du fichier : '+html.length+' caractères';
+ }catch(err){out.textContent='Test impossible : '+String(err)}
+})();
+</script></body></html>
