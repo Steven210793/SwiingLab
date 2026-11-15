@@ -3159,7 +3159,7 @@ function slHome(){
  slCard('◎','Putt Tracker','Centre d’entraînement putting','puttTrackerHome()',true)+
  slCard('◉','TrackMan','Practice et parcours virtuels','slTrackmanHome()')+
  slCard('▤','Parcours réels',rounds.length+' carte(s) enregistrée(s)','slRealHome()')+
- slCard('🏆','Compétition','Évolution de mon index','slCompetitionHome()',true)+
+ slCard('🏆','Compétition','Carnet et suivi de l’index','slCompetitionHome()',true)+
  slCard('▥','Centre de données','Statistiques et analyses','realHome()',true)+
  slCard('◯','Mon profil','Sac et informations','profile()',true)+
  '</div>');
@@ -3200,21 +3200,72 @@ function slCompetitionGraph(){
  (list.length>1?'<polyline points="'+coords.join(' ')+'" fill="none" stroke="#e3b34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>':'')+
  points+dates+'</svg><p class="muted">Dates en bas · Index sur l’axe vertical · Dernier index : <strong>'+list[list.length-1].index.toFixed(1)+'</strong></p></div>';
 }
+/* Carnet de compétition, distinct des parties réelles et du suivi d'index. */
+const slCompetitionBookKey='swiinglab_competition_book_v1';
+function slCompetitionBook(){
+ try{const v=JSON.parse(localStorage.getItem(slCompetitionBookKey)||'[]');return Array.isArray(v)?v:[]}
+ catch(e){return []}
+}
+function slCompetitionLocalDate(){
+ const d=new Date();
+ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
 function slCompetitionHome(){
- const list=slCompetitionRecords().sort((a,b)=>b.date.localeCompare(a.date));
- const today=new Date(),localDate=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
- realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">COMPÉTITION</span><h1>Évolution de mon index</h1><p>Suivi de l’index officiel après chaque compétition.</p></div>'+
- slCompetitionGraph()+
- '<div class="info"><h3>Enregistrer mon index après compétition</h3><div class="field"><label>Date</label><input id="slCompetitionDate" type="date" value="'+localDate+'"></div><div class="field"><label>Nouvel index officiel</label><input id="slCompetitionIndex" type="number" min="-10" max="54" step="0.1" placeholder="Ex. : 18.4"></div><button onclick="slCompetitionSave()">Ajouter au graphique</button><p class="muted">L’index est celui communiqué officiellement : il ne peut pas être déduit d’une simple carte de score.</p></div>'+
- (list.length?'<div class="info"><h3>Index enregistrés</h3>'+list.slice(0,12).map(r=>'<div class="histItem"><span>'+safe(r.date)+'</span><b>'+Number(r.index).toFixed(1)+'</b></div>').join('')+'</div>':''));
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">COMPÉTITION</span><h1>Compétition</h1></div>'+
+ '<div class="slTiles">'+slCard('▤','Carnet de compétition','Retrouver et ajouter mes compétitions','slCompetitionNotebook()',true)+'</div>'+
+ '<div class="slSectionTitle"><h2>Évolution de mon index</h2></div>'+slCompetitionGraph()+
+ '<div class="info"><h3>Enregistrer mon index</h3><div class="field"><label for="slCompetitionDate">Date</label><input id="slCompetitionDate" type="date" value="'+slCompetitionLocalDate()+'"></div>'+
+ '<div class="field"><label for="slCompetitionIndex">Index</label><input id="slCompetitionIndex" type="number" min="-10" max="54" step="0.1" placeholder="Ex. : 18.4"></div>'+
+ '<button onclick="slCompetitionSave()">Enregistrer</button><p class="muted">Saisis ton index officiel après une compétition. Chaque enregistrement actualise le graphique.</p></div>');
  setActiveTab('progression');
 }
 function slCompetitionSave(){
  try{
-  slCompetitionAddIndex(document.getElementById('slCompetitionDate').value,document.getElementById('slCompetitionIndex').value);
+  const date=document.getElementById('slCompetitionDate').value;
+  const val=document.getElementById('slCompetitionIndex').value;
+  if(!val.trim())throw Error('Renseigne ton index.');
+  slCompetitionAddIndex(date,val);
   slCompetitionHome();
  }catch(e){alert(e.message)}
 }
+function slCompetitionNotebook(){
+ const items=slCompetitionBook().slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+ const rows=items.map(c=>'<div class="histItem" style="padding:9px 12px;min-height:0;margin:5px 0;gap:8px"><div style="min-width:0;flex:1"><b style="display:block;overflow-wrap:anywhere;font-size:13px">'+safe(c.name)+'</b><small>'+safe(c.date)+'</small></div><div class="r"><b>'+safe(c.grossScore)+'</b><small>brut</small></div></div>').join('');
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slCompetitionHome()">‹ Compétition</button><span class="slEyebrow">COMPÉTITION</span><h1>Carnet de compétition</h1></div>'+
+ '<div class="slTiles">'+slCard('＋','Ajouter une compétition','Nouvelle fiche','slCompetitionNew()',true)+'</div>'+
+ '<div class="slSectionTitle"><h2>Mes compétitions</h2><span>'+items.length+' enregistrée(s)</span></div>'+
+ (rows||'<p class="muted">Aucune compétition enregistrée.</p>'));
+ setActiveTab('progression');
+}
+function slCompetitionNew(){
+ realUI('<div class="slPageTop"><button class="slBack" onclick="slCompetitionNotebook()">‹ Carnet de compétition</button><h1>Ajouter une compétition</h1></div>'+
+ '<div class="info">'+
+ '<div class="field"><label for="slBookName">Nom de la compétition</label><input id="slBookName" type="text" maxlength="160"></div>'+
+ '<div class="field"><label for="slBookDate">Date</label><input id="slBookDate" type="date" value="'+slCompetitionLocalDate()+'"></div>'+
+ '<div class="field"><label for="slBookCourse">Parcours</label><input id="slBookCourse" type="text" maxlength="160"></div>'+
+ '<div class="field"><label for="slBookFormat">Formule de jeu</label><input id="slBookFormat" type="text" maxlength="100" placeholder="Stroke play, Stableford..."></div>'+
+ '<div class="field"><label for="slBookGross">Score en brut</label><input id="slBookGross" type="number" min="1" max="300" step="1"></div>'+
+ '<button onclick="slCompetitionNewSave()">Enregistrer</button></div>');
+ setActiveTab('progression');
+}
+function slCompetitionNewSave(){
+ const name=document.getElementById('slBookName').value.trim();
+ const date=document.getElementById('slBookDate').value;
+ const course=document.getElementById('slBookCourse').value.trim();
+ const format=document.getElementById('slBookFormat').value.trim();
+ const scoreRaw=document.getElementById('slBookGross').value.trim();
+ const grossScore=Number(scoreRaw);
+ if(!name||!course||!format||!date||!scoreRaw){alert('Renseigne les cinq champs.');return}
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T12:00:00Z'))){alert('Date invalide.');return}
+ if(!Number.isInteger(grossScore)||grossScore<1||grossScore>300){alert('Score brut invalide.');return}
+ const list=slCompetitionBook();
+ list.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,8),name,date,course,format,grossScore});
+ try{
+  localStorage.setItem(slCompetitionBookKey,JSON.stringify(list));
+  slCompetitionNotebook();
+ }catch(e){alert('Enregistrement impossible : espace de stockage indisponible.')}
+}
+
 function slRealHome(){
  const rounds=realGet().rounds||[];
  const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
