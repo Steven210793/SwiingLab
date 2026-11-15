@@ -3206,7 +3206,6 @@ function slCompetitionHome(){
  realUI('<div class="slPageTop"><button class="slBack" onclick="slHome()">‹ Accueil</button><span class="slEyebrow">COMPÉTITION</span><h1>Évolution de mon index</h1><p>Suivi de l’index officiel après chaque compétition.</p></div>'+
  slCompetitionGraph()+
  '<div class="info"><h3>Enregistrer mon index après compétition</h3><div class="field"><label>Date</label><input id="slCompetitionDate" type="date" value="'+localDate+'"></div><div class="field"><label>Nouvel index officiel</label><input id="slCompetitionIndex" type="number" min="-10" max="54" step="0.1" placeholder="Ex. : 18.4"></div><button onclick="slCompetitionSave()">Ajouter au graphique</button><p class="muted">L’index est celui communiqué officiellement : il ne peut pas être déduit d’une simple carte de score.</p></div>'+
- '<div class="info"><h3>Importer une carte de compétition</h3><p class="muted">Fichier JSON SwiingLab de parcours réels. Si le fichier contient « indexAfter », l’index sera ajouté automatiquement au graphique.</p><input type="file" accept=".json,application/json" onchange="slCompetitionImport(this)"></div>'+
  (list.length?'<div class="info"><h3>Index enregistrés</h3>'+list.slice(0,12).map(r=>'<div class="histItem"><span>'+safe(r.date)+'</span><b>'+Number(r.index).toFixed(1)+'</b></div>').join('')+'</div>':''));
  setActiveTab('progression');
 }
@@ -3216,37 +3215,6 @@ function slCompetitionSave(){
   slCompetitionHome();
  }catch(e){alert(e.message)}
 }
-function slCompetitionImport(input){
- const f=input.files&&input.files[0];if(!f)return;
- if(f.size>2000000){alert('Fichier trop volumineux.');input.value='';return}
- f.text().then(t=>{
-  try{
-   const payload=JSON.parse(t);
-   if(payload?.format!=='swiinglab-real-rounds-v1'||!Array.isArray(payload.rounds)||!payload.rounds.length||payload.rounds.length>100)throw Error('Fichier de parcours réels SwiingLab attendu.');
-   const parsed=payload.rounds.map(raw=>({raw,round:realParseRound(raw)}));
-   const d=realGet(),seen=new Set(d.rounds.map(realRoundFingerprint));
-   let added=0,indices=0;
-   const updates=[];
-   for(const {raw,round} of parsed){
-    const fp=realRoundFingerprint(round);
-    if(!seen.has(fp)){round.source='competition';d.rounds.push(round);seen.add(fp);added++;
-     if(!d.courses.some(c=>c.golf===round.golf&&c.name===round.name&&c.count===round.count))d.courses.push({golf:round.golf,name:round.name,count:round.count,pars:round.holes.map(h=>h.par)})}
-    const indexAfter=raw.indexAfter??raw.handicapIndexAfter;
-    if(indexAfter!==null&&indexAfter!==undefined&&indexAfter!==''){
-      const v=Number(String(indexAfter).replace(',','.'));
-      if(!round.date||!Number.isFinite(v)||v< -10||v>54)throw Error('indexAfter ou date incorrect dans une carte.');
-      updates.push({date:round.date,index:v});
-    }
-   }
-   if(added)realSave(d);
-   for(const u of updates){slCompetitionAddIndex(u.date,u.index);indices++}
-   alert(added+' carte(s) importée(s), '+indices+' point(s) d’index mis à jour.');
-   slCompetitionHome();
-  }catch(e){alert('Import impossible : '+e.message)}
-  finally{input.value=''}
- }).catch(e=>{alert('Lecture impossible : '+e.message);input.value=''});
-}
-
 function slRealHome(){
  const rounds=realGet().rounds||[];
  const pending=localStorage.getItem(realDraftKey)?'<div class="slNotice"><strong>Partie en cours</strong><div class="slNoticeButtons"><button onclick="realResumeDraft()">Reprendre</button><button class="secondary" onclick="realDiscardDraft()">Abandonner</button></div></div>':'';
